@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orapeleng Timothy Madibela - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#github">GitHub</a></li>
+                <li><a href="#references">References</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button id="darkModeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <main>
+        <section id="home">
+            <h1>ORAPELENG TIMOTHY MADIBELA</h1>
+            <p>Web Developer & Data Analyst</p>
+            <div class="icons">
+                <i class="fas fa-code"></i>
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <a href="Orapeleng Resume.pdf" download class="download-resume">Download Resume (PDF)</a>
+        </section>
+
+        <section id="about">
+            <h2><i class="fas fa-user"></i> About Me</h2>
+            <p>I am a proactive computer science student pursuing a Bachelor of Sciences degree in Mathematical Sciences at the University of Limpopo. As a collaborative team player, I believe in working hard independently and as part of a team. I'm passionate about learning and interested in becoming a Data Analyst and Web Developer. My goal is to combine my analytical skills with web development expertise to create data-driven web applications that solve real-world problems.</p>
+        </section>
+
+        <section id="skills">
+            <h2>Skills</h2>
+            <ul>
+                <li><i class="fab fa-html5"></i> HTML5</li>
+                <li><i class="fab fa-css3-alt"></i> CSS3</li>
+                <li><i class="fab fa-js"></i> JavaScript</li>
+                <li><i class="fab fa-python"></i> Python</li>
+                <li><i class="fas fa-database"></i> SQL</li>
+                <li><i class="fab fa-microsoft"></i> Power BI</li>
+                <li><i class="fas fa-chart-line"></i> Data Analysis</li>
+            </ul>
+        </section>
+
+        <section id="projects">
+            <h2>Projects</h2>
+            <div class="project-grid">
+                <div class="project" data-project="data-analysis">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Data Analysis Project</h3>
+                    <p>Analyzed customer data to identify trends in purchasing behavior.</p>
+                    <button class="view-details">View Details</button>
+                </div>
+                <div class="project" data-project="web-dev">
+                    <i class="fas fa-code"></i>
+                    <h3>Web Development Project</h3>
+                    <p>Created a responsive e-commerce website for a local business.</p>
+                    <button class="view-details">View Details</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="github">
+            <h2>GitHub Repositories</h2>
+            <div id="repos"></div>
+        </section>
+
+        <section id="references">
+            <h2>References</h2>
+            <div class="reference-grid">
+                <div class="reference">
+                    <i class="fas fa-user-tie"></i>
+                    <h3>Mr CSS Pheto</h3>
+                    <p>High School Teacher</p>
+                    <p>079 048 8215</p>
+                </div>
+                <div class="reference">
+                    <i class="fas fa-user-tie"></i>
+                    <h3>Ms Seimela</h3>
+                    <p>Lecturer</p>
+                    <p>079 168 4201</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <ul>
+                <li><i class="fas fa-envelope"></i> <a href="mailto:madibelaorapeleng17@gmail.com">madibelaorapeleng17@gmail.com</a></li>
+                <li><i class="fas fa-phone"></i> <a href="tel:+27766069486">+27766069486</a></li>
+                <li><i class="fab fa-whatsapp"></i> <a href="https://wa.me/27662343315">+27662343315</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="currentYear"></span> Orapeleng Madibela. All rights reserved.</p>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
+            <div id="modal-files"></div>
+            <div id="modal-link"></div>
+        </div>
+    </div>
+
+    <div class="cursor"></div>
+    <div class="cursor2"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
