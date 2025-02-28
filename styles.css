@@ -78,6 +78,11 @@ header .container {
   font-size: 1.5rem;
 }
 
+#navbar {
+  display: flex;
+  align-items: center;
+}
+
 #navbar ul {
   display: flex;
   list-style-type: none;
@@ -119,6 +124,7 @@ header .container {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  margin-left: 1rem;
 }
 
 #darkModeToggle:hover {
@@ -932,6 +938,8 @@ footer .container {
     width: 100%;
     height: calc(100vh - 60px);
     background-color: var(--card-background);
+    flex-direction: column;
+    justify-content: flex-start;
     transition: left 0.3s ease;
     overflow-y: auto;
   }
@@ -942,11 +950,22 @@ footer .container {
 
   #navbar ul {
     flex-direction: column;
-    padding: 2rem;
+    width: 100%;
+    padding: 2rem 0;
   }
 
   #navbar ul li {
     margin: 1rem 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  #navbar ul li a {
+    justify-content: center;
+  }
+
+  #darkModeToggle {
+    margin: 1rem auto;
   }
 
   #menuToggle {
