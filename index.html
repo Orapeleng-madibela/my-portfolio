@@ -4,31 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orapeleng Timothy Madibela - Portfolio</title>
-    <!-- Main stylesheet -->
     <link rel="stylesheet" href="styles.css">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Typed.js for typing animation -->
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 </head>
 <body>
-    <!-- Particles.js container for background animation -->
     <div id="particles-js"></div>
     
-    <!-- Header with navigation -->
     <header>
         <div class="container">
-            <!-- Logo -->
             <div class="logo">
                 <a href="#home">OTM</a>
             </div>
             
-            <!-- Mobile menu toggle button -->
             <button class="menu-toggle" aria-label="Toggle navigation menu">
                 <i class="fas fa-bars"></i>
             </button>
             
-            <!-- Desktop navigation -->
             <nav>
                 <ul>
                     <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
@@ -41,7 +33,6 @@
                 </ul>
             </nav>
             
-            <!-- Dark mode toggle button -->
             <button id="darkModeToggle" aria-label="Toggle dark mode">
                 <i class="fas fa-moon"></i>
             </button>
@@ -49,30 +40,25 @@
     </header>
 
     <main>
-        <!-- Home section -->
         <section id="home">
             <div class="container">
                 <h1 class="rgb-text">ORAPELENG TIMOTHY MADIBELA</h1>
-                <!-- Typing animation container -->
                 <div class="typing-text"></div>
                 <div class="icons">
                     <i class="fas fa-code"></i>
                     <i class="fas fa-chart-bar"></i>
                 </div>
-                <!-- Resume download button -->
                 <a href="Orapeleng Resume.pdf" download class="download-resume">
                     <i class="fas fa-download"></i> Download Resume (PDF)
                 </a>
             </div>
         </section>
 
-        <!-- About section -->
         <section id="about">
             <div class="container">
                 <h2><i class="fas fa-user"></i> About Me</h2>
                 <div class="about-content">
                     <div class="profile-pic-container">
-                        <!-- Lazy-loaded profile picture -->
                         <img src="IMG_20231020_161116.jpg" alt="Orapeleng Timothy Madibela" class="profile-pic lazy-load" data-src="IMG_20231020_161116.jpg">
                     </div>
                     <div class="about-text">
@@ -82,12 +68,10 @@
             </div>
         </section>
 
-        <!-- Skills section -->
         <section id="skills">
             <div class="container">
                 <h2><i class="fas fa-code"></i> Skills</h2>
                 <div class="skills-grid">
-                    <!-- Skill items -->
                     <div class="skill">
                         <i class="fab fa-html5"></i>
                         <h3>HTML5</h3>
@@ -98,24 +82,99 @@
                             <div class="progress-label">90%</div>
                         </div>
                     </div>
-                    <!-- More skill items... -->
+                    <div class="skill">
+                        <i class="fab fa-css3-alt"></i>
+                        <h3>CSS3</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" data-percentage="85">
+                                <div class="progress-bar-inner"></div>
+                            </div>
+                            <div class="progress-label">85%</div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <i class="fab fa-js"></i>
+                        <h3>JavaScript</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" data-percentage="80">
+                                <div class="progress-bar-inner"></div>
+                            </div>
+                            <div class="progress-label">80%</div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <i class="fab fa-python"></i>
+                        <h3>Python</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" data-percentage="75">
+                                <div class="progress-bar-inner"></div>
+                            </div>
+                            <div class="progress-label">75%</div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <i class="fas fa-database"></i>
+                        <h3>SQL</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" data-percentage="70">
+                                <div class="progress-bar-inner"></div>
+                            </div>
+                            <div class="progress-label">70%</div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <i class="fab fa-microsoft"></i>
+                        <h3>Power BI</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" data-percentage="65">
+                                <div class="progress-bar-inner"></div>
+                            </div>
+                            <div class="progress-label">65%</div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Data Analysis</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" data-percentage="80">
+                                <div class="progress-bar-inner"></div>
+                            </div>
+                            <div class="progress-label">80%</div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <i class="fab fa-cuttlefish"></i>
+                        <h3>C++</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" data-percentage="60">
+                                <div class="progress-bar-inner"></div>
+                            </div>
+                            <div class="progress-label">60%</div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <i class="fab fa-java"></i>
+                        <h3>Java</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" data-percentage="55">
+                                <div class="progress-bar-inner"></div>
+                            </div>
+                            <div class="progress-label">55%</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Projects section -->
         <section id="projects">
             <div class="container">
                 <h2><i class="fas fa-briefcase"></i> Projects</h2>
-                <!-- Project filter buttons -->
                 <div class="project-filters">
                     <button class="filter-btn active" data-filter="all">All</button>
                     <button class="filter-btn" data-filter="web">Web Development</button>
                     <button class="filter-btn" data-filter="data">Data Analysis</button>
                 </div>
-                <!-- Project grid -->
                 <div class="project-grid">
-                    <!-- Project items -->
                     <div class="project" data-category="data">
                         <div class="project-icon">
                             <i class="fas fa-chart-bar"></i>
@@ -124,17 +183,38 @@
                         <p>Analyzed customer data to identify trends in purchasing behavior.</p>
                         <button class="view-details">View Details</button>
                     </div>
-                    <!-- More project items... -->
+                    <div class="project" data-category="web">
+                        <div class="project-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>E-commerce Website</h3>
+                        <p>Created a responsive e-commerce website for a local business.</p>
+                        <button class="view-details">View Details</button>
+                    </div>
+                    <div class="project" data-category="data">
+                        <div class="project-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3>Sales Dashboard</h3>
+                        <p>Developed an interactive sales dashboard using Power BI.</p>
+                        <button class="view-details">View Details</button>
+                    </div>
+                    <div class="project" data-category="web">
+                        <div class="project-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Weather App</h3>
+                        <p>Built a weather application using JavaScript and a weather API.</p>
+                        <button class="view-details">View Details</button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Timeline section -->
         <section id="timeline">
             <div class="container">
                 <h2><i class="fas fa-clock"></i> Education & Experience</h2>
                 <div class="timeline">
-                    <!-- Timeline items -->
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <h3>University of Limpopo</h3>
@@ -142,18 +222,35 @@
                             <span class="date">2021 - Present</span>
                         </div>
                     </div>
-                    <!-- More timeline items... -->
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>Nkobong Secondary School</h3>
+                            <p>High School Bachelor</p>
+                            <span class="date">2016 - 2020</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>Class Representative</h3>
+                            <p>SSTB000 Module</p>
+                            <span class="date">2023</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>Representative Council of Learners</h3>
+                            <p>Grade 12 Representative</p>
+                            <span class="date">2020</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- GitHub section -->
         <section id="github">
             <div class="container">
                 <h2><i class="fab fa-github"></i> GitHub Repositories</h2>
-                <!-- Repository grid (populated by JavaScript) -->
                 <div id="repos" class="repos-grid"></div>
-                <!-- Language statistics (populated by JavaScript) -->
                 <div id="language-stats">
                     <h3>Language Statistics</h3>
                     <div class="language-bar"></div>
@@ -162,28 +259,31 @@
             </div>
         </section>
 
-        <!-- Contact section -->
         <section id="contact">
             <div class="container">
                 <h2><i class="fas fa-envelope"></i> Contact Me</h2>
                 <div class="contact-grid">
-                    <!-- Contact form -->
                     <div class="contact-form">
                         <h3>Send Me a Message</h3>
                         <form id="contactForm" action="https://formspree.io/f/your-formspree-id" method="POST">
-                            <!-- Form fields -->
                             <div class="form-group">
                                 <input type="text" name="name" placeholder="Your Name" required>
                             </div>
-                            <!-- More form fields... -->
+                            <div class="form-group">
+                                <input type="email" name="email" placeholder="Your Email" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="subject" placeholder="Subject" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                            </div>
                             <button type="submit" class="submit-btn">Send Message</button>
                         </form>
                     </div>
-                    <!-- Contact information -->
                     <div class="contact-info">
                         <h3>Contact Information</h3>
                         <ul>
-                            <!-- Contact info items -->
                             <li>
                                 <i class="fas fa-envelope"></i>
                                 <div>
@@ -191,7 +291,34 @@
                                     <a href="mailto:orapelengmadibela@gmail.com">orapelengmadibela@gmail.com</a>
                                 </div>
                             </li>
-                            <!-- More contact info items... -->
+                            <li>
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <p>Phone</p>
+                                    <a href="tel:+27766069486">+27 76 606 9486</a>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <p>Address</p>
+                                    <p>799 Morago ga thaba section, Kraalhoek, 0341</p>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fab fa-github"></i>
+                                <div>
+                                    <p>GitHub</p>
+                                    <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer">Orapeleng-madibela</a>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fab fa-linkedin"></i>
+                                <div>
+                                    <p>LinkedIn</p>
+                                    <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer">Orapeleng Madibela</a>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -199,23 +326,21 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <p>&copy; <span id="currentYear"></span> Orapeleng Timothy Madibela. All rights reserved.</p>
-            <!-- Social media links -->
             <div class="social-links">
                 <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-github"></i>
                 </a>
                 <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-linkedin">  target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-linkedin"></i>
                 </a>
             </div>
         </div>
     </footer>
 
-    <!-- Project details modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -226,21 +351,23 @@
         </div>
     </div>
 
-    <!-- Mobile Navigation Menu -->
     <div id="mobile-menu" class="mobile-menu">
         <div class="mobile-menu-header">
             <span class="mobile-menu-close">&times;</span>
         </div>
         <nav class="mobile-nav">
             <ul>
-                <!-- Mobile menu items -->
                 <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
-                <!-- More mobile menu items... -->
+                <li><a href="#about"><i class="fas fa-user"></i> About</a></li>
+                <li><a href="#skills"><i class="fas fa-code"></i> Skills</a></li>
+                <li><a href="#projects"><i class="fas fa-briefcase"></i> Projects</a></li>
+                <li><a href="#timeline"><i class="fas fa-clock"></i> Timeline</a></li>
+                <li><a href="#github"><i class="fab fa-github"></i> GitHub</a></li>
+                <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
             </ul>
         </nav>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast" class="toast">
         <div class="toast-content">
             <i class="fas fa-check-circle toast-icon success"></i>
@@ -249,9 +376,7 @@
         </div>
     </div>
 
-    <!-- Particles.js library -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <!-- Main JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>
