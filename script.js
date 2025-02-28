@@ -478,6 +478,25 @@ function initMobileMenu() {
       document.body.style.overflow = ""
     }
   })
+
+  // Enable smooth scrolling for mobile menu items
+  const mobileMenuItems = mobileMenu.querySelectorAll('a[href^="#"]')
+  mobileMenuItems.forEach((item) => {
+    item.addEventListener("click", (e) => {
+      e.preventDefault()
+      const targetId = item.getAttribute("href")
+      const targetElement = document.querySelector(targetId)
+      if (targetElement) {
+        mobileMenu.classList.remove("show")
+        document.body.style.overflow = ""
+        setTimeout(() => {
+          targetElement.scrollIntoView({
+            behavior: "smooth",
+          })
+        }, 300) // Delay to allow menu to close
+      }
+    })
+  })
 }
 
 // Function to initialize contact form
