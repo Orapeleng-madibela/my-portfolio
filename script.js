@@ -457,44 +457,36 @@ function initLazyLoading() {
 
 // Function to initialize mobile menu
 function initMobileMenu() {
-  const menuToggle = document.querySelector(".menu-toggle")
-  const mobileMenu = document.getElementById("mobile-menu")
-  const mobileMenuClose = document.querySelector(".mobile-menu-close")
+  const menuToggle = document.getElementById("menuToggle")
+  const navbar = document.getElementById("navbar")
 
   menuToggle.addEventListener("click", () => {
-    mobileMenu.classList.add("show")
-    document.body.style.overflow = "hidden" // Prevent scrolling when menu is open
-  })
+    navbar.classList.toggle("active")
+    menuToggle.classList.toggle("active")
 
-  mobileMenuClose.addEventListener("click", () => {
-    mobileMenu.classList.remove("show")
-    document.body.style.overflow = "" // Re-enable scrolling
+    if (navbar.classList.contains("active")) {
+      menuToggle.innerHTML = '<i class="fas fa-times"></i>'
+    } else {
+      menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
+    }
   })
 
   // Close menu when clicking outside
   document.addEventListener("click", (e) => {
-    if (mobileMenu.classList.contains("show") && !mobileMenu.contains(e.target) && e.target !== menuToggle) {
-      mobileMenu.classList.remove("show")
-      document.body.style.overflow = ""
+    if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
+      navbar.classList.remove("active")
+      menuToggle.classList.remove("active")
+      menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
     }
   })
 
-  // Enable smooth scrolling for mobile menu items
-  const mobileMenuItems = mobileMenu.querySelectorAll('a[href^="#"]')
-  mobileMenuItems.forEach((item) => {
-    item.addEventListener("click", (e) => {
-      e.preventDefault()
-      const targetId = item.getAttribute("href")
-      const targetElement = document.querySelector(targetId)
-      if (targetElement) {
-        mobileMenu.classList.remove("show")
-        document.body.style.overflow = ""
-        setTimeout(() => {
-          targetElement.scrollIntoView({
-            behavior: "smooth",
-          })
-        }, 300) // Delay to allow menu to close
-      }
+  // Close menu when clicking on a link
+  const navLinks = navbar.querySelectorAll("a")
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      navbar.classList.remove("active")
+      menuToggle.classList.remove("active")
+      menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
     })
   })
 }
