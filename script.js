@@ -475,7 +475,6 @@ function initMobileMenu() {
   document.addEventListener("click", (e) => {
     if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
       navbar.classList.remove("active")
-      menuToggle.classList.remove("active")
       menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
     }
   })
@@ -485,7 +484,6 @@ function initMobileMenu() {
   navLinks.forEach((link) => {
     link.addEventListener("click", () => {
       navbar.classList.remove("active")
-      menuToggle.classList.remove("active")
       menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
     })
   })
