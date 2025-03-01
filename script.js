@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initProjectModal()
   initGitHubIntegration()
   initParticles()
+  applyAnimationClasses()
   initScrollAnimations()
   initSkillsAnimation()
   initProjectFilters()
@@ -24,7 +25,7 @@ function initDarkMode() {
   const darkModeToggle = document.getElementById("darkModeToggle")
   const darkModeToggleMobile = document.getElementById("darkModeToggleMobile")
   const body = document.body
-  
+
   // Function to toggle dark mode
   const toggleDarkMode = () => {
     body.classList.toggle("light-mode")
@@ -34,12 +35,12 @@ function initDarkMode() {
     // Update icons based on mode
     updateDarkModeIcons(isLightMode)
   }
-  
+
   // Function to update dark mode icons
   const updateDarkModeIcons = (isLightMode) => {
     const desktopIcon = darkModeToggle.querySelector("i")
     const mobileIcon = darkModeToggleMobile.querySelector("i")
-    
+
     if (isLightMode) {
       desktopIcon.className = "fas fa-moon"
       mobileIcon.className = "fas fa-moon"
@@ -78,7 +79,7 @@ function initMobileMenu() {
   const menuOverlay = document.getElementById("menuOverlay")
   const navLinks = document.querySelectorAll(".nav-link")
   const mobileMenuYear = document.getElementById("mobileMenuYear")
-  
+
   // Set current year in mobile menu footer
   mobileMenuYear.textContent = new Date().getFullYear()
 
@@ -88,7 +89,7 @@ function initMobileMenu() {
     menuOverlay.classList.add("active")
     document.body.style.overflow = "hidden" // Prevent scrolling when menu is open
   }
-  
+
   // Function to close mobile menu
   const closeMenuFunc = () => {
     navbar.classList.remove("active")
@@ -100,12 +101,12 @@ function initMobileMenu() {
   menuToggle.addEventListener("click", openMenu)
   closeMenu.addEventListener("click", closeMenuFunc)
   menuOverlay.addEventListener("click", closeMenuFunc)
-  
+
   // Close menu when clicking on a link
-  navLinks.forEach(link => {
+  navLinks.forEach((link) => {
     link.addEventListener("click", closeMenuFunc)
   })
-  
+
   // Close menu on window resize (if desktop size)
   window.addEventListener("resize", () => {
     if (window.innerWidth >= 768) {
@@ -117,7 +118,7 @@ function initMobileMenu() {
 // Function to add shadow to header on scroll
 function initScrollHeader() {
   const header = document.getElementById("main-header")
-  
+
   window.addEventListener("scroll", () => {
     if (window.scrollY > 10) {
       header.classList.add("scrolled")
@@ -188,7 +189,7 @@ function initProjectModal() {
         { name: "script.js", description: "JavaScript functionality" },
         { name: "products.json", description: "Product data in JSON format" },
       ],
-      link: "https://example.com/ecommerce-demo"
+      link: "https://example.com/ecommerce-demo",
     },
     "Sales Dashboard": {
       title: "Sales Dashboard",
@@ -209,7 +210,7 @@ function initProjectModal() {
         { name: "styles.css", description: "CSS styles for the app" },
         { name: "script.js", description: "JavaScript functionality and API integration" },
       ],
-      link: "https://example.com/weather-app-demo"
+      link: "https://example.com/weather-app-demo",
     },
   }
 
@@ -412,7 +413,7 @@ function initParticles() {
 
 // Function to initialize scroll animations
 function initScrollAnimations() {
-  const sections = document.querySelectorAll("section")
+  const animatedElements = document.querySelectorAll(".fade-in, .scale-in, .slide-in-left, .slide-in-right")
 
   const observerOptions = {
     root: null,
@@ -429,8 +430,8 @@ function initScrollAnimations() {
     })
   }, observerOptions)
 
-  sections.forEach((section) => {
-    observer.observe(section)
+  animatedElements.forEach((element) => {
+    observer.observe(element)
   })
 }
 
@@ -615,3 +616,26 @@ function initContactForm() {
     }
   })
 }
+
+function applyAnimationClasses() {
+  // Apply fade-in animation to sections
+  document.querySelectorAll("section").forEach((section, index) => {
+    section.classList.add("fade-in")
+  })
+
+  // Apply scale-in animation to skill items
+  document.querySelectorAll(".skill").forEach((skill, index) => {
+    skill.classList.add("scale-in")
+  })
+
+  // Apply slide-in animations to project items
+  document.querySelectorAll(".project").forEach((project, index) => {
+    project.classList.add(index % 2 === 0 ? "slide-in-left" : "slide-in-right")
+  })
+
+  // Apply fade-in animation to timeline items
+  document.querySelectorAll(".timeline-item").forEach((item, index) => {
+    item.classList.add("fade-in")
+  })
+}
+
