@@ -16,36 +16,48 @@ document.addEventListener("DOMContentLoaded", () => {
   initLazyLoading()
   initMobileMenu()
   initContactForm()
+  initScrollHeader()
 })
 
 // Function to initialize dark mode functionality
 function initDarkMode() {
   const darkModeToggle = document.getElementById("darkModeToggle")
+  const darkModeToggleMobile = document.getElementById("darkModeToggleMobile")
   const body = document.body
-  const icon = darkModeToggle.querySelector("i")
-
+  
   // Function to toggle dark mode
   const toggleDarkMode = () => {
     body.classList.toggle("light-mode")
     const isLightMode = body.classList.contains("light-mode")
     localStorage.setItem("lightMode", isLightMode)
 
-    // Update icon based on mode
+    // Update icons based on mode
+    updateDarkModeIcons(isLightMode)
+  }
+  
+  // Function to update dark mode icons
+  const updateDarkModeIcons = (isLightMode) => {
+    const desktopIcon = darkModeToggle.querySelector("i")
+    const mobileIcon = darkModeToggleMobile.querySelector("i")
+    
     if (isLightMode) {
-      icon.className = "fas fa-moon"
+      desktopIcon.className = "fas fa-moon"
+      mobileIcon.className = "fas fa-moon"
     } else {
-      icon.className = "fas fa-sun"
+      desktopIcon.className = "fas fa-sun"
+      mobileIcon.className = "fas fa-sun"
     }
   }
 
-  // Add click event listener to dark mode toggle button
+  // Add click event listeners to dark mode toggle buttons
   darkModeToggle.addEventListener("click", toggleDarkMode)
+  darkModeToggleMobile.addEventListener("click", toggleDarkMode)
 
   // Check for saved mode preference
   const savedLightMode = localStorage.getItem("lightMode") === "true"
   if (savedLightMode) {
     body.classList.add("light-mode")
-    icon.className = "fas fa-moon"
+    updateDarkModeIcons(true)
   }
 
   // Check system preference if no saved preference
@@ -53,9 +65,66 @@ function initDarkMode() {
     const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
     if (!prefersDarkMode) {
       body.classList.add("light-mode")
-      icon.className = "fas fa-moon"
+      updateDarkModeIcons(true)
     }
   }
+}
+
+// Function to initialize mobile menu
+function initMobileMenu() {
+  const menuToggle = document.getElementById("menuToggle")
+  const closeMenu = document.getElementById("closeMenu")
+  const navbar = document.getElementById("navbar")
+  const menuOverlay = document.getElementById("menuOverlay")
+  const navLinks = document.querySelectorAll(".nav-link")
+  const mobileMenuYear = document.getElementById("mobileMenuYear")
+  
+  // Set current year in mobile menu footer
+  mobileMenuYear.textContent = new Date().getFullYear()
+
+  // Function to open mobile menu
+  const openMenu = () => {
+    navbar.classList.add("active")
+    menuOverlay.classList.add("active")
+    document.body.style.overflow = "hidden" // Prevent scrolling when menu is open
+  }
+  
+  // Function to close mobile menu
+  const closeMenuFunc = () => {
+    navbar.classList.remove("active")
+    menuOverlay.classList.remove("active")
+    document.body.style.overflow = "" // Re-enable scrolling
+  }
+
+  // Add event listeners
+  menuToggle.addEventListener("click", openMenu)
+  closeMenu.addEventListener("click", closeMenuFunc)
+  menuOverlay.addEventListener("click", closeMenuFunc)
+  
+  // Close menu when clicking on a link
+  navLinks.forEach(link => {
+    link.addEventListener("click", closeMenuFunc)
+  })
+  
+  // Close menu on window resize (if desktop size)
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768) {
+      closeMenuFunc()
+    }
+  })
+}
+
+// Function to add shadow to header on scroll
+function initScrollHeader() {
+  const header = document.getElementById("main-header")
+  
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 10) {
+      header.classList.add("scrolled")
+    } else {
+      header.classList.remove("scrolled")
+    }
+  })
 }
 
 // Function to initialize typing effect
@@ -109,7 +178,39 @@ function initProjectModal() {
         { name: "report.pdf", description: "Final report summarizing findings and recommendations" },
       ],
     },
-    // ... other projects ...
+    "E-commerce Website": {
+      title: "E-commerce Website",
+      description:
+        "Developed a responsive e-commerce website for a local business using HTML, CSS, and JavaScript. The website includes product listings, shopping cart functionality, and a checkout process.",
+      files: [
+        { name: "index.html", description: "Main HTML file" },
+        { name: "styles.css", description: "CSS styles for the website" },
+        { name: "script.js", description: "JavaScript functionality" },
+        { name: "products.json", description: "Product data in JSON format" },
+      ],
+      link: "https://example.com/ecommerce-demo"
+    },
+    "Sales Dashboard": {
+      title: "Sales Dashboard",
+      description:
+        "Created an interactive sales dashboard using Power BI to visualize sales data and key performance indicators. The dashboard provides insights into sales trends, customer demographics, and product performance.",
+      files: [
+        { name: "sales_dashboard.pbix", description: "Power BI dashboard file" },
+        { name: "data_model.xlsx", description: "Excel data model" },
+        { name: "documentation.pdf", description: "Dashboard documentation and user guide" },
+      ],
+    },
+    "Weather App": {
+      title: "Weather App",
+      description:
+        "Developed a weather application using JavaScript and the OpenWeatherMap API. The app allows users to search for weather information by city and displays current conditions and a 5-day forecast.",
+      files: [
+        { name: "index.html", description: "Main HTML file" },
+        { name: "styles.css", description: "CSS styles for the app" },
+        { name: "script.js", description: "JavaScript functionality and API integration" },
+      ],
+      link: "https://example.com/weather-app-demo"
+    },
   }
 
   // Add click event listeners to all "View Details" buttons
@@ -407,12 +508,6 @@ function initSmoothScrolling() {
     anchor.addEventListener("click", function (e) {
       e.preventDefault()
 
-      // Close mobile menu if open
-      const mobileMenu = document.getElementById("mobile-menu")
-      if (mobileMenu.classList.contains("show")) {
-        mobileMenu.classList.remove("show")
-      }
-
       const targetId = this.getAttribute("href")
       const targetElement = document.querySelector(targetId)
 
@@ -452,40 +547,6 @@ function initLazyLoading() {
 
   lazyImages.forEach((img) => {
     observer.observe(img)
-  })
-}
-
-// Function to initialize mobile menu
-function initMobileMenu() {
-  const menuToggle = document.getElementById("menuToggle")
-  const navbar = document.getElementById("navbar")
-
-  menuToggle.addEventListener("click", () => {
-    navbar.classList.toggle("active")
-    menuToggle.classList.toggle("active")
-
-    if (navbar.classList.contains("active")) {
-      menuToggle.innerHTML = '<i class="fas fa-times"></i>'
-    } else {
-      menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
-    }
-  })
-
-  // Close menu when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
-      navbar.classList.remove("active")
-      menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
-    }
-  })
-
-  // Close menu when clicking on a link
-  const navLinks = navbar.querySelectorAll("a")
-  navLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      navbar.classList.remove("active")
-      menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
-    })
   })
 }
 
@@ -554,4 +615,3 @@ function initContactForm() {
     }
   })
 }
-
