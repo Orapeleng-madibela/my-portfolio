@@ -11,32 +11,55 @@
 <body>
     <div id="particles-js"></div>
     
-    <header>
+    <header id="main-header">
         <div class="container">
             <div class="logo">
                 <a href="#home">OTM</a>
             </div>
             
-            <button id="menuToggle" aria-label="Toggle navigation menu">
+            <!-- Dark Mode Toggle (Mobile) -->
+            <button id="darkModeToggleMobile" class="dark-mode-toggle-mobile" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            
+            <!-- Mobile Menu Button -->
+            <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu">
                 <i class="fas fa-bars"></i>
             </button>
 
+            <!-- Navigation -->
             <nav id="navbar">
-                <ul>
-                    <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#about"><i class="fas fa-user"></i> About</a></li>
-                    <li><a href="#skills"><i class="fas fa-code"></i> Skills</a></li>
-                    <li><a href="#projects"><i class="fas fa-briefcase"></i> Projects</a></li>
-                    <li><a href="#timeline"><i class="fas fa-clock"></i> Timeline</a></li>
-                    <li><a href="#github"><i class="fab fa-github"></i> GitHub</a></li>
-                    <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
-                </ul>
-                <button id="darkModeToggle" aria-label="Toggle dark mode">
+                <div class="navbar-container">
+                    <div class="navbar-header">
+                        <span class="navbar-title">Menu</span>
+                        <button id="closeMenu" class="close-menu" aria-label="Close menu">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <ul class="nav-links">
+                        <li><a href="#home" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#about" class="nav-link"><i class="fas fa-user"></i> About</a></li>
+                        <li><a href="#skills" class="nav-link"><i class="fas fa-code"></i> Skills</a></li>
+                        <li><a href="#projects" class="nav-link"><i class="fas fa-briefcase"></i> Projects</a></li>
+                        <li><a href="#timeline" class="nav-link"><i class="fas fa-clock"></i> Timeline</a></li>
+                        <li><a href="#github" class="nav-link"><i class="fab fa-github"></i> GitHub</a></li>
+                        <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                    <div class="navbar-footer">
+                        <p>&copy; <span id="mobileMenuYear"></span> Orapeleng Timothy Madibela</p>
+                    </div>
+                </div>
+                
+                <!-- Dark Mode Toggle (Desktop) -->
+                <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
                     <i class="fas fa-moon"></i>
                 </button>
             </nav>
         </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="menuOverlay" class="menu-overlay"></div>
 
     <main>
         <section id="home">
@@ -361,4 +384,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
