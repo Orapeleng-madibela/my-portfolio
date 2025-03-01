@@ -180,16 +180,15 @@ function initProjectModal() {
       ],
     },
     "E-commerce Website": {
-      title: "E-commerce Website",
+      title: "Excellent KB Events and Hire",
       description:
         "Developed a responsive e-commerce website for a local business using HTML, CSS, and JavaScript. The website includes product listings, shopping cart functionality, and a checkout process.",
       files: [
-        { name: "index.html", description: "Main HTML file" },
+        { name: "index.html", description: Home HTML file" },
         { name: "styles.css", description: "CSS styles for the website" },
         { name: "script.js", description: "JavaScript functionality" },
-        { name: "products.json", description: "Product data in JSON format" },
       ],
-      link: "https://example.com/ecommerce-demo",
+      link: "https://excellent-kb-events.netlify.app/",
     },
     "Sales Dashboard": {
       title: "Sales Dashboard",
@@ -202,15 +201,15 @@ function initProjectModal() {
       ],
     },
     "Weather App": {
-      title: "Weather App",
+      title: "My Portfolio Website",
       description:
-        "Developed a weather application using JavaScript and the OpenWeatherMap API. The app allows users to search for weather information by city and displays current conditions and a 5-day forecast.",
+        "Developed a website that has my details such as contacts. The website has projects i did, skills that i have and my github reposetories.",
       files: [
         { name: "index.html", description: "Main HTML file" },
         { name: "styles.css", description: "CSS styles for the app" },
         { name: "script.js", description: "JavaScript functionality and API integration" },
       ],
-      link: "https://example.com/weather-app-demo",
+      link: "https://orapeleng-madibela.github.io/my-portfolio/",
     },
   }
 
