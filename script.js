@@ -1,4 +1,5 @@
- // Main JavaScript file for the Portfolio Website
+
+// Main JavaScript file for the Portfolio Website
 
 // Wait for the DOM to be fully loaded before executing scripts
 document.addEventListener("DOMContentLoaded", () => {
