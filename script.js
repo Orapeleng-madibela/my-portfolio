@@ -184,7 +184,7 @@ function initProjectModal() {
       description:
         "Developed a responsive e-commerce website for a local business using HTML, CSS, and JavaScript. The website includes product listings, shopping cart functionality, and a checkout process.",
       files: [
-        { name: "index.html", description: Home HTML file" },
+        { name: "index.html", description: "Main HTML file" },
         { name: "styles.css", description: "CSS styles for the website" },
         { name: "script.js", description: "JavaScript functionality" },
       ],
