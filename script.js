@@ -2,22 +2,26 @@
 
 // Wait for the DOM to be fully loaded before executing scripts
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize all modules
-  initDarkMode()
-  initTypingEffect()
-  initProjectModal()
-  initGitHubIntegration()
-  initParticles()
-  applyAnimationClasses()
-  initScrollAnimations()
-  initSkillsAnimation()
-  initProjectFilters()
-  setCurrentYear()
-  initSmoothScrolling()
-  initLazyLoading()
-  initMobileMenu()
-  initContactForm()
-  initScrollHeader()
+  // Initialize all modules with proper error handling
+  try {
+    initDarkMode()
+    initTypingEffect()
+    initProjectModal()
+    initGitHubIntegration()
+    initParticles()
+    applyAnimationClasses()
+    initScrollAnimations()
+    initSkillsAnimation()
+    initProjectFilters()
+    setCurrentYear()
+    initSmoothScrolling()
+    initLazyLoading()
+    initMobileMenu()
+    initContactForm()
+    initScrollHeader()
+  } catch (error) {
+    console.error("Error initializing modules:", error)
+  }
 })
 
 // Function to initialize dark mode functionality
@@ -25,6 +29,12 @@ function initDarkMode() {
   const darkModeToggle = document.getElementById("darkModeToggle")
   const darkModeToggleMobile = document.getElementById("darkModeToggleMobile")
   const body = document.body
+
+  // Check if elements exist
+  if (!darkModeToggle || !darkModeToggleMobile) {
+    console.warn("Dark mode toggle elements not found")
+    return
+  }
 
   // Function to toggle dark mode
   const toggleDarkMode = () => {
@@ -40,6 +50,11 @@ function initDarkMode() {
   const updateDarkModeIcons = (isLightMode) => {
     const desktopIcon = darkModeToggle.querySelector("i")
     const mobileIcon = darkModeToggleMobile.querySelector("i")
+
+    if (!desktopIcon || !mobileIcon) {
+      console.warn("Dark mode icons not found")
+      return
+    }
 
     if (isLightMode) {
       desktopIcon.className = "fas fa-moon"
@@ -80,8 +95,16 @@ function initMobileMenu() {
   const navLinks = document.querySelectorAll(".nav-link")
   const mobileMenuYear = document.getElementById("mobileMenuYear")
 
-  // Set current year in mobile menu footer
-  mobileMenuYear.textContent = new Date().getFullYear()
+  // Check if required elements exist
+  if (!menuToggle || !closeMenu || !navbar || !menuOverlay) {
+    console.warn("Mobile menu elements not found")
+    return
+  }
+
+  // Set current year in mobile menu footer if element exists
+  if (mobileMenuYear) {
+    mobileMenuYear.textContent = new Date().getFullYear()
+  }
 
   // Function to open mobile menu
   const openMenu = () => {
@@ -118,6 +141,11 @@ function initMobileMenu() {
 // Function to add shadow to header on scroll
 function initScrollHeader() {
   const header = document.getElementById("main-header")
+  
+  if (!header) {
+    console.warn("Header element not found")
+    return
+  }
 
   window.addEventListener("scroll", () => {
     if (window.scrollY > 10) {
@@ -131,6 +159,12 @@ function initScrollHeader() {
 // Function to initialize typing effect
 function initTypingEffect() {
   const typingText = document.querySelector(".typing-text")
+  
+  if (!typingText) {
+    console.warn("Typing text element not found")
+    return
+  }
+  
   const texts = [
     "Web Developer",
     "Data Analyst",
@@ -144,18 +178,24 @@ function initTypingEffect() {
     "Data Visualization",
   ]
 
-  // Using Typed.js for typing animation
-  const Typed = window.Typed // Declare Typed variable
-  new Typed(typingText, {
-    strings: texts,
-    typeSpeed: 50,
-    backSpeed: 30,
-    backDelay: 1500,
-    startDelay: 500,
-    loop: true,
-    showCursor: true,
-    cursorChar: "|",
-  })
+  // Check if Typed.js is loaded
+  if (typeof window.Typed !== 'undefined') {
+    // Using Typed.js for typing animation
+    new window.Typed(typingText, {
+      strings: texts,
+      typeSpeed: 50,
+      backSpeed: 30,
+      backDelay: 1500,
+      startDelay: 500,
+      loop: true,
+      showCursor: true,
+      cursorChar: "|",
+    })
+  } else {
+    console.warn("Typed.js library not loaded")
+    // Fallback: Display the first text without animation
+    typingText.textContent = texts[0]
+  }
 }
 
 // Function to initialize project modal
@@ -166,8 +206,15 @@ function initProjectModal() {
   const modalFiles = document.getElementById("modal-files")
   const modalLink = document.getElementById("modal-link")
   const closeBtn = document.getElementsByClassName("close")[0]
+  const viewDetailsButtons = document.querySelectorAll(".view-details")
 
-  // Project details
+  // Check if required elements exist
+  if (!modal || !modalTitle || !modalDescription || !modalFiles || !modalLink || !closeBtn) {
+    console.warn("Modal elements not found")
+    return
+  }
+
+  // Project details - Consider moving this to a separate JSON file in a production environment
   const projects = {
     "Customer Behavior Analysis": {
       title: "Customer Behavior Analysis",
@@ -214,11 +261,29 @@ function initProjectModal() {
     },
   }
 
+  // Check if view details buttons exist
+  if (viewDetailsButtons.length === 0) {
+    console.warn("No 'View Details' buttons found")
+    return
+  }
+
   // Add click event listeners to all "View Details" buttons
-  document.querySelectorAll(".view-details").forEach((button) => {
+  viewDetailsButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const projectTitle = button.parentElement.querySelector("h3").textContent
+      const projectTitleElement = button.parentElement.querySelector("h3")
+      
+      if (!projectTitleElement) {
+        console.warn("Project title element not found")
+        return
+      }
+      
+      const projectTitle = projectTitleElement.textContent
       const project = projects[projectTitle]
+      
+      if (!project) {
+        console.warn(`Project details not found for: ${projectTitle}`)
+        return
+      }
 
       // Populate modal with project details
       modalTitle.textContent = project.title
@@ -226,7 +291,7 @@ function initProjectModal() {
 
       // Clear and populate files list
       modalFiles.innerHTML = ""
-      if (project.files) {
+      if (project.files && project.files.length > 0) {
         const filesList = document.createElement("ul")
         project.files.forEach((file) => {
           const listItem = document.createElement("li")
@@ -276,15 +341,29 @@ function initGitHubIntegration() {
   const languageBar = document.querySelector(".language-bar")
   const languageLabels = document.querySelector(".language-labels")
 
+  // Check if required elements exist
+  if (!reposSection) {
+    console.warn("GitHub repositories section not found")
+    return
+  }
+
+  // Optional elements check
+  const hasLanguageStats = languageStats && languageBar && languageLabels
+
   // Fetch GitHub repositories
   fetch(`https://api.github.com/users/${githubUsername}/repos?sort=updated&direction=desc&per_page=6`)
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`GitHub API responded with status: ${response.status}`)
+      }
+      return response.json()
+    })
     .then((data) => {
       reposSection.innerHTML = "" // Clear loading state
 
-      if (data.length === 0) {
+      if (!data || data.length === 0) {
         reposSection.innerHTML = "<p>No repositories found.</p>"
-        return
+        return null // Return null to indicate no data for the next promise
       }
 
       // Create repository cards
@@ -292,21 +371,40 @@ function initGitHubIntegration() {
         const repoElement = document.createElement("div")
         repoElement.classList.add("repo")
         repoElement.innerHTML = `
-                    <h3>${repo.name}</h3>
-                    <p>${repo.description || "No description available."}</p>
-                    <div class="repo-meta">
-                        <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
-                        <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-                    </div>
-                `
+          <h3>${repo.name}</h3>
+          <p>${repo.description || "No description available."}</p>
+          <div class="repo-meta">
+            <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
+            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          </div>
+        `
         reposSection.appendChild(repoElement)
       })
 
-      // Fetch language statistics
-      return Promise.all(data.map((repo) => fetch(repo.languages_url).then((res) => res.json())))
+      // Only proceed with language stats if the elements exist
+      if (hasLanguageStats) {
+        // Fetch language statistics
+        return Promise.all(
+          data.map((repo) => 
+            fetch(repo.languages_url)
+              .then(res => {
+                if (!res.ok) {
+                  throw new Error(`Failed to fetch languages for ${repo.name}`)
+                }
+                return res.json()
+              })
+              .catch(err => {
+                console.warn(`Error fetching languages for ${repo.name}:`, err)
+                return {} // Return empty object on error to continue with other repos
+              })
+          )
+        )
+      }
+      
+      return null // Skip language stats if elements don't exist
     })
     .then((languagesData) => {
-      if (!languagesData) return
+      if (!languagesData || !hasLanguageStats) return
 
       // Calculate total bytes for each language
       const languageTotals = {}
@@ -317,6 +415,11 @@ function initGitHubIntegration() {
       })
 
       const totalBytes = Object.values(languageTotals).reduce((a, b) => a + b, 0)
+      
+      if (totalBytes === 0) {
+        languageStats.innerHTML = "<p>No language data available.</p>"
+        return
+      }
 
       // Clear previous content
       languageBar.innerHTML = ""
@@ -340,9 +443,9 @@ function initGitHubIntegration() {
           const label = document.createElement("div")
           label.className = "language-label"
           label.innerHTML = `
-                        <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
-                        <span>${language}: ${percentage}%</span>
-                    `
+            <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
+            <span>${language}: ${percentage}%</span>
+          `
           languageLabels.appendChild(label)
         })
     })
@@ -368,14 +471,21 @@ function getLanguageColor(language) {
     Go: "#00ADD8",
     Rust: "#dea584",
   }
-  return colors[language] || "#808080"
+  return colors[language] || "#808080" // Default to gray if language not in list
 }
 
 // Function to initialize particles background
 function initParticles() {
-  const particlesJS = window.particlesJS // Declare particlesJS variable
-  if (typeof particlesJS !== "undefined") {
-    particlesJS("particles-js", {
+  // Check if particlesJS is loaded
+  if (typeof window.particlesJS !== "undefined") {
+    const particlesContainer = document.getElementById("particles-js")
+    
+    if (!particlesContainer) {
+      console.warn("Particles container not found")
+      return
+    }
+    
+    window.particlesJS("particles-js", {
       particles: {
         number: { value: 80, density: { enable: true, value_area: 800 } },
         color: { value: "#4a00e0" },
@@ -407,13 +517,25 @@ function initParticles() {
       retina_detect: true,
     })
   } else {
-    console.warn("particles.js not loaded")
+    console.warn("particles.js library not loaded")
   }
 }
 
 // Function to initialize scroll animations
 function initScrollAnimations() {
   const animatedElements = document.querySelectorAll(".fade-in, .scale-in, .slide-in-left, .slide-in-right")
+  
+  if (animatedElements.length === 0) {
+    return // No elements to animate
+  }
+
+  // Check if IntersectionObserver is supported
+  if (!('IntersectionObserver' in window)) {
+    console.warn("IntersectionObserver not supported in this browser")
+    // Make all elements visible as fallback
+    animatedElements.forEach(element => element.classList.add("appear"))
+    return
+  }
 
   const observerOptions = {
     root: null,
@@ -438,6 +560,24 @@ function initScrollAnimations() {
 // Function to initialize skills animation
 function initSkillsAnimation() {
   const progressBars = document.querySelectorAll(".progress-bar")
+  
+  if (progressBars.length === 0) {
+    return // No progress bars to animate
+  }
+
+  // Check if IntersectionObserver is supported
+  if (!('IntersectionObserver' in window)) {
+    console.warn("IntersectionObserver not supported in this browser")
+    // Animate all progress bars immediately as fallback
+    progressBars.forEach(bar => {
+      const percentage = bar.getAttribute("data-percentage")
+      const progressBarInner = bar.querySelector(".progress-bar-inner")
+      if (progressBarInner) {
+        progressBarInner.style.width = `${percentage}%`
+      }
+    })
+    return
+  }
 
   const observerOptions = {
     root: null,
@@ -450,10 +590,12 @@ function initSkillsAnimation() {
       if (entry.isIntersecting) {
         const percentage = entry.target.getAttribute("data-percentage")
         const progressBarInner = entry.target.querySelector(".progress-bar-inner")
-
-        setTimeout(() => {
-          progressBarInner.style.width = `${percentage}%`
-        }, 200)
+        
+        if (progressBarInner && percentage) {
+          setTimeout(() => {
+            progressBarInner.style.width = `${percentage}%`
+          }, 200)
+        }
 
         observer.unobserve(entry.target)
       }
@@ -469,10 +611,20 @@ function initSkillsAnimation() {
 function initProjectFilters() {
   const filterButtons = document.querySelectorAll(".filter-btn")
   const projects = document.querySelectorAll(".project")
+  
+  if (filterButtons.length === 0 || projects.length === 0) {
+    console.warn("Project filter elements not found")
+    return
+  }
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const filter = button.getAttribute("data-filter")
+      
+      if (!filter) {
+        console.warn("Filter attribute missing on button")
+        return
+      }
 
       // Update active button
       filterButtons.forEach((btn) => btn.classList.remove("active"))
@@ -480,7 +632,9 @@ function initProjectFilters() {
 
       // Filter projects
       projects.forEach((project) => {
-        if (filter === "all" || project.getAttribute("data-category") === filter) {
+        const category = project.getAttribute("data-category")
+        
+        if (filter === "all" || category === filter) {
           project.style.display = "flex"
           setTimeout(() => {
             project.style.opacity = "1"
@@ -500,20 +654,33 @@ function initProjectFilters() {
 
 // Function to set the current year in the footer
 function setCurrentYear() {
-  document.getElementById("currentYear").textContent = new Date().getFullYear()
+  const yearElement = document.getElementById("currentYear")
+  
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear()
+  }
 }
 
 // Function to initialize smooth scrolling
 function initSmoothScrolling() {
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  const anchorLinks = document.querySelectorAll('a[href^="#"]')
+  
+  if (anchorLinks.length === 0) {
+    return // No anchor links to handle
+  }
+
+  anchorLinks.forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
       e.preventDefault()
 
       const targetId = this.getAttribute("href")
+      if (!targetId) return
+      
       const targetElement = document.querySelector(targetId)
 
       if (targetElement) {
-        const headerHeight = document.querySelector("header").offsetHeight
+        const header = document.querySelector("header")
+        const headerHeight = header ? header.offsetHeight : 0
         const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight
 
         window.scrollTo({
@@ -528,6 +695,24 @@ function initSmoothScrolling() {
 // Function to initialize lazy loading for images
 function initLazyLoading() {
   const lazyImages = document.querySelectorAll("img.lazy-load")
+  
+  if (lazyImages.length === 0) {
+    return // No images to lazy load
+  }
+
+  // Check if IntersectionObserver is supported
+  if (!('IntersectionObserver' in window)) {
+    console.warn("IntersectionObserver not supported in this browser")
+    // Load all images immediately as fallback
+    lazyImages.forEach(img => {
+      const src = img.getAttribute("data-src")
+      if (src) {
+        img.src = src
+        img.classList.remove("lazy-load")
+      }
+    })
+    return
+  }
 
   const observerOptions = {
     root: null,
@@ -539,8 +724,13 @@ function initLazyLoading() {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const img = entry.target
-        img.src = img.getAttribute("data-src")
-        img.classList.remove("lazy-load")
+        const src = img.getAttribute("data-src")
+        
+        if (src) {
+          img.src = src
+          img.classList.remove("lazy-load")
+        }
+        
         observer.unobserve(img)
       }
     })
@@ -555,15 +745,32 @@ function initLazyLoading() {
 function initContactForm() {
   const contactForm = document.getElementById("contactForm")
   const toast = document.getElementById("toast")
-  const toastMessage = document.querySelector(".toast-message")
-  const successIcon = document.querySelector(".toast-icon.success")
-  const errorIcon = document.querySelector(".toast-icon.error")
+  
+  if (!contactForm || !toast) {
+    console.warn("Contact form elements not found")
+    return
+  }
+  
+  const toastMessage = toast.querySelector(".toast-message")
+  const successIcon = toast.querySelector(".toast-icon.success")
+  const errorIcon = toast.querySelector(".toast-icon.error")
+  
+  if (!toastMessage || !successIcon || !errorIcon) {
+    console.warn("Toast elements not found")
+    return
+  }
 
   contactForm.addEventListener("submit", async (e) => {
     e.preventDefault()
 
     const formData = new FormData(contactForm)
     const formAction = contactForm.getAttribute("action")
+    
+    if (!formAction) {
+      console.error("Form action attribute is missing")
+      showToast("Form configuration error. Please try again later.", false)
+      return
+    }
 
     try {
       const response = await fetch(formAction, {
@@ -576,55 +783,42 @@ function initContactForm() {
 
       if (response.ok) {
         // Show success toast
-        toastMessage.textContent = "Message sent successfully!"
-        successIcon.style.display = "block"
-        errorIcon.style.display = "none"
-        toast.classList.add("show")
-
+        showToast("Message sent successfully!", true)
         // Reset form
         contactForm.reset()
-
-        // Hide toast after 5 seconds
-        setTimeout(() => {
-          toast.classList.remove("show")
-        }, 5000)
       } else {
         // Show error toast
-        toastMessage.textContent = "Failed to send message. Please try again."
-        successIcon.style.display = "none"
-        errorIcon.style.display = "block"
-        toast.classList.add("show")
-
-        // Hide toast after 5 seconds
-        setTimeout(() => {
-          toast.classList.remove("show")
-        }, 5000)
+        showToast("Failed to send message. Please try again.", false)
       }
     } catch (error) {
       console.error("Error sending form:", error)
-
       // Show error toast
-      toastMessage.textContent = "Failed to send message. Please try again."
-      successIcon.style.display = "none"
-      errorIcon.style.display = "block"
-      toast.classList.add("show")
-
-      // Hide toast after 5 seconds
-      setTimeout(() => {
-        toast.classList.remove("show")
-      }, 5000)
+      showToast("Failed to send message. Please try again.", false)
     }
   })
+  
+  // Helper function to show toast
+  function showToast(message, isSuccess) {
+    toastMessage.textContent = message
+    successIcon.style.display = isSuccess ? "block" : "none"
+    errorIcon.style.display = isSuccess ? "none" : "block"
+    toast.classList.add("show")
+
+    // Hide toast after 5 seconds
+    setTimeout(() => {
+      toast.classList.remove("show")
+    }, 5000)
+  }
 }
 
 function applyAnimationClasses() {
   // Apply fade-in animation to sections
-  document.querySelectorAll("section").forEach((section, index) => {
+  document.querySelectorAll("section").forEach((section) => {
     section.classList.add("fade-in")
   })
 
   // Apply scale-in animation to skill items
-  document.querySelectorAll(".skill").forEach((skill, index) => {
+  document.querySelectorAll(".skill").forEach((skill) => {
     skill.classList.add("scale-in")
   })
 
@@ -634,8 +828,7 @@ function applyAnimationClasses() {
   })
 
   // Apply fade-in animation to timeline items
-  document.querySelectorAll(".timeline-item").forEach((item, index) => {
+  document.querySelectorAll(".timeline-item").forEach((item) => {
     item.classList.add("fade-in")
   })
 }
-
