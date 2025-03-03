@@ -136,12 +136,13 @@ function initTypingEffect() {
     "Web Developer",
     "Data Analyst",
     "Computer Science Student",
-    "HTML/CSS/JavaScript Developer",
+    "HTML/CSS/JavaScript",
     "Python Programmer",
     "C++ Programmer",
-    "SQL Expert",
-    "Power BI Analyst",
-    "Data Visualization Specialist",
+    "SQL",
+    "Power BI",
+    "Excel",
+    "Data Visualization",
   ]
 
   // Using Typed.js for typing animation
@@ -183,7 +184,7 @@ function initProjectModal() {
     "E-commerce Website": {
       title: "Excellent KB Events and Hire",
       description:
-        "Developed a responsive e-commerce website for a local business using HTML, CSS, and JavaScript. The website includes product listings, shopping cart functionality, and a checkout process.",
+        "Developed a responsive e-commerce website for a local business using HTML, CSS, and JavaScript. The website includes services offered by the business for various events including weddings, graduations, funerals, and corporate events. Clients are able to see the previous work done by the business and they able to book services they want and check the price estimation. In this project JavaScript is used for price estimator calculator, animations, slideshow gallery,  form Submission with Formspree and back to top button",
       files: [
         { name: "index.html", description: "Main HTML file" },
         { name: "styles.css", description: "CSS styles for the website" },
