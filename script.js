@@ -1,4 +1,3 @@
-
 // Main JavaScript file for the Portfolio Website
 
 // Wait for the DOM to be fully loaded before executing scripts
@@ -202,10 +201,10 @@ function initProjectModal() {
         { name: "documentation.pdf", description: "Dashboard documentation and user guide" },
       ],
     },
-    "Weather App": {
+    "My Portfolio": {
       title: "My Portfolio Website",
       description:
-        "Developed a website that has my details such as contacts. The website has projects i did, skills that i have and my github reposetories.",
+        "Developed a website that has my details such as contacts. The website has projects i did, skills that i have and my github reposetories. JavaScript is used for theme switching, animation, transitions, data fetching from GitHub repository data, showcasing the user's latest projects and displays language statistics based on the fetched GitHub data. CSS is responsible for the visual presentation and layout of the portfolio, ensuring it looks appealing and functions well across different devices.",
       files: [
         { name: "index.html", description: "Main HTML file" },
         { name: "styles.css", description: "CSS styles for the app" },
