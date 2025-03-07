@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initMobileMenu()
     initContactForm()
     initScrollHeader()
+    initNavActiveState()
   } catch (error) {
     console.error("Error initializing modules:", error)
   }
@@ -86,14 +87,17 @@ function initDarkMode() {
   }
 }
 
-// Function to initialize mobile menu
+// Function to initialize mobile menu with improved animations
 function initMobileMenu() {
   const menuToggle = document.getElementById("menuToggle")
   const closeMenu = document.getElementById("closeMenu")
   const navbar = document.getElementById("navbar")
   const menuOverlay = document.getElementById("menuOverlay")
-  const navLinks = document.querySelectorAll(".nav-link")
+  const navItems = document.querySelectorAll(".nav-item")
   const mobileMenuYear = document.getElementById("mobileMenuYear")
+  const body = document.body
+  let isMenuOpen = false
+  let lastScrollTop = 0
 
   // Check if required elements exist
   if (!menuToggle || !closeMenu || !navbar || !menuOverlay) {
@@ -106,18 +110,81 @@ function initMobileMenu() {
     mobileMenuYear.textContent = new Date().getFullYear()
   }
 
-  // Function to open mobile menu
-  const openMenu = () => {
-    navbar.classList.add("active")
-    menuOverlay.classList.add("active")
-    document.body.style.overflow = "hidden" // Prevent scrolling when menu is open
+  // Function to toggle menu button appearance
+  const toggleMenuButton = (isActive) => {
+    if (isActive) {
+      menuToggle.classList.add("active")
+      menuToggle.setAttribute("aria-expanded", "true")
+    } else {
+      menuToggle.classList.remove("active")
+      menuToggle.setAttribute("aria-expanded", "false")
+    }
   }
 
-  // Function to close mobile menu
+  // Function to animate nav items
+  const animateNavItems = (shouldShow) => {
+    navItems.forEach((item, index) => {
+      setTimeout(() => {
+        if (shouldShow) {
+          item.classList.add("show-item")
+        } else {
+          item.classList.remove("show-item")
+        }
+      }, index * 50) // Staggered animation
+    })
+  }
+
+  // Function to open mobile menu with animation
+  const openMenu = () => {
+    if (isMenuOpen) return
+
+    isMenuOpen = true
+    toggleMenuButton(true)
+    
+    // Show overlay first for smooth transition
+    menuOverlay.classList.add("active")
+    
+    // Then open the menu
+    navbar.classList.add("active")
+    
+    // Animate nav items after menu is visible
+    setTimeout(() => animateNavItems(true), 100)
+    
+    // Prevent scrolling when menu is open
+    body.style.overflow = "hidden"
+    
+    // Add event listeners for keyboard navigation
+    document.addEventListener("keydown", handleEscapeKey)
+  }
+
+  // Function to close mobile menu with animation
   const closeMenuFunc = () => {
-    navbar.classList.remove("active")
-    menuOverlay.classList.remove("active")
-    document.body.style.overflow = "" // Re-enable scrolling
+    if (!isMenuOpen) return
+
+    isMenuOpen = false
+    toggleMenuButton(false)
+    
+    // First hide the nav items
+    animateNavItems(false)
+    
+    // Then after a short delay, close the menu
+    setTimeout(() => {
+      navbar.classList.remove("active")
+      menuOverlay.classList.remove("active")
+      
+      // Re-enable scrolling
+      body.style.overflow = ""
+      
+      // Remove event listeners
+      document.removeEventListener("keydown", handleEscapeKey)
+    }, 200)
+  }
+
+  // Function to handle escape key press
+  const handleEscapeKey = (e) => {
+    if (e.key === "Escape") {
+      closeMenuFunc()
+    }
   }
 
   // Add event listeners
@@ -126,21 +193,60 @@ function initMobileMenu() {
   menuOverlay.addEventListener("click", closeMenuFunc)
 
   // Close menu when clicking on a link
-  navLinks.forEach((link) => {
-    link.addEventListener("click", closeMenuFunc)
-  })
-
-  // Close menu on window resize (if desktop size)
-  window.addEventListener("resize", () => {
-    if (window.innerWidth >= 768) {
-      closeMenuFunc()
+  navItems.forEach((item) => {
+    const link = item.querySelector(".nav-link")
+    if (link) {
+      link.addEventListener("click", () => {
+        closeMenuFunc()
+        
+        // Remove active class from all items
+        navItems.forEach(item => item.classList.remove("active"))
+        
+        // Add active class to clicked item
+        item.classList.add("active")
+      })
     }
   })
+
+  // Handle window resize
+  let resizeTimeout
+  window.addEventListener("resize", () => {
+    // Debounce the resize event
+    clearTimeout(resizeTimeout)
+    resizeTimeout = setTimeout(() => {
+      if (window.innerWidth >= 768 && isMenuOpen) {
+        closeMenuFunc()
+      }
+    }, 100)
+  })
+
+  // Handle touch swipe to close menu
+  let touchStartX = 0
+  let touchEndX = 0
+
+  navbar.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX
+  }, { passive: true })
+
+  navbar.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX
+    handleSwipe()
+  }, { passive: true })
+
+  const handleSwipe = () => {
+    // If swiped left (from right to left)
+    if (touchStartX - touchEndX > 50 && isMenuOpen) {
+      closeMenuFunc()
+    }
+  }
 }
 
-// Function to add shadow to header on scroll
+// Function to add shadow to header on scroll and hide on scroll down
 function initScrollHeader() {
   const header = document.getElementById("main-header")
+  let lastScrollTop = 0
+  let scrollThreshold = 10
+  let isScrollingUp = true
   
   if (!header) {
     console.warn("Header element not found")
@@ -148,12 +254,73 @@ function initScrollHeader() {
   }
 
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 10) {
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop
+    
+    // Always add scrolled class if past threshold
+    if (currentScroll > scrollThreshold) {
       header.classList.add("scrolled")
     } else {
       header.classList.remove("scrolled")
     }
-  })
+    
+    // Handle header hiding on scroll down (only if mobile menu is not open)
+    if (!document.getElementById("navbar").classList.contains("active")) {
+      // Determine scroll direction
+      isScrollingUp = currentScroll < lastScrollTop
+      
+      // If scrolling down and past threshold, hide header
+      if (!isScrollingUp && currentScroll > 100) {
+        header.classList.add("hide")
+      } 
+      // If scrolling up, show header
+      else if (isScrollingUp) {
+        header.classList.remove("hide")
+      }
+    }
+    
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll // For Mobile or negative scrolling
+  }, { passive: true })
+}
+
+// Function to update active state in navigation based on scroll position
+function initNavActiveState() {
+  const sections = document.querySelectorAll("section[id]")
+  const navItems = document.querySelectorAll(".nav-item")
+  
+  if (!sections.length || !navItems.length) {
+    console.warn("Sections or nav items not found")
+    return
+  }
+  
+  const setActiveNavItem = () => {
+    const scrollPosition = window.scrollY + 100 // Offset for better accuracy
+    
+    // Find the current section
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop
+      const sectionHeight = section.offsetHeight
+      const sectionId = section.getAttribute("id")
+      
+      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+        // Remove active class from all items
+        navItems.forEach(item => {
+          item.classList.remove("active")
+        })
+        
+        // Add active class to corresponding nav item
+        const activeNavItem = document.querySelector(`.nav-item a[href="#${sectionId}"]`).parentElement
+        if (activeNavItem) {
+          activeNavItem.classList.add("active")
+        }
+      }
+    })
+  }
+  
+  // Set active state on scroll
+  window.addEventListener("scroll", setActiveNavItem, { passive: true })
+  
+  // Set active state on page load
+  window.addEventListener("load", setActiveNavItem)
 }
 
 // Function to initialize typing effect
@@ -259,12 +426,6 @@ function initProjectModal() {
       ],
       link: "https://orapeleng-madibela.github.io/my-portfolio/",
     },
-  }
-
-  // Check if view details buttons exist
-  if (viewDetailsButtons.length === 0) {
-    console.warn("No 'View Details' buttons found")
-    return
   }
 
   // Add click event listeners to all "View Details" buttons
@@ -705,130 +866,4 @@ function initLazyLoading() {
     console.warn("IntersectionObserver not supported in this browser")
     // Load all images immediately as fallback
     lazyImages.forEach(img => {
-      const src = img.getAttribute("data-src")
-      if (src) {
-        img.src = src
-        img.classList.remove("lazy-load")
-      }
-    })
-    return
-  }
-
-  const observerOptions = {
-    root: null,
-    rootMargin: "0px",
-    threshold: 0.1,
-  }
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const img = entry.target
-        const src = img.getAttribute("data-src")
-        
-        if (src) {
-          img.src = src
-          img.classList.remove("lazy-load")
-        }
-        
-        observer.unobserve(img)
-      }
-    })
-  }, observerOptions)
-
-  lazyImages.forEach((img) => {
-    observer.observe(img)
-  })
-}
-
-// Function to initialize contact form
-function initContactForm() {
-  const contactForm = document.getElementById("contactForm")
-  const toast = document.getElementById("toast")
-  
-  if (!contactForm || !toast) {
-    console.warn("Contact form elements not found")
-    return
-  }
-  
-  const toastMessage = toast.querySelector(".toast-message")
-  const successIcon = toast.querySelector(".toast-icon.success")
-  const errorIcon = toast.querySelector(".toast-icon.error")
-  
-  if (!toastMessage || !successIcon || !errorIcon) {
-    console.warn("Toast elements not found")
-    return
-  }
-
-  contactForm.addEventListener("submit", async (e) => {
-    e.preventDefault()
-
-    const formData = new FormData(contactForm)
-    const formAction = contactForm.getAttribute("action")
-    
-    if (!formAction) {
-      console.error("Form action attribute is missing")
-      showToast("Form configuration error. Please try again later.", false)
-      return
-    }
-
-    try {
-      const response = await fetch(formAction, {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      })
-
-      if (response.ok) {
-        // Show success toast
-        showToast("Message sent successfully!", true)
-        // Reset form
-        contactForm.reset()
-      } else {
-        // Show error toast
-        showToast("Failed to send message. Please try again.", false)
-      }
-    } catch (error) {
-      console.error("Error sending form:", error)
-      // Show error toast
-      showToast("Failed to send message. Please try again.", false)
-    }
-  })
-  
-  // Helper function to show toast
-  function showToast(message, isSuccess) {
-    toastMessage.textContent = message
-    successIcon.style.display = isSuccess ? "block" : "none"
-    errorIcon.style.display = isSuccess ? "none" : "block"
-    toast.classList.add("show")
-
-    // Hide toast after 5 seconds
-    setTimeout(() => {
-      toast.classList.remove("show")
-    }, 5000)
-  }
-}
-
-function applyAnimationClasses() {
-  // Apply fade-in animation to sections
-  document.querySelectorAll("section").forEach((section) => {
-    section.classList.add("fade-in")
-  })
-
-  // Apply scale-in animation to skill items
-  document.querySelectorAll(".skill").forEach((skill) => {
-    skill.classList.add("scale-in")
-  })
-
-  // Apply slide-in animations to project items
-  document.querySelectorAll(".project").forEach((project, index) => {
-    project.classList.add(index % 2 === 0 ? "slide-in-left" : "slide-in-right")
-  })
-
-  // Apply fade-in animation to timeline items
-  document.querySelectorAll(".timeline-item").forEach((item) => {
-    item.classList.add("fade-in")
-  })
-}
+      const src = img.getAttribu
