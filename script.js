@@ -494,6 +494,23 @@ function initProjectModal() {
       // Show modal
       modal.style.display = "block"
       document.body.style.overflow = "hidden" // Prevent scrolling when modal is open
+
+      // Ensure the modal is scrolled to the top when opened
+      modal.scrollTop = 0
+
+      // Make sure the "View Live Project" link is visible by scrolling to it if needed
+      if (project.link) {
+        setTimeout(() => {
+          // Check if the link is in the viewport
+          const linkRect = modalLink.getBoundingClientRect()
+          const modalRect = modal.getBoundingClientRect()
+
+          // If the link is below the visible area, scroll to it
+          if (linkRect.bottom > modalRect.bottom) {
+            modalLink.scrollIntoView({ behavior: "smooth", block: "center" })
+          }
+        }, 100)
+      }
     })
   })
 
@@ -510,6 +527,14 @@ function initProjectModal() {
       document.body.style.overflow = "" // Re-enable scrolling
     }
   }
+
+  // Add keyboard support for closing the modal with Escape key
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.style.display === "block") {
+      modal.style.display = "none"
+      document.body.style.overflow = "" // Re-enable scrolling
+    }
+  })
 }
 
 // Function to initialize GitHub integration
