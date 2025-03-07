@@ -19,8 +19,8 @@
         
             <div class="mobile-controls">
                 <!-- Mobile Menu Button -->
-                <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu">
-                    <i class="fas fa-bars"></i>
+                <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span class="menu-icon"></span>
                 </button>
                 
                 <!-- Dark Mode Toggle (Mobile) -->
@@ -30,24 +30,75 @@
             </div>
 
             <!-- Navigation -->
-            <nav id="navbar">
+            <nav id="navbar" aria-label="Main navigation">
                 <div class="navbar-container">
                     <div class="navbar-header">
-                        <span class="navbar-title">Menu</span>
+                        <div class="navbar-brand">
+                            <span class="navbar-title">Menu</span>
+                            <p class="navbar-subtitle">Portfolio Navigation</p>
+                        </div>
                         <button id="closeMenu" class="close-menu" aria-label="Close menu">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+
                     <ul class="nav-links">
-                        <li><a href="#home" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-                        <li><a href="#about" class="nav-link"><i class="fas fa-user"></i> About</a></li>
-                        <li><a href="#skills" class="nav-link"><i class="fas fa-code"></i> Skills</a></li>
-                        <li><a href="#projects" class="nav-link"><i class="fas fa-briefcase"></i> Projects</a></li>
-                        <li><a href="#timeline" class="nav-link"><i class="fas fa-clock"></i> Timeline</a></li>
-                        <li><a href="#github" class="nav-link"><i class="fab fa-github"></i> GitHub</a></li>
-                        <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                        <li class="nav-item active">
+                            <a href="#home" class="nav-link" aria-current="page">
+                                <i class="fas fa-home nav-icon"></i>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#about" class="nav-link">
+                                <i class="fas fa-user nav-icon"></i>
+                                <span>About</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#skills" class="nav-link">
+                                <i class="fas fa-code nav-icon"></i>
+                                <span>Skills</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#projects" class="nav-link">
+                                <i class="fas fa-briefcase nav-icon"></i>
+                                <span>Projects</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#timeline" class="nav-link">
+                                <i class="fas fa-clock nav-icon"></i>
+                                <span>Timeline</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#github" class="nav-link">
+                                <i class="fab fa-github nav-icon"></i>
+                                <span>GitHub</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#contact" class="nav-link">
+                                <i class="fas fa-envelope nav-icon"></i>
+                                <span>Contact</span>
+                            </a>
+                        </li>
                     </ul>
+
                     <div class="navbar-footer">
+                        <div class="social-links-mobile">
+                            <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="https://wa.me/27662343315" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        </div>
                         <p>&copy; <span id="mobileMenuYear"></span> Orapeleng Timothy Madibela</p>
                     </div>
                 </div>
@@ -61,7 +112,7 @@
     </header>
 
     <!-- Mobile Menu Overlay -->
-    <div id="menuOverlay" class="menu-overlay"></div>
+    <div id="menuOverlay" class="menu-overlay" aria-hidden="true"></div>
 
     <main>
         <section id="home">
@@ -315,7 +366,7 @@
                                 <i class="fas fa-envelope"></i>
                                 <div>
                                     <p>Email</p>
-                                    <a href="mailto:orapelengmadibela@gmail.com">orapelengmadibela@gmail.com</a>
+                                    <a href="mailto:orapeleng.madibela@gmail.com">orapeleng.madibela@gmail.com</a>
                                 </div>
                             </li>
                             <li>
@@ -386,4 +437,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
