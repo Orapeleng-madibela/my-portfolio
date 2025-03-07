@@ -97,7 +97,7 @@ function initMobileMenu() {
   const mobileMenuYear = document.getElementById("mobileMenuYear")
   const body = document.body
   let isMenuOpen = false
-  let lastScrollTop = 0
+  const lastScrollTop = 0
 
   // Check if required elements exist
   if (!menuToggle || !closeMenu || !navbar || !menuOverlay) {
@@ -140,19 +140,19 @@ function initMobileMenu() {
 
     isMenuOpen = true
     toggleMenuButton(true)
-    
+
     // Show overlay first for smooth transition
     menuOverlay.classList.add("active")
-    
+
     // Then open the menu
     navbar.classList.add("active")
-    
+
     // Animate nav items after menu is visible
     setTimeout(() => animateNavItems(true), 100)
-    
+
     // Prevent scrolling when menu is open
     body.style.overflow = "hidden"
-    
+
     // Add event listeners for keyboard navigation
     document.addEventListener("keydown", handleEscapeKey)
   }
@@ -163,18 +163,18 @@ function initMobileMenu() {
 
     isMenuOpen = false
     toggleMenuButton(false)
-    
+
     // First hide the nav items
     animateNavItems(false)
-    
+
     // Then after a short delay, close the menu
     setTimeout(() => {
       navbar.classList.remove("active")
       menuOverlay.classList.remove("active")
-      
+
       // Re-enable scrolling
       body.style.overflow = ""
-      
+
       // Remove event listeners
       document.removeEventListener("keydown", handleEscapeKey)
     }, 200)
@@ -198,10 +198,10 @@ function initMobileMenu() {
     if (link) {
       link.addEventListener("click", () => {
         closeMenuFunc()
-        
+
         // Remove active class from all items
-        navItems.forEach(item => item.classList.remove("active"))
-        
+        navItems.forEach((item) => item.classList.remove("active"))
+
         // Add active class to clicked item
         item.classList.add("active")
       })
@@ -224,14 +224,22 @@ function initMobileMenu() {
   let touchStartX = 0
   let touchEndX = 0
 
-  navbar.addEventListener("touchstart", (e) => {
-    touchStartX = e.changedTouches[0].screenX
-  }, { passive: true })
+  navbar.addEventListener(
+    "touchstart",
+    (e) => {
+      touchStartX = e.changedTouches[0].screenX
+    },
+    { passive: true },
+  )
 
-  navbar.addEventListener("touchend", (e) => {
-    touchEndX = e.changedTouches[0].screenX
-    handleSwipe()
-  }, { passive: true })
+  navbar.addEventListener(
+    "touchend",
+    (e) => {
+      touchEndX = e.changedTouches[0].screenX
+      handleSwipe()
+    },
+    { passive: true },
+  )
 
   const handleSwipe = () => {
     // If swiped left (from right to left)
@@ -245,68 +253,72 @@ function initMobileMenu() {
 function initScrollHeader() {
   const header = document.getElementById("main-header")
   let lastScrollTop = 0
-  let scrollThreshold = 10
+  const scrollThreshold = 10
   let isScrollingUp = true
-  
+
   if (!header) {
     console.warn("Header element not found")
     return
   }
 
-  window.addEventListener("scroll", () => {
-    const currentScroll = window.pageYOffset || document.documentElement.scrollTop
-    
-    // Always add scrolled class if past threshold
-    if (currentScroll > scrollThreshold) {
-      header.classList.add("scrolled")
-    } else {
-      header.classList.remove("scrolled")
-    }
-    
-    // Handle header hiding on scroll down (only if mobile menu is not open)
-    if (!document.getElementById("navbar").classList.contains("active")) {
-      // Determine scroll direction
-      isScrollingUp = currentScroll < lastScrollTop
-      
-      // If scrolling down and past threshold, hide header
-      if (!isScrollingUp && currentScroll > 100) {
-        header.classList.add("hide")
-      } 
-      // If scrolling up, show header
-      else if (isScrollingUp) {
-        header.classList.remove("hide")
+  window.addEventListener(
+    "scroll",
+    () => {
+      const currentScroll = window.pageYOffset || document.documentElement.scrollTop
+
+      // Always add scrolled class if past threshold
+      if (currentScroll > scrollThreshold) {
+        header.classList.add("scrolled")
+      } else {
+        header.classList.remove("scrolled")
       }
-    }
-    
-    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll // For Mobile or negative scrolling
-  }, { passive: true })
+
+      // Handle header hiding on scroll down (only if mobile menu is not open)
+      if (!document.getElementById("navbar").classList.contains("active")) {
+        // Determine scroll direction
+        isScrollingUp = currentScroll < lastScrollTop
+
+        // If scrolling down and past threshold, hide header
+        if (!isScrollingUp && currentScroll > 100) {
+          header.classList.add("hide")
+        }
+        // If scrolling up, show header
+        else if (isScrollingUp) {
+          header.classList.remove("hide")
+        }
+      }
+
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll // For Mobile or negative scrolling
+    },
+    { passive: true },
+  )
 }
 
 // Function to update active state in navigation based on scroll position
 function initNavActiveState() {
   const sections = document.querySelectorAll("section[id]")
   const navItems = document.querySelectorAll(".nav-item")
-  
+
   if (!sections.length || !navItems.length) {
     console.warn("Sections or nav items not found")
     return
   }
-  
+
   const setActiveNavItem = () => {
     const scrollPosition = window.scrollY + 100 // Offset for better accuracy
-    
+
     // Find the current section
-    sections.forEach(section => {
+    sections.forEach((section) => {
       const sectionTop = section.offsetTop
       const sectionHeight = section.offsetHeight
       const sectionId = section.getAttribute("id")
-      
+
       if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
         // Remove active class from all items
-        navItems.forEach(item => {
+        navItems.forEach((item) => {
           item.classList.remove("active")
         })
-        
+
         // Add active class to corresponding nav item
         const activeNavItem = document.querySelector(`.nav-item a[href="#${sectionId}"]`).parentElement
         if (activeNavItem) {
@@ -315,10 +327,10 @@ function initNavActiveState() {
       }
     })
   }
-  
+
   // Set active state on scroll
   window.addEventListener("scroll", setActiveNavItem, { passive: true })
-  
+
   // Set active state on page load
   window.addEventListener("load", setActiveNavItem)
 }
@@ -326,12 +338,12 @@ function initNavActiveState() {
 // Function to initialize typing effect
 function initTypingEffect() {
   const typingText = document.querySelector(".typing-text")
-  
+
   if (!typingText) {
     console.warn("Typing text element not found")
     return
   }
-  
+
   const texts = [
     "Web Developer",
     "Data Analyst",
@@ -346,7 +358,7 @@ function initTypingEffect() {
   ]
 
   // Check if Typed.js is loaded
-  if (typeof window.Typed !== 'undefined') {
+  if (typeof window.Typed !== "undefined") {
     // Using Typed.js for typing animation
     new window.Typed(typingText, {
       strings: texts,
@@ -428,19 +440,25 @@ function initProjectModal() {
     },
   }
 
+  // Check if view details buttons exist
+  if (viewDetailsButtons.length === 0) {
+    console.warn("No 'View Details' buttons found")
+    return
+  }
+
   // Add click event listeners to all "View Details" buttons
   viewDetailsButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const projectTitleElement = button.parentElement.querySelector("h3")
-      
+
       if (!projectTitleElement) {
         console.warn("Project title element not found")
         return
       }
-      
+
       const projectTitle = projectTitleElement.textContent
       const project = projects[projectTitle]
-      
+
       if (!project) {
         console.warn(`Project details not found for: ${projectTitle}`)
         return
@@ -546,22 +564,22 @@ function initGitHubIntegration() {
       if (hasLanguageStats) {
         // Fetch language statistics
         return Promise.all(
-          data.map((repo) => 
+          data.map((repo) =>
             fetch(repo.languages_url)
-              .then(res => {
+              .then((res) => {
                 if (!res.ok) {
                   throw new Error(`Failed to fetch languages for ${repo.name}`)
                 }
                 return res.json()
               })
-              .catch(err => {
+              .catch((err) => {
                 console.warn(`Error fetching languages for ${repo.name}:`, err)
                 return {} // Return empty object on error to continue with other repos
-              })
-          )
+              }),
+          ),
         )
       }
-      
+
       return null // Skip language stats if elements don't exist
     })
     .then((languagesData) => {
@@ -576,7 +594,7 @@ function initGitHubIntegration() {
       })
 
       const totalBytes = Object.values(languageTotals).reduce((a, b) => a + b, 0)
-      
+
       if (totalBytes === 0) {
         languageStats.innerHTML = "<p>No language data available.</p>"
         return
@@ -640,12 +658,12 @@ function initParticles() {
   // Check if particlesJS is loaded
   if (typeof window.particlesJS !== "undefined") {
     const particlesContainer = document.getElementById("particles-js")
-    
+
     if (!particlesContainer) {
       console.warn("Particles container not found")
       return
     }
-    
+
     window.particlesJS("particles-js", {
       particles: {
         number: { value: 80, density: { enable: true, value_area: 800 } },
@@ -685,16 +703,16 @@ function initParticles() {
 // Function to initialize scroll animations
 function initScrollAnimations() {
   const animatedElements = document.querySelectorAll(".fade-in, .scale-in, .slide-in-left, .slide-in-right")
-  
+
   if (animatedElements.length === 0) {
     return // No elements to animate
   }
 
   // Check if IntersectionObserver is supported
-  if (!('IntersectionObserver' in window)) {
+  if (!("IntersectionObserver" in window)) {
     console.warn("IntersectionObserver not supported in this browser")
     // Make all elements visible as fallback
-    animatedElements.forEach(element => element.classList.add("appear"))
+    animatedElements.forEach((element) => element.classList.add("appear"))
     return
   }
 
@@ -721,16 +739,16 @@ function initScrollAnimations() {
 // Function to initialize skills animation
 function initSkillsAnimation() {
   const progressBars = document.querySelectorAll(".progress-bar")
-  
+
   if (progressBars.length === 0) {
     return // No progress bars to animate
   }
 
   // Check if IntersectionObserver is supported
-  if (!('IntersectionObserver' in window)) {
+  if (!("IntersectionObserver" in window)) {
     console.warn("IntersectionObserver not supported in this browser")
     // Animate all progress bars immediately as fallback
-    progressBars.forEach(bar => {
+    progressBars.forEach((bar) => {
       const percentage = bar.getAttribute("data-percentage")
       const progressBarInner = bar.querySelector(".progress-bar-inner")
       if (progressBarInner) {
@@ -751,7 +769,7 @@ function initSkillsAnimation() {
       if (entry.isIntersecting) {
         const percentage = entry.target.getAttribute("data-percentage")
         const progressBarInner = entry.target.querySelector(".progress-bar-inner")
-        
+
         if (progressBarInner && percentage) {
           setTimeout(() => {
             progressBarInner.style.width = `${percentage}%`
@@ -772,7 +790,7 @@ function initSkillsAnimation() {
 function initProjectFilters() {
   const filterButtons = document.querySelectorAll(".filter-btn")
   const projects = document.querySelectorAll(".project")
-  
+
   if (filterButtons.length === 0 || projects.length === 0) {
     console.warn("Project filter elements not found")
     return
@@ -781,7 +799,7 @@ function initProjectFilters() {
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const filter = button.getAttribute("data-filter")
-      
+
       if (!filter) {
         console.warn("Filter attribute missing on button")
         return
@@ -794,7 +812,7 @@ function initProjectFilters() {
       // Filter projects
       projects.forEach((project) => {
         const category = project.getAttribute("data-category")
-        
+
         if (filter === "all" || category === filter) {
           project.style.display = "flex"
           setTimeout(() => {
@@ -816,7 +834,7 @@ function initProjectFilters() {
 // Function to set the current year in the footer
 function setCurrentYear() {
   const yearElement = document.getElementById("currentYear")
-  
+
   if (yearElement) {
     yearElement.textContent = new Date().getFullYear()
   }
@@ -825,7 +843,7 @@ function setCurrentYear() {
 // Function to initialize smooth scrolling
 function initSmoothScrolling() {
   const anchorLinks = document.querySelectorAll('a[href^="#"]')
-  
+
   if (anchorLinks.length === 0) {
     return // No anchor links to handle
   }
@@ -836,7 +854,7 @@ function initSmoothScrolling() {
 
       const targetId = this.getAttribute("href")
       if (!targetId) return
-      
+
       const targetElement = document.querySelector(targetId)
 
       if (targetElement) {
@@ -856,14 +874,141 @@ function initSmoothScrolling() {
 // Function to initialize lazy loading for images
 function initLazyLoading() {
   const lazyImages = document.querySelectorAll("img.lazy-load")
-  
+
   if (lazyImages.length === 0) {
     return // No images to lazy load
   }
 
   // Check if IntersectionObserver is supported
-  if (!('IntersectionObserver' in window)) {
+  if (!("IntersectionObserver" in window)) {
     console.warn("IntersectionObserver not supported in this browser")
     // Load all images immediately as fallback
-    lazyImages.forEach(img => {
-      const src = img.getAttribu
+    lazyImages.forEach((img) => {
+      const src = img.getAttribute("data-src")
+      if (src) {
+        img.src = src
+        img.classList.remove("lazy-load")
+      }
+    })
+    return
+  }
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.1,
+  }
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const img = entry.target
+        const src = img.getAttribute("data-src")
+
+        if (src) {
+          img.src = src
+          img.classList.remove("lazy-load")
+        }
+
+        observer.unobserve(img)
+      }
+    })
+  }, observerOptions)
+
+  lazyImages.forEach((img) => {
+    observer.observe(img)
+  })
+}
+
+// Function to initialize contact form
+function initContactForm() {
+  const contactForm = document.getElementById("contactForm")
+  const toast = document.getElementById("toast")
+
+  if (!contactForm || !toast) {
+    console.warn("Contact form elements not found")
+    return
+  }
+
+  const toastMessage = toast.querySelector(".toast-message")
+  const successIcon = toast.querySelector(".toast-icon.success")
+  const errorIcon = toast.querySelector(".toast-icon.error")
+
+  if (!toastMessage || !successIcon || !errorIcon) {
+    console.warn("Toast elements not found")
+    return
+  }
+
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+
+    const formData = new FormData(contactForm)
+    const formAction = contactForm.getAttribute("action")
+
+    if (!formAction) {
+      console.error("Form action attribute is missing")
+      showToast("Form configuration error. Please try again later.", false)
+      return
+    }
+
+    try {
+      const response = await fetch(formAction, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      })
+
+      if (response.ok) {
+        // Show success toast
+        showToast("Message sent successfully!", true)
+        // Reset form
+        contactForm.reset()
+      } else {
+        // Show error toast
+        showToast("Failed to send message. Please try again.", false)
+      }
+    } catch (error) {
+      console.error("Error sending form:", error)
+      // Show error toast
+      showToast("Failed to send message. Please try again.", false)
+    }
+  })
+
+  // Helper function to show toast
+  function showToast(message, isSuccess) {
+    toastMessage.textContent = message
+    successIcon.style.display = isSuccess ? "block" : "none"
+    errorIcon.style.display = isSuccess ? "none" : "block"
+    toast.classList.add("show")
+
+    // Hide toast after 5 seconds
+    setTimeout(() => {
+      toast.classList.remove("show")
+    }, 5000)
+  }
+}
+
+function applyAnimationClasses() {
+  // Apply fade-in animation to sections
+  document.querySelectorAll("section").forEach((section) => {
+    section.classList.add("fade-in")
+  })
+
+  // Apply scale-in animation to skill items
+  document.querySelectorAll(".skill").forEach((skill) => {
+    skill.classList.add("scale-in")
+  })
+
+  // Apply slide-in animations to project items
+  document.querySelectorAll(".project").forEach((project, index) => {
+    project.classList.add(index % 2 === 0 ? "slide-in-left" : "slide-in-right")
+  })
+
+  // Apply fade-in animation to timeline items
+  document.querySelectorAll(".timeline-item").forEach((item) => {
+    item.classList.add("fade-in")
+  })
+}
+
