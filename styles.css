@@ -47,6 +47,9 @@ body {
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .container {
@@ -511,6 +514,9 @@ body {
 main {
   padding-top: 70px;
   min-height: calc(100vh - 70px - 80px); /* Subtract header and footer heights */
+  width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 section {
@@ -519,11 +525,13 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  opacity: 0;
-  transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease;
+  /* Remove initial invisibility */
+  opacity: 1;
+  transform: translateY(0);
 }
 
+/* Keep the appear class styling for animation effects */
 section.appear {
   opacity: 1;
   transform: translateY(0);
