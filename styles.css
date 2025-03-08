@@ -513,10 +513,11 @@ body {
 /* Main Content */
 main {
   padding-top: 70px;
-  min-height: calc(100vh - 70px - 80px); /* Subtract header and footer heights */
+  flex: 1;
   width: 100%;
   position: relative;
   z-index: 1;
+  display: block;
 }
 
 section {
@@ -525,13 +526,20 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  /* Remove initial invisibility */
-  opacity: 1;
-  transform: translateY(0);
+  /* Always visible by default */
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  visibility: visible !important;
 }
 
-/* Keep the appear class styling for animation effects */
+/* Animation classes still exist but don't hide content initially */
+.fade-in,
+.scale-in,
+.slide-in-left,
+.slide-in-right {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
 section.appear {
   opacity: 1;
   transform: translateY(0);
@@ -1315,5 +1323,21 @@ footer .container {
     bottom: 20px;
     width: 85%;
   }
+}
+
+/* Emergency fix for visibility issues */
+body * {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
 }
 
