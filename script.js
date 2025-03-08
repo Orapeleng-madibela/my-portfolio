@@ -1006,10 +1006,19 @@ function initContactForm() {
     toastMessage.textContent = message
     successIcon.style.display = isSuccess ? "block" : "none"
     errorIcon.style.display = isSuccess ? "none" : "block"
+
+    // Remove any existing show class and timeout
+    toast.classList.remove("show")
+    clearTimeout(toast.timeout)
+
+    // Force a reflow to ensure the removal takes effect before adding again
+    void toast.offsetWidth
+
+    // Show the toast
     toast.classList.add("show")
 
     // Hide toast after 5 seconds
-    setTimeout(() => {
+    toast.timeout = setTimeout(() => {
       toast.classList.remove("show")
     }, 5000)
   }
