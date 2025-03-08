@@ -49,7 +49,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 .container {
@@ -428,8 +427,8 @@ body {
   .nav-item {
     margin: 0;
     width: 100%;
-    opacity: 0;
-    transform: translateX(20px);
+    opacity: 1; /* Make sure items are visible by default */
+    transform: translateX(0); /* Reset transform by default */
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
@@ -507,6 +506,28 @@ body {
 
   .mobile-controls {
     display: flex;
+  }
+
+  /* Fix menu overlay */
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--overlay-bg);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(3px);
+  }
+
+  .menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    display: block;
   }
 }
 
@@ -1339,5 +1360,147 @@ body {
 
 main {
   flex: 1;
+}
+
+/* Fix GitHub repositories and language statistics styles */
+.repos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.repo {
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.repo:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.repo h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.repo p {
+  color: var(--muted-color);
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  flex-grow: 1;
+}
+
+.repo-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.repo a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-speed) ease;
+  display: inline-block;
+}
+
+.repo a:hover {
+  color: var(--secondary-color);
+}
+
+#language-stats {
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+}
+
+.language-bar {
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+  display: flex;
+}
+
+.language-segment {
+  height: 100%;
+  transition: width 1s ease;
+}
+
+.language-labels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.language-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.language-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Fix dark mode toggle buttons */
+.dark-mode-toggle,
+.dark-mode-toggle-mobile {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: transform var(--transition-speed) ease, background-color var(--transition-speed) ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.dark-mode-toggle {
+  margin-left: 1rem;
+}
+
+.dark-mode-toggle-mobile {
+  display: none;
+  margin-right: 0.5rem;
+}
+
+.dark-mode-toggle:hover,
+.dark-mode-toggle-mobile:hover {
+  transform: rotate(360deg);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode-toggle:focus,
+.dark-mode-toggle-mobile:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .dark-mode-toggle {
+    display: none;
+  }
+
+  .dark-mode-toggle-mobile {
+    display: flex;
+  }
 }
 
