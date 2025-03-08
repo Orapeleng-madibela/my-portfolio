@@ -437,10 +437,11 @@
         </div>
     </div>
 
-    <div id="toast" class="toast">
+    <!-- Update the toast HTML structure to ensure it's at the end of the body -->
+    <div id="toast" class="toast" aria-live="polite" role="status">
         <div class="toast-content">
-            <i class="fas fa-check-circle toast-icon success"></i>
-            <i class="fas fa-exclamation-circle toast-icon error"></i>
+            <i class="fas fa-check-circle toast-icon success" aria-hidden="true"></i>
+            <i class="fas fa-exclamation-circle toast-icon error" aria-hidden="true"></i>
             <div class="toast-message">Message sent successfully!</div>
         </div>
     </div>
