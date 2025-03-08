@@ -4,6 +4,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize all modules with proper error handling
   try {
+    fixVisibility() // Add this line to fix visibility issues
     initDarkMode()
     initTypingEffect()
     initProjectModal()
@@ -22,6 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
     initNavActiveState()
   } catch (error) {
     console.error("Error initializing modules:", error)
+    // Fall back to making everything visible if there's an error
+    document.querySelectorAll("section").forEach((section) => {
+      section.classList.add("appear")
+    })
   }
 })
 
@@ -733,6 +738,11 @@ function initScrollAnimations() {
     return // No elements to animate
   }
 
+  // Make all sections immediately visible when page loads
+  document.querySelectorAll("section").forEach((section) => {
+    section.classList.add("appear")
+  })
+
   // Check if IntersectionObserver is supported
   if (!("IntersectionObserver" in window)) {
     console.warn("IntersectionObserver not supported in this browser")
@@ -1046,5 +1056,26 @@ function applyAnimationClasses() {
   document.querySelectorAll(".timeline-item").forEach((item) => {
     item.classList.add("fade-in")
   })
+}
+
+
+// Ensure all sections are visible even if JS is slow or fails
+document.addEventListener("DOMContentLoaded", () => {
+  // Immediately show all sections to prevent blank page
+  document.querySelectorAll("section").forEach((section) => {
+    section.classList.add("appear");
+  });
+});
+
+// Add this function to fix empty page issue
+function fixVisibility() {
+  // Force show all sections if they're still hidden after 500ms
+  setTimeout(() => {
+    document.querySelectorAll("section").forEach((section) => {
+      if (!section.classList.contains("appear")) {
+        section.classList.add("appear");
+      }
+    });
+  }, 500);
 }
 
