@@ -14,7 +14,7 @@
         <div class="toast-content">
             <i class="fas fa-check-circle toast-icon success" aria-hidden="true"></i>
             <i class="fas fa-exclamation-circle toast-icon error" aria-hidden="true"></i>
-            <div class="toast-message">Message sent successfully!</div>
+            <div class="toast-message"></div>
         </div>
     </div>
 
@@ -22,10 +22,12 @@
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2 id="modal-title"></h2>
-            <p id="modal-description"></p>
-            <div id="modal-files"></div>
-            <div id="modal-link"></div>
+            <div class="modal-inner">
+                <h2 id="modal-title"></h2>
+                <p id="modal-description"></p>
+                <div id="modal-files"></div>
+                <div id="modal-link"></div>
+            </div>
         </div>
     </div>
 
@@ -550,11 +552,15 @@
     
     // Fix GitHub repositories section
     const reposSection = document.getElementById("repos");
+    const languageStats = document.getElementById("language-stats");
+    const languageBar = document.querySelector(".language-bar");
+    const languageLabels = document.querySelector(".language-labels");
+
     if (reposSection && reposSection.innerHTML === "") {
       reposSection.innerHTML = `
         <div class="repo">
           <h3>my-portfolio</h3>
-          <p>My personal portfolio website showcasing my skills and projects</p>
+          <p>My personal portfolio website showcasing my skills and projects using HTML, CSS, and JavaScript</p>
           <div class="repo-meta">
             <span>Updated: ${new Date().toLocaleDateString()}</span>
             <a href="https://github.com/Orapeleng-madibela/my-portfolio" target="_blank" rel="noopener noreferrer">View on GitHub</a>
@@ -562,7 +568,7 @@
         </div>
         <div class="repo">
           <h3>data-analysis-projects</h3>
-          <p>Collection of data analysis projects using Python and various libraries</p>
+          <p>Collection of data analysis projects using Python, pandas, and matplotlib for data visualization</p>
           <div class="repo-meta">
             <span>Updated: ${new Date().toLocaleDateString()}</span>
             <a href="https://github.com/Orapeleng-madibela/data-analysis-projects" target="_blank" rel="noopener noreferrer">View on GitHub</a>
@@ -570,13 +576,52 @@
         </div>
         <div class="repo">
           <h3>web-development</h3>
-          <p>Web development projects using HTML, CSS, and JavaScript</p>
+          <p>Web development projects using HTML, CSS, JavaScript and responsive design techniques</p>
           <div class="repo-meta">
             <span>Updated: ${new Date().toLocaleDateString()}</span>
             <a href="https://github.com/Orapeleng-madibela/web-development" target="_blank" rel="noopener noreferrer">View on GitHub</a>
           </div>
         </div>
       `;
+      
+      // Add fallback language statistics
+      if (languageStats && languageBar && languageLabels) {
+        languageBar.innerHTML = "";
+        languageLabels.innerHTML = "";
+        
+        const fallbackLanguages = {
+          "JavaScript": 40,
+          "HTML": 30,
+          "CSS": 20,
+          "Python": 10
+        };
+        
+        const colors = {
+          "JavaScript": "#f1e05a",
+          "Python": "#3572A5",
+          "HTML": "#e34c26",
+          "CSS": "#563d7c"
+        };
+        
+        Object.entries(fallbackLanguages).forEach(([language, percentage]) => {
+          // Create language segment in bar
+          const segment = document.createElement("div");
+          segment.className = "language-segment";
+          segment.style.width = `${percentage}%`;
+          segment.style.backgroundColor = colors[language] || "#808080";
+          segment.title = `${language}: ${percentage}%`;
+          languageBar.appendChild(segment);
+
+          // Create language label
+          const label = document.createElement("div");
+          label.className = "language-label";
+          label.innerHTML = `
+            <div class="language-color" style="background-color: ${colors[language] || "#808080"}"></div>
+            <span>${language}: ${percentage}%</span>
+          `;
+          languageLabels.appendChild(label);
+        });
+      }
     }
   });
 </script>
