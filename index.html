@@ -141,7 +141,7 @@
     <div id="menuOverlay" class="menu-overlay" aria-hidden="true"></div>
 
     <main>
-        <section id="home">
+        <section id="home" class="appear">
             <div class="container">
                 <h1 class="rgb-text">ORAPELENG TIMOTHY MADIBELA</h1>
                 <div class="typing-text"></div>
@@ -155,7 +155,7 @@
             </div>
         </section>
 
-        <section id="about">
+        <section id="about" class="appear">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-user"></i> About Me</h2>
                 <div class="about-content">
@@ -169,7 +169,7 @@
             </div>
         </section>
 
-        <section id="skills">
+        <section id="skills" class="appear">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-code"></i> Skills</h2>
                 <div class="skills-grid">
@@ -267,7 +267,7 @@
             </div>
         </section>
 
-        <section id="projects">
+        <section id="projects" class="appear">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-briefcase"></i> Projects</h2>
                 <div class="project-filters">
@@ -312,7 +312,7 @@
             </div>
         </section>
 
-        <section id="timeline">
+        <section id="timeline" class="appear">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-clock"></i> Education</h2>
                 <div class="timeline">
@@ -348,7 +348,7 @@
             </div>
         </section>
 
-        <section id="github">
+        <section id="github" class="appear">
             <div class="container">
                 <h2 class="section-header"><i class="fab fa-github"></i> GitHub Repositories</h2>
                 <div id="repos" class="repos-grid"></div>
@@ -360,7 +360,7 @@
             </div>
         </section>
 
-        <section id="contact">
+        <section id="contact" class="appear">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-envelope"></i> Contact Me</h2>
                 <div class="contact-grid">
@@ -446,6 +446,25 @@
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="script.js"></script>
+    <script>
+  // Emergency fix to ensure content visibility
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll("section").forEach(function(section) {
+      section.style.opacity = "1";
+      section.style.transform = "translateY(0)";
+      section.style.visibility = "visible";
+      section.classList.add("appear");
+    });
+  });
+  
+  // Backup in case DOMContentLoaded already fired
+  document.querySelectorAll("section").forEach(function(section) {
+    section.style.opacity = "1";
+    section.style.transform = "translateY(0)";
+    section.style.visibility = "visible";
+    section.classList.add("appear");
+  });
+</script>
 </body>
 </html>
 
