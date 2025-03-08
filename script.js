@@ -1,3 +1,24 @@
+// Immediate fix for visibility issues - run before anything else
+document.addEventListener("DOMContentLoaded", () => {
+  // Force all sections to be visible immediately
+  document.querySelectorAll("section").forEach((section) => {
+    section.style.opacity = "1"
+    section.style.transform = "translateY(0)"
+    section.style.visibility = "visible"
+    section.classList.add("appear")
+  })
+})
+
+// Backup fix - run this even if there's an error elsewhere
+window.onload = () => {
+  document.querySelectorAll("section").forEach((section) => {
+    section.style.opacity = "1"
+    section.style.transform = "translateY(0)"
+    section.style.visibility = "visible"
+    section.classList.add("appear")
+  })
+}
+
 // Main JavaScript file for the Portfolio Website
 
 // Wait for the DOM to be fully loaded before executing scripts
@@ -1069,13 +1090,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Add this function to fix empty page issue
 function fixVisibility() {
-  // Force show all sections if they're still hidden after 500ms
+  // Force show all sections immediately
+  document.querySelectorAll("section").forEach((section) => {
+    section.style.opacity = "1";
+    section.style.transform = "translateY(0)";
+    section.style.visibility = "visible";
+    section.classList.add("appear");
+  });
+  
+  // And again after a short delay to be sure
   setTimeout(() => {
     document.querySelectorAll("section").forEach((section) => {
-      if (!section.classList.contains("appear")) {
-        section.classList.add("appear");
-      }
+      section.style.opacity = "1";
+      section.style.transform = "translateY(0)";
+      section.style.visibility = "visible";
+      section.classList.add("appear");
     });
-  }, 500);
+  }, 100);
 }
 
