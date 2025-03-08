@@ -9,6 +9,32 @@
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 </head>
 <body>
+    <!-- Toast notification - positioned at the top level for proper stacking -->
+    <div id="toast" class="toast" aria-live="polite" role="status">
+        <div class="toast-content">
+            <i class="fas fa-check-circle toast-icon success" aria-hidden="true"></i>
+            <i class="fas fa-exclamation-circle toast-icon error" aria-hidden="true"></i>
+            <div class="toast-message">Message sent successfully!</div>
+        </div>
+    </div>
+
+    <!-- Modal - positioned at the top level for proper stacking -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
+            <div id="modal-files"></div>
+            <div id="modal-link"></div>
+        </div>
+    </div>
+
+    <!-- WhatsApp floating button -->
+    <a href="https://wa.me/27662343315" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="sr-only">Chat on WhatsApp</span>
+    </a>
+
     <div id="particles-js"></div>
     
     <header id="main-header">
@@ -295,7 +321,6 @@
                             <h3>University of Limpopo</h3>
                             <p>BSc Mathematical Sciences</p>
                             <span class="date">2021 - Present</span>
-                            <!-- <a href="path/to/university_of_limpopo.pdf" download class="download-pdf">Download PDF</a> -->
                         </div>
                     </div>
                     <div class="timeline-item">
@@ -303,7 +328,6 @@
                             <h3>Nkobong Secondary School</h3>
                             <p>High School Bachelor</p>
                             <span class="date">2016 - 2020</span>
-                            <!--<a href="path/to/nkobong_secondary.pdf" download class="download-pdf">Download PDF</a>-->
                         </div>
                     </div>
                     <div class="timeline-item">
@@ -311,7 +335,6 @@
                             <h3>Class Representative</h3>
                             <p>SSTB000 Module</p>
                             <span class="date">2023</span>
-                            <!--<a href="path/to/class_representative.pdf" download class="download-pdf">Download PDF</a> -->
                         </div>
                     </div>
                     <div class="timeline-item">
@@ -420,31 +443,6 @@
             <p>&copy; <span id="currentYear"></span> Orapeleng Timothy Madibela. All rights reserved.</p>
         </div>
     </footer>
-
-    <!-- WhatsApp floating button -->
-    <a href="https://wa.me/27662343315" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-        <span class="sr-only">Chat on WhatsApp</span>
-    </a>
-
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modal-title"></h2>
-            <p id="modal-description"></p>
-            <div id="modal-files"></div>
-            <div id="modal-link"></div>
-        </div>
-    </div>
-
-    <!-- Update the toast HTML structure to ensure it's at the end of the body -->
-    <div id="toast" class="toast" aria-live="polite" role="status">
-        <div class="toast-content">
-            <i class="fas fa-check-circle toast-icon success" aria-hidden="true"></i>
-            <i class="fas fa-exclamation-circle toast-icon error" aria-hidden="true"></i>
-            <div class="toast-message">Message sent successfully!</div>
-        </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="script.js"></script>
