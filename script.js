@@ -1003,25 +1003,27 @@ function initContactForm() {
 
   // Helper function to show toast
   function showToast(message, isSuccess) {
-    toastMessage.textContent = message
-    successIcon.style.display = isSuccess ? "block" : "none"
-    errorIcon.style.display = isSuccess ? "none" : "block"
+    toastMessage.textContent = message;
+    successIcon.style.display = isSuccess ? "block" : "none";
+    errorIcon.style.display = isSuccess ? "none" : "block";
+  
+  // Remove any existing show class and timeout
+  toast.classList.remove("show");
+  clearTimeout(toast.timeout);
+  
+  // Force a reflow to ensure the removal takes effect before adding again
+  void toast.offsetWidth;
+  
+  // Ensure the toast is positioned above all elements
+  document.body.appendChild(toast);
+  
+  // Show the toast
+  toast.classList.add("show");
 
-    // Remove any existing show class and timeout
-    toast.classList.remove("show")
-    clearTimeout(toast.timeout)
-
-    // Force a reflow to ensure the removal takes effect before adding again
-    void toast.offsetWidth
-
-    // Show the toast
-    toast.classList.add("show")
-
-    // Hide toast after 5 seconds
-    toast.timeout = setTimeout(() => {
-      toast.classList.remove("show")
-    }, 5000)
-  }
+  // Hide toast after 5 seconds
+  toast.timeout = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 5000);
 }
 
 function applyAnimationClasses() {
