@@ -465,6 +465,121 @@
     section.classList.add("appear");
   });
 </script>
+
+<!-- Add a noscript fallback for when JavaScript is disabled -->
+<noscript>
+  <style>
+    section {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+      visibility: visible !important;
+    }
+    .progress-bar-inner {
+      width: 100% !important;
+    }
+  </style>
+</noscript>
+
+<!-- Add inline script at the end of body to ensure mobile menu works -->
+<script>
+  // Emergency fix for mobile menu
+  document.addEventListener("DOMContentLoaded", function() {
+    // Fix mobile menu toggle
+    const menuToggle = document.getElementById("menuToggle");
+    const closeMenu = document.getElementById("closeMenu");
+    const navbar = document.getElementById("navbar");
+    const menuOverlay = document.getElementById("menuOverlay");
+    
+    if (menuToggle && closeMenu && navbar && menuOverlay) {
+      menuToggle.addEventListener("click", function(e) {
+        e.preventDefault();
+        navbar.classList.add("active");
+        navbar.style.right = "0";
+        menuOverlay.classList.add("active");
+        menuOverlay.style.display = "block";
+        document.body.style.overflow = "hidden";
+      });
+      
+      closeMenu.addEventListener("click", function(e) {
+        e.preventDefault();
+        navbar.classList.remove("active");
+        navbar.style.right = `calc(-1 * var(--nav-width-mobile))`;
+        menuOverlay.classList.remove("active");
+        menuOverlay.style.display = "none";
+        document.body.style.overflow = "";
+      });
+      
+      menuOverlay.addEventListener("click", function(e) {
+        e.preventDefault();
+        navbar.classList.remove("active");
+        navbar.style.right = `calc(-1 * var(--nav-width-mobile))`;
+        menuOverlay.classList.remove("active");
+        menuOverlay.style.display = "none";
+        document.body.style.overflow = "";
+      });
+    }
+    
+    // Fix dark mode toggle
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const darkModeToggleMobile = document.getElementById("darkModeToggleMobile");
+    
+    if (darkModeToggle && darkModeToggleMobile) {
+      const toggleDarkMode = function() {
+        document.body.classList.toggle("light-mode");
+        const isLightMode = document.body.classList.contains("light-mode");
+        localStorage.setItem("lightMode", isLightMode);
+        
+        // Update icons
+        const desktopIcon = darkModeToggle.querySelector("i");
+        const mobileIcon = darkModeToggleMobile.querySelector("i");
+        
+        if (desktopIcon && mobileIcon) {
+          if (isLightMode) {
+            desktopIcon.className = "fas fa-moon";
+            mobileIcon.className = "fas fa-moon";
+          } else {
+            desktopIcon.className = "fas fa-sun";
+            mobileIcon.className = "fas fa-sun";
+          }
+        }
+      };
+      
+      darkModeToggle.addEventListener("click", toggleDarkMode);
+      darkModeToggleMobile.addEventListener("click", toggleDarkMode);
+    }
+    
+    // Fix GitHub repositories section
+    const reposSection = document.getElementById("repos");
+    if (reposSection && reposSection.innerHTML === "") {
+      reposSection.innerHTML = `
+        <div class="repo">
+          <h3>my-portfolio</h3>
+          <p>My personal portfolio website showcasing my skills and projects</p>
+          <div class="repo-meta">
+            <span>Updated: ${new Date().toLocaleDateString()}</span>
+            <a href="https://github.com/Orapeleng-madibela/my-portfolio" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          </div>
+        </div>
+        <div class="repo">
+          <h3>data-analysis-projects</h3>
+          <p>Collection of data analysis projects using Python and various libraries</p>
+          <div class="repo-meta">
+            <span>Updated: ${new Date().toLocaleDateString()}</span>
+            <a href="https://github.com/Orapeleng-madibela/data-analysis-projects" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          </div>
+        </div>
+        <div class="repo">
+          <h3>web-development</h3>
+          <p>Web development projects using HTML, CSS, and JavaScript</p>
+          <div class="repo-meta">
+            <span>Updated: ${new Date().toLocaleDateString()}</span>
+            <a href="https://github.com/Orapeleng-madibela/web-development" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          </div>
+        </div>
+      `;
+    }
+  });
+</script>
 </body>
 </html>
 
