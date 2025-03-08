@@ -572,19 +572,14 @@ function initProjectModal() {
       document.body.style.overflow = "hidden" // Prevent scrolling when modal is open
 
       // Ensure the modal is scrolled to the top when opened
-      modal.scrollTop = 0
+      if (modal.querySelector(".modal-inner")) {
+        modal.querySelector(".modal-inner").scrollTop = 0
+      }
 
       // Make sure the "View Live Project" link is visible by scrolling to it if needed
       if (project.link) {
         setTimeout(() => {
-          // Check if the link is in the viewport
-          const linkRect = modalLink.getBoundingClientRect()
-          const modalRect = modal.getBoundingClientRect()
-
-          // If the link is below the visible area, scroll to it
-          if (linkRect.bottom > modalRect.bottom) {
-            modalLink.scrollIntoView({ behavior: "smooth", block: "center" })
-          }
+          modalLink.scrollIntoView({ behavior: "smooth", block: "nearest" })
         }, 100)
       }
     })
@@ -641,178 +636,184 @@ function initGitHubIntegration() {
   const fallbackRepos = [
     {
       name: "my-portfolio",
-      description: "My personal portfolio website showcasing my skills and projects",
+      description: "My personal portfolio website showcasing my skills and projects using HTML, CSS, and JavaScript",
       html_url: "https://github.com/Orapeleng-madibela/my-portfolio",
       updated_at: new Date().toISOString(),
     },
     {
       name: "data-analysis-projects",
-      description: "Collection of data analysis projects using Python and various libraries",
+      description: "Collection of data analysis projects using Python, pandas, and matplotlib for data visualization",
       html_url: "https://github.com/Orapeleng-madibela/data-analysis-projects",
       updated_at: new Date().toISOString(),
     },
     {
       name: "web-development",
-      description: "Web development projects using HTML, CSS, and JavaScript",
+      description: "Web development projects using HTML, CSS, JavaScript and responsive design techniques",
       html_url: "https://github.com/Orapeleng-madibela/web-development",
       updated_at: new Date().toISOString(),
     },
   ]
 
-  // Fetch GitHub repositories with timeout
-  const fetchPromise = fetch(
-    `https://api.github.com/users/${githubUsername}/repos?sort=updated&direction=desc&per_page=6`,
-  )
-  const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), 5000))
+  // Fallback language data
+  const fallbackLanguages = {
+    JavaScript: 40,
+    HTML: 30,
+    CSS: 20,
+    Python: 10,
+  }
 
-  Promise.race([fetchPromise, timeoutPromise])
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`GitHub API responded with status: ${response.status}`)
-      }
-      return response.json()
+  // Try to fetch from GitHub API with a timeout
+  try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 5000)
+
+    fetch(`https://api.github.com/users/${githubUsername}/repos?sort=updated&direction=desc&per_page=6`, {
+      signal: controller.signal,
     })
-    .then((data) => {
-      reposSection.innerHTML = "" // Clear loading state
-
-      if (!data || data.length === 0) {
-        throw new Error("No repositories found")
-      }
-
-      // Create repository cards
-      data.forEach((repo) => {
-        const repoElement = document.createElement("div")
-        repoElement.classList.add("repo")
-        repoElement.innerHTML = `
-          <h3>${repo.name}</h3>
-          <p>${repo.description || "No description available."}</p>
-          <div class="repo-meta">
-            <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
-            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-          </div>
-        `
-        reposSection.appendChild(repoElement)
+      .then((response) => {
+        clearTimeout(timeoutId)
+        if (!response.ok) {
+          throw new Error(`GitHub API responded with status: ${response.status}`)
+        }
+        return response.json()
       })
-
-      // Only proceed with language stats if the elements exist
-      if (hasLanguageStats) {
-        // Fetch language statistics
-        return Promise.all(
-          data.map((repo) =>
-            fetch(repo.languages_url)
-              .then((res) => {
-                if (!res.ok) {
-                  throw new Error(`Failed to fetch languages for ${repo.name}`)
-                }
-                return res.json()
-              })
-              .catch((err) => {
-                console.warn(`Error fetching languages for ${repo.name}:`, err)
-                return {} // Return empty object on error to continue with other repos
-              }),
-          ),
-        )
-      }
-
-      return null // Skip language stats if elements don't exist
-    })
-    .then((languagesData) => {
-      if (!languagesData || !hasLanguageStats) return
-
-      // Calculate total bytes for each language
-      const languageTotals = {}
-      languagesData.forEach((repoLanguages) => {
-        Object.entries(repoLanguages).forEach(([language, bytes]) => {
-          languageTotals[language] = (languageTotals[language] || 0) + bytes
-        })
-      })
-
-      const totalBytes = Object.values(languageTotals).reduce((a, b) => a + b, 0)
-
-      if (totalBytes === 0) {
-        languageStats.innerHTML = "<p>No language data available.</p>"
-        return
-      }
-
-      // Clear previous content
-      languageBar.innerHTML = ""
-      languageLabels.innerHTML = ""
-
-      // Create language statistics visualization
-      Object.entries(languageTotals)
-        .sort(([, a], [, b]) => b - a)
-        .forEach(([language, bytes]) => {
-          const percentage = ((bytes / totalBytes) * 100).toFixed(1)
-
-          // Create language segment in bar
-          const segment = document.createElement("div")
-          segment.className = "language-segment"
-          segment.style.width = `${percentage}%`
-          segment.style.backgroundColor = getLanguageColor(language)
-          segment.title = `${language}: ${percentage}%`
-          languageBar.appendChild(segment)
-
-          // Create language label
-          const label = document.createElement("div")
-          label.className = "language-label"
-          label.innerHTML = `
-            <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
-            <span>${language}: ${percentage}%</span>
-          `
-          languageLabels.appendChild(label)
-        })
-    })
-    .catch((error) => {
-      console.error("Error fetching GitHub data:", error)
-
-      // Use fallback data if API fails
-      reposSection.innerHTML = ""
-      fallbackRepos.forEach((repo) => {
-        const repoElement = document.createElement("div")
-        repoElement.classList.add("repo")
-        repoElement.innerHTML = `
-          <h3>${repo.name}</h3>
-          <p>${repo.description || "No description available."}</p>
-          <div class="repo-meta">
-            <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
-            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-          </div>
-        `
-        reposSection.appendChild(repoElement)
-      })
-
-      // Add fallback language stats
-      if (hasLanguageStats) {
-        languageBar.innerHTML = ""
-        languageLabels.innerHTML = ""
-
-        const fallbackLanguages = {
-          JavaScript: 50,
-          HTML: 25,
-          CSS: 15,
-          Python: 10,
+      .then((data) => {
+        if (!data || data.length === 0) {
+          throw new Error("No repositories found")
         }
 
-        Object.entries(fallbackLanguages).forEach(([language, percentage]) => {
-          // Create language segment in bar
-          const segment = document.createElement("div")
-          segment.className = "language-segment"
-          segment.style.width = `${percentage}%`
-          segment.style.backgroundColor = getLanguageColor(language)
-          segment.title = `${language}: ${percentage}%`
-          languageBar.appendChild(segment)
+        // Clear loading state and display repos
+        reposSection.innerHTML = ""
 
-          // Create language label
-          const label = document.createElement("div")
-          label.className = "language-label"
-          label.innerHTML = `
-            <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
-            <span>${language}: ${percentage}%</span>
+        // Create repository cards
+        data.forEach((repo) => {
+          const repoElement = document.createElement("div")
+          repoElement.classList.add("repo")
+          repoElement.innerHTML = `
+            <h3>${repo.name}</h3>
+            <p>${repo.description || "No description available."}</p>
+            <div class="repo-meta">
+              <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
+              <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
           `
-          languageLabels.appendChild(label)
+          reposSection.appendChild(repoElement)
         })
-      }
+
+        // Fetch language stats if we have the elements
+        if (hasLanguageStats) {
+          // Get languages for each repo
+          Promise.all(
+            data.map((repo) =>
+              fetch(repo.languages_url)
+                .then((res) => (res.ok ? res.json() : {}))
+                .catch(() => ({})),
+            ),
+          )
+            .then((languagesData) => {
+              // Combine all language data
+              const languageTotals = {}
+              languagesData.forEach((repoLanguages) => {
+                Object.entries(repoLanguages).forEach(([language, bytes]) => {
+                  languageTotals[language] = (languageTotals[language] || 0) + bytes
+                })
+              })
+
+              const totalBytes = Object.values(languageTotals).reduce((a, b) => a + b, 0)
+
+              if (totalBytes === 0) {
+                throw new Error("No language data available")
+              }
+
+              // Clear previous content
+              languageBar.innerHTML = ""
+              languageLabels.innerHTML = ""
+
+              // Create language statistics visualization
+              Object.entries(languageTotals)
+                .sort(([, a], [, b]) => b - a)
+                .forEach(([language, bytes]) => {
+                  const percentage = ((bytes / totalBytes) * 100).toFixed(1)
+
+                  // Create language segment in bar
+                  const segment = document.createElement("div")
+                  segment.className = "language-segment"
+                  segment.style.width = `${percentage}%`
+                  segment.style.backgroundColor = getLanguageColor(language)
+                  segment.title = `${language}: ${percentage}%`
+                  languageBar.appendChild(segment)
+
+                  // Create language label
+                  const label = document.createElement("div")
+                  label.className = "language-label"
+                  label.innerHTML = `
+                    <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
+                    <span>${language}: ${percentage}%</span>
+                  `
+                  languageLabels.appendChild(label)
+                })
+            })
+            .catch((error) => {
+              console.error("Error fetching language data:", error)
+              displayFallbackLanguageStats()
+            })
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching GitHub data:", error)
+        displayFallbackRepos()
+        displayFallbackLanguageStats()
+      })
+  } catch (error) {
+    console.error("Error in GitHub integration:", error)
+    displayFallbackRepos()
+    displayFallbackLanguageStats()
+  }
+
+  // Function to display fallback repositories
+  function displayFallbackRepos() {
+    reposSection.innerHTML = ""
+    fallbackRepos.forEach((repo) => {
+      const repoElement = document.createElement("div")
+      repoElement.classList.add("repo")
+      repoElement.innerHTML = `
+        <h3>${repo.name}</h3>
+        <p>${repo.description || "No description available."}</p>
+        <div class="repo-meta">
+          <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
+          <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      `
+      reposSection.appendChild(repoElement)
     })
+  }
+
+  // Function to display fallback language statistics
+  function displayFallbackLanguageStats() {
+    if (!hasLanguageStats) return
+
+    languageBar.innerHTML = ""
+    languageLabels.innerHTML = ""
+
+    Object.entries(fallbackLanguages).forEach(([language, percentage]) => {
+      // Create language segment in bar
+      const segment = document.createElement("div")
+      segment.className = "language-segment"
+      segment.style.width = `${percentage}%`
+      segment.style.backgroundColor = getLanguageColor(language)
+      segment.title = `${language}: ${percentage}%`
+      languageBar.appendChild(segment)
+
+      // Create language label
+      const label = document.createElement("div")
+      label.className = "language-label"
+      label.innerHTML = `
+        <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
+        <span>${language}: ${percentage}%</span>
+      `
+      languageLabels.appendChild(label)
+    })
+  }
 }
 
 // Function to get color for programming language
@@ -1125,6 +1126,11 @@ function initContactForm() {
     return
   }
 
+  // Make sure toast is hidden initially
+  toast.classList.remove("show")
+  toast.style.opacity = "0"
+  toast.style.visibility = "hidden"
+
   contactForm.addEventListener("submit", async (e) => {
     e.preventDefault()
 
@@ -1164,27 +1170,28 @@ function initContactForm() {
 
   // Helper function to show toast
   function showToast(message, isSuccess) {
-    toastMessage.textContent = message;
-    successIcon.style.display = isSuccess ? "block" : "none";
-    errorIcon.style.display = isSuccess ? "none" : "block";
-  
-  // Remove any existing show class and timeout
-  toast.classList.remove("show");
-  clearTimeout(toast.timeout);
-  
-  // Force a reflow to ensure the removal takes effect before adding again
-  void toast.offsetWidth;
-  
-  // Ensure the toast is positioned above all elements
-  document.body.appendChild(toast);
-  
-  // Show the toast
-  toast.classList.add("show");
+    toastMessage.textContent = message
+    successIcon.style.display = isSuccess ? "block" : "none"
+    errorIcon.style.display = isSuccess ? "none" : "block"
 
-  // Hide toast after 5 seconds
-  toast.timeout = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 5000);
+    // Remove any existing show class and timeout
+    toast.classList.remove("show")
+    clearTimeout(toast.timeout)
+
+    // Force a reflow to ensure the removal takes effect before adding again
+    void toast.offsetWidth
+
+    // Ensure the toast is positioned above all elements
+    document.body.appendChild(toast)
+
+    // Show the toast
+    toast.classList.add("show")
+
+    // Hide toast after 5 seconds
+    toast.timeout = setTimeout(() => {
+      toast.classList.remove("show")
+    }, 5000)
+  }
 }
 
 function applyAnimationClasses() {
@@ -1209,33 +1216,32 @@ function applyAnimationClasses() {
   })
 }
 
-
 // Ensure all sections are visible even if JS is slow or fails
 document.addEventListener("DOMContentLoaded", () => {
   // Immediately show all sections to prevent blank page
   document.querySelectorAll("section").forEach((section) => {
-    section.classList.add("appear");
-  });
-});
+    section.classList.add("appear")
+  })
+})
 
 // Add this function to fix empty page issue
 function fixVisibility() {
   // Force show all sections immediately
   document.querySelectorAll("section").forEach((section) => {
-    section.style.opacity = "1";
-    section.style.transform = "translateY(0)";
-    section.style.visibility = "visible";
-    section.classList.add("appear");
-  });
-  
+    section.style.opacity = "1"
+    section.style.transform = "translateY(0)"
+    section.style.visibility = "visible"
+    section.classList.add("appear")
+  })
+
   // And again after a short delay to be sure
   setTimeout(() => {
     document.querySelectorAll("section").forEach((section) => {
-      section.style.opacity = "1";
-      section.style.transform = "translateY(0)";
-      section.style.visibility = "visible";
-      section.classList.add("appear");
-    });
-  }, 100);
+      section.style.opacity = "1"
+      section.style.transform = "translateY(0)"
+      section.style.visibility = "visible"
+      section.classList.add("appear")
+    })
+  }, 100)
 }
 
