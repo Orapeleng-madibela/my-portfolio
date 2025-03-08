@@ -65,16 +65,22 @@ function initDarkMode() {
 
   // Function to toggle dark mode
   const toggleDarkMode = () => {
-    body.classList.toggle("light-mode")
-    const isLightMode = body.classList.contains("light-mode")
-    localStorage.setItem("lightMode", isLightMode)
+    // Toggle light mode class
+    if (body.classList.contains("light-mode")) {
+      body.classList.remove("light-mode")
+      localStorage.setItem("lightMode", "false")
+    } else {
+      body.classList.add("light-mode")
+      localStorage.setItem("lightMode", "true")
+    }
 
-    // Update icons based on mode
-    updateDarkModeIcons(isLightMode)
+    // Update icons based on current mode
+    updateDarkModeIcons()
   }
 
   // Function to update dark mode icons
-  const updateDarkModeIcons = (isLightMode) => {
+  const updateDarkModeIcons = () => {
+    const isLightMode = body.classList.contains("light-mode")
     const desktopIcon = darkModeToggle.querySelector("i")
     const mobileIcon = darkModeToggleMobile.querySelector("i")
 
@@ -92,25 +98,48 @@ function initDarkMode() {
     }
   }
 
-  // Add click event listeners to dark mode toggle buttons
-  darkModeToggle.addEventListener("click", toggleDarkMode)
-  darkModeToggleMobile.addEventListener("click", toggleDarkMode)
+  // Add click event listeners to dark mode toggle buttons with direct handling
+  darkModeToggle.addEventListener("click", (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    toggleDarkMode()
+  })
 
-  // Check for saved mode preference
-  const savedLightMode = localStorage.getItem("lightMode") === "true"
-  if (savedLightMode) {
+  darkModeToggleMobile.addEventListener("click", (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    toggleDarkMode()
+  })
+
+  // Check for saved mode preference and apply it
+  const savedLightMode = localStorage.getItem("lightMode")
+  if (savedLightMode === "true") {
     body.classList.add("light-mode")
-    updateDarkModeIcons(true)
-  }
-
-  // Check system preference if no saved preference
-  if (localStorage.getItem("lightMode") === null) {
+  } else if (savedLightMode === "false") {
+    body.classList.remove("light-mode")
+  } else {
+    // If no preference is saved, check system preference
     const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
     if (!prefersDarkMode) {
       body.classList.add("light-mode")
-      updateDarkModeIcons(true)
     }
   }
+
+  // Update icons based on initial state
+  updateDarkModeIcons()
+
+  // Listen for system preference changes
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    // Only apply if user hasn't set a preference
+    if (localStorage.getItem("lightMode") === null) {
+      if (e.matches) {
+        body.classList.remove("light-mode")
+      } else {
+        body.classList.add("light-mode")
+      }
+      updateDarkModeIcons()
+    }
+  })
 }
 
 // Function to initialize mobile menu with improved animations
@@ -123,7 +152,6 @@ function initMobileMenu() {
   const mobileMenuYear = document.getElementById("mobileMenuYear")
   const body = document.body
   let isMenuOpen = false
-  const lastScrollTop = 0
 
   // Check if required elements exist
   if (!menuToggle || !closeMenu || !navbar || !menuOverlay) {
@@ -150,13 +178,16 @@ function initMobileMenu() {
   // Function to animate nav items
   const animateNavItems = (shouldShow) => {
     navItems.forEach((item, index) => {
-      setTimeout(() => {
-        if (shouldShow) {
-          item.classList.add("show-item")
-        } else {
-          item.classList.remove("show-item")
-        }
-      }, index * 50) // Staggered animation
+      if (shouldShow) {
+        // Apply immediately for better performance on mobile
+        item.style.opacity = "1"
+        item.style.transform = "translateX(0)"
+        item.classList.add("show-item")
+      } else {
+        item.style.opacity = "0"
+        item.style.transform = "translateX(20px)"
+        item.classList.remove("show-item")
+      }
     })
   }
 
@@ -169,9 +200,11 @@ function initMobileMenu() {
 
     // Show overlay first for smooth transition
     menuOverlay.classList.add("active")
+    menuOverlay.style.display = "block"
 
     // Then open the menu
     navbar.classList.add("active")
+    navbar.style.right = "0"
 
     // Animate nav items after menu is visible
     setTimeout(() => animateNavItems(true), 100)
@@ -196,7 +229,9 @@ function initMobileMenu() {
     // Then after a short delay, close the menu
     setTimeout(() => {
       navbar.classList.remove("active")
+      navbar.style.right = `calc(-1 * var(--nav-width-mobile))`
       menuOverlay.classList.remove("active")
+      menuOverlay.style.display = "none"
 
       // Re-enable scrolling
       body.style.overflow = ""
@@ -213,16 +248,31 @@ function initMobileMenu() {
     }
   }
 
-  // Add event listeners
-  menuToggle.addEventListener("click", openMenu)
-  closeMenu.addEventListener("click", closeMenuFunc)
-  menuOverlay.addEventListener("click", closeMenuFunc)
+  // Add event listeners with direct click handling
+  menuToggle.addEventListener("click", (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    openMenu()
+  })
+
+  closeMenu.addEventListener("click", (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    closeMenuFunc()
+  })
+
+  menuOverlay.addEventListener("click", (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    closeMenuFunc()
+  })
 
   // Close menu when clicking on a link
   navItems.forEach((item) => {
     const link = item.querySelector(".nav-link")
     if (link) {
-      link.addEventListener("click", () => {
+      link.addEventListener("click", (e) => {
+        // Don't prevent default here to allow navigation
         closeMenuFunc()
 
         // Remove active class from all items
@@ -577,11 +627,45 @@ function initGitHubIntegration() {
     return
   }
 
+  // Show loading state
+  reposSection.innerHTML = "<p>Loading repositories...</p>"
+
   // Optional elements check
   const hasLanguageStats = languageStats && languageBar && languageLabels
 
-  // Fetch GitHub repositories
-  fetch(`https://api.github.com/users/${githubUsername}/repos?sort=updated&direction=desc&per_page=6`)
+  if (hasLanguageStats) {
+    languageStats.innerHTML = "<p>Loading language statistics...</p>"
+  }
+
+  // Fallback data in case API fails
+  const fallbackRepos = [
+    {
+      name: "my-portfolio",
+      description: "My personal portfolio website showcasing my skills and projects",
+      html_url: "https://github.com/Orapeleng-madibela/my-portfolio",
+      updated_at: new Date().toISOString(),
+    },
+    {
+      name: "data-analysis-projects",
+      description: "Collection of data analysis projects using Python and various libraries",
+      html_url: "https://github.com/Orapeleng-madibela/data-analysis-projects",
+      updated_at: new Date().toISOString(),
+    },
+    {
+      name: "web-development",
+      description: "Web development projects using HTML, CSS, and JavaScript",
+      html_url: "https://github.com/Orapeleng-madibela/web-development",
+      updated_at: new Date().toISOString(),
+    },
+  ]
+
+  // Fetch GitHub repositories with timeout
+  const fetchPromise = fetch(
+    `https://api.github.com/users/${githubUsername}/repos?sort=updated&direction=desc&per_page=6`,
+  )
+  const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), 5000))
+
+  Promise.race([fetchPromise, timeoutPromise])
     .then((response) => {
       if (!response.ok) {
         throw new Error(`GitHub API responded with status: ${response.status}`)
@@ -592,8 +676,7 @@ function initGitHubIntegration() {
       reposSection.innerHTML = "" // Clear loading state
 
       if (!data || data.length === 0) {
-        reposSection.innerHTML = "<p>No repositories found.</p>"
-        return null // Return null to indicate no data for the next promise
+        throw new Error("No repositories found")
       }
 
       // Create repository cards
@@ -681,7 +764,54 @@ function initGitHubIntegration() {
     })
     .catch((error) => {
       console.error("Error fetching GitHub data:", error)
-      reposSection.innerHTML = "<p>Failed to load GitHub repositories. Please try again later.</p>"
+
+      // Use fallback data if API fails
+      reposSection.innerHTML = ""
+      fallbackRepos.forEach((repo) => {
+        const repoElement = document.createElement("div")
+        repoElement.classList.add("repo")
+        repoElement.innerHTML = `
+          <h3>${repo.name}</h3>
+          <p>${repo.description || "No description available."}</p>
+          <div class="repo-meta">
+            <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
+            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          </div>
+        `
+        reposSection.appendChild(repoElement)
+      })
+
+      // Add fallback language stats
+      if (hasLanguageStats) {
+        languageBar.innerHTML = ""
+        languageLabels.innerHTML = ""
+
+        const fallbackLanguages = {
+          JavaScript: 50,
+          HTML: 25,
+          CSS: 15,
+          Python: 10,
+        }
+
+        Object.entries(fallbackLanguages).forEach(([language, percentage]) => {
+          // Create language segment in bar
+          const segment = document.createElement("div")
+          segment.className = "language-segment"
+          segment.style.width = `${percentage}%`
+          segment.style.backgroundColor = getLanguageColor(language)
+          segment.title = `${language}: ${percentage}%`
+          languageBar.appendChild(segment)
+
+          // Create language label
+          const label = document.createElement("div")
+          label.className = "language-label"
+          label.innerHTML = `
+            <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
+            <span>${language}: ${percentage}%</span>
+          `
+          languageLabels.appendChild(label)
+        })
+      }
     })
 }
 
