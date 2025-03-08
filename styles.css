@@ -1203,22 +1203,29 @@ footer .container {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   background-color: var(--overlay-bg);
   backdrop-filter: blur(3px);
 }
 
 .modal-content {
   background-color: var(--card-background);
-  margin: 10% auto;
+  margin: 5% auto;
   padding: 2rem;
   border-radius: var(--border-radius);
   max-width: 700px;
   width: 90%;
   box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
   position: relative;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-inner {
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .close {
@@ -1265,6 +1272,7 @@ footer .container {
 
 #modal-link {
   margin-top: 1.5rem;
+  padding-bottom: 1rem;
 }
 
 #modal-link a {
@@ -1288,7 +1296,7 @@ footer .container {
   position: fixed;
   bottom: 30px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(100px);
   background-color: var(--card-background);
   color: var(--text-color);
   padding: 1rem;
