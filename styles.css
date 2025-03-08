@@ -1138,7 +1138,7 @@ footer .container {
   padding: 1rem;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  z-index: 2000;
+  z-index: 9999; /* Increased z-index to ensure it's above everything */
   display: flex;
   align-items: center;
   opacity: 0;
@@ -1146,12 +1146,14 @@ footer .container {
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
   max-width: 90%;
   width: 350px;
+  pointer-events: none; /* Prevent it from blocking interactions */
 }
 
 .toast.show {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
+  pointer-events: auto; /* Allow interactions when visible */
 }
 
 .toast-content {
