@@ -1,5 +1,3 @@
-// Portfolio Website JavaScript - Simple and Clean Version
-
 // Wait for the page to load before running any code
 document.addEventListener("DOMContentLoaded", function() {
   // Run all our functions when the page loads
@@ -439,8 +437,6 @@ function loadGitHubProjects() {
   // Get the elements where we'll show the GitHub data
   var reposSection = document.getElementById("repos");
   var languageStats = document.getElementById("language-stats");
-  var languageBar = document.querySelector(".language-bar");
-  var languageLabels = document.querySelector(".language-labels");
   
   // Check if repos section exists
   if (!reposSection) {
@@ -451,27 +447,12 @@ function loadGitHubProjects() {
   // Show loading message for repositories
   reposSection.innerHTML = "<p>Loading repositories...</p>";
   
-  // Check if language stats elements exist
-  var hasLanguageStats = false;
-  if (languageStats && languageBar && languageLabels) {
-    hasLanguageStats = true;
-    
-    // Clear language stats and show loading message
-    languageBar.innerHTML = "";
-    languageLabels.innerHTML = "";
-    
-    // Make sure we have the heading
-    if (!languageStats.querySelector("h3")) {
-      var heading = document.createElement("h3");
-      heading.textContent = "Language Statistics";
-      languageStats.innerHTML = "";
-      languageStats.appendChild(heading);
-    }
-    
-    // Add loading message
-    var loadingMessage = document.createElement("p");
-    loadingMessage.textContent = "Loading language statistics...";
-    languageStats.appendChild(loadingMessage);
+  // Check if language stats element exists
+  if (!languageStats) {
+    console.log("Language stats section not found");
+  } else {
+    // Show loading message for language stats
+    languageStats.innerHTML = "<h3>Language Statistics</h3><p>Loading language statistics...</p>";
   }
   
   // Fallback data in case GitHub API fails
@@ -504,117 +485,6 @@ function loadGitHubProjects() {
     Python: 10
   };
   
-  // Try to fetch repositories from GitHub
-  fetch("https://api.github.com/users/" + githubUsername + "/repos?sort=updated&direction=desc&per_page=6")
-    .then(function(response) {
-      // Check if the response is ok (status 200-299)
-      if (!response.ok) {
-        throw new Error("GitHub API error: " + response.status);
-      }
-      return response.json();
-    })
-    .then(function(data) {
-      // Check if we got any repositories
-      if (!data || data.length === 0) {
-        throw new Error("No repositories found");
-      }
-      
-      // Clear loading message
-      reposSection.innerHTML = "";
-      
-      // Create repository cards
-      data.forEach(function(repo) {
-        var repoElement = document.createElement("div");
-        repoElement.classList.add("repo");
-        repoElement.innerHTML = `
-          <h3>${repo.name}</h3>
-          <p>${repo.description || "No description available."}</p>
-          <div class="repo-meta">
-            <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
-            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-          </div>
-        `;
-        reposSection.appendChild(repoElement);
-      });
-      
-      // If we have language stats elements, fetch language data
-      if (hasLanguageStats) {
-        // Get languages for each repo
-        var languagePromises = [];
-        
-        data.forEach(function(repo) {
-          if (repo.languages_url) {
-            var promise = fetch(repo.languages_url)
-              .then(function(res) {
-                if (res.ok) {
-                  return res.json();
-                } else {
-                  console.log("Error fetching languages for " + repo.name);
-                  return {};
-                }
-              })
-              .catch(function(error) {
-                console.log("Error fetching languages for " + repo.name + ": " + error);
-                return {};
-              });
-            
-            languagePromises.push(promise);
-          }
-        });
-        
-        // If we have no language URLs, use fallback
-        if (languagePromises.length === 0) {
-          showFallbackLanguageStats();
-          return;
-        }
-        
-        // Wait for all language requests to complete
-        Promise.all(languagePromises)
-          .then(function(languagesData) {
-            // Combine all language data
-            var languageTotals = {};
-            
-            languagesData.forEach(function(repoLanguages) {
-              if (!repoLanguages) return;
-              
-              // Add up bytes for each language
-              Object.keys(repoLanguages).forEach(function(language) {
-                var bytes = repoLanguages[language];
-                if (language && bytes) {
-                  languageTotals[language] = (languageTotals[language] || 0) + bytes;
-                }
-              });
-            });
-            
-            // Calculate total bytes
-            var totalBytes = 0;
-            Object.keys(languageTotals).forEach(function(language) {
-              totalBytes += languageTotals[language];
-            });
-            
-            // If no language data, use fallback
-            if (totalBytes === 0 || Object.keys(languageTotals).length === 0) {
-              showFallbackLanguageStats();
-              return;
-            }
-            
-            // Display language statistics
-            displayLanguageStats(languageTotals, totalBytes);
-          })
-          .catch(function(error) {
-            console.log("Error processing language data: " + error);
-            showFallbackLanguageStats();
-          });
-      }
-    })
-    .catch(function(error) {
-      console.log("Error loading GitHub data: " + error);
-      showFallbackRepos();
-      if (hasLanguageStats) {
-        showFallbackLanguageStats();
-      }
-    });
-  
   // Function to show fallback repositories
   function showFallbackRepos() {
     reposSection.innerHTML = "";
@@ -633,70 +503,20 @@ function loadGitHubProjects() {
     });
   }
   
-  // Function to display language statistics
-  function displayLanguageStats(languageTotals, totalBytes) {
-    if (!hasLanguageStats) return;
-    
-    // Clear language stats content
-    languageStats.innerHTML = "";
-    languageBar.innerHTML = "";
-    languageLabels.innerHTML = "";
-    
-    // Add heading
-    var heading = document.createElement("h3");
-    heading.textContent = "Language Statistics";
-    languageStats.appendChild(heading);
-    
-    // Add language bar and labels containers back
-    languageStats.appendChild(languageBar);
-    languageStats.appendChild(languageLabels);
-    
-    // Sort languages by usage (most used first)
-    var languages = Object.keys(languageTotals).sort(function(a, b) {
-      return languageTotals[b] - languageTotals[a];
-    });
-    
-    // Create language statistics visualization
-    languages.forEach(function(language) {
-      var bytes = languageTotals[language];
-      var percentage = ((bytes / totalBytes) * 100).toFixed(1);
-      
-      // Create language segment in bar
-      var segment = document.createElement("div");
-      segment.className = "language-segment";
-      segment.style.width = percentage + "%";
-      segment.style.backgroundColor = getLanguageColor(language);
-      segment.title = language + ": " + percentage + "%";
-      languageBar.appendChild(segment);
-      
-      // Create language label
-      var label = document.createElement("div");
-      label.className = "language-label";
-      label.innerHTML = `
-        <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
-        <span>${language}: ${percentage}%</span>
-      `;
-      languageLabels.appendChild(label);
-    });
-  }
-  
   // Function to show fallback language statistics
   function showFallbackLanguageStats() {
-    if (!hasLanguageStats) return;
+    if (!languageStats) return;
     
-    // Clear language stats content
-    languageStats.innerHTML = "";
-    languageBar.innerHTML = "";
-    languageLabels.innerHTML = "";
+    // Clear and rebuild language stats section
+    languageStats.innerHTML = "<h3>Language Statistics</h3>";
     
-    // Add heading
-    var heading = document.createElement("h3");
-    heading.textContent = "Language Statistics";
-    languageStats.appendChild(heading);
+    // Create language bar
+    var languageBar = document.createElement("div");
+    languageBar.className = "language-bar";
     
-    // Add language bar and labels containers back
-    languageStats.appendChild(languageBar);
-    languageStats.appendChild(languageLabels);
+    // Create language labels container
+    var languageLabels = document.createElement("div");
+    languageLabels.className = "language-labels";
     
     // Add fallback language data
     Object.keys(fallbackLanguages).forEach(function(language) {
@@ -719,7 +539,142 @@ function loadGitHubProjects() {
       `;
       languageLabels.appendChild(label);
     });
+    
+    // Add language bar and labels to the stats section
+    languageStats.appendChild(languageBar);
+    languageStats.appendChild(languageLabels);
+    
+    console.log("Fallback language statistics displayed");
   }
+  
+  // Try to fetch repositories from GitHub
+  console.log("Fetching GitHub repositories...");
+  fetch("https://api.github.com/users/" + githubUsername + "/repos?sort=updated&direction=desc&per_page=6")
+    .then(function(response) {
+      // Check if the response is ok (status 200-299)
+      if (!response.ok) {
+        console.log("GitHub API error: " + response.status);
+        throw new Error("GitHub API error: " + response.status);
+      }
+      return response.json();
+    })
+    .then(function(data) {
+      // Check if we got any repositories
+      if (!data || data.length === 0) {
+        console.log("No repositories found");
+        throw new Error("No repositories found");
+      }
+      
+      console.log("Repositories fetched successfully:", data.length);
+      
+      // Clear loading message
+      reposSection.innerHTML = "";
+      
+      // Create repository cards
+      data.forEach(function(repo) {
+        var repoElement = document.createElement("div");
+        repoElement.classList.add("repo");
+        repoElement.innerHTML = `
+          <h3>${repo.name}</h3>
+          <p>${repo.description || "No description available."}</p>
+          <div class="repo-meta">
+            <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
+            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          </div>
+        `;
+        reposSection.appendChild(repoElement);
+      });
+      
+      // If we have language stats element, fetch language data
+      if (languageStats) {
+        console.log("Fetching language statistics...");
+        
+        // Use a simple approach: just use the first repo's languages as a sample
+        if (data[0] && data[0].languages_url) {
+          fetch(data[0].languages_url)
+            .then(function(res) {
+              if (!res.ok) {
+                console.log("Error fetching languages: " + res.status);
+                throw new Error("Error fetching languages");
+              }
+              return res.json();
+            })
+            .then(function(languages) {
+              console.log("Languages fetched successfully:", languages);
+              
+              if (!languages || Object.keys(languages).length === 0) {
+                console.log("No language data available");
+                throw new Error("No language data available");
+              }
+              
+              // Clear language stats section
+              languageStats.innerHTML = "<h3>Language Statistics</h3>";
+              
+              // Create language bar
+              var languageBar = document.createElement("div");
+              languageBar.className = "language-bar";
+              
+              // Create language labels container
+              var languageLabels = document.createElement("div");
+              languageLabels.className = "language-labels";
+              
+              // Calculate total bytes
+              var totalBytes = 0;
+              Object.keys(languages).forEach(function(language) {
+                totalBytes += languages[language];
+              });
+              
+              // Sort languages by usage (most used first)
+              var sortedLanguages = Object.keys(languages).sort(function(a, b) {
+                return languages[b] - languages[a];
+              });
+              
+              // Create language statistics visualization
+              sortedLanguages.forEach(function(language) {
+                var bytes = languages[language];
+                var percentage = ((bytes / totalBytes) * 100).toFixed(1);
+                
+                // Create language segment in bar
+                var segment = document.createElement("div");
+                segment.className = "language-segment";
+                segment.style.width = percentage + "%";
+                segment.style.backgroundColor = getLanguageColor(language);
+                segment.title = language + ": " + percentage + "%";
+                languageBar.appendChild(segment);
+                
+                // Create language label
+                var label = document.createElement("div");
+                label.className = "language-label";
+                label.innerHTML = `
+                  <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
+                  <span>${language}: ${percentage}%</span>
+                `;
+                languageLabels.appendChild(label);
+              });
+              
+              // Add language bar and labels to the stats section
+              languageStats.appendChild(languageBar);
+              languageStats.appendChild(languageLabels);
+              
+              console.log("Language statistics displayed successfully");
+            })
+            .catch(function(error) {
+              console.log("Error processing language data:", error);
+              showFallbackLanguageStats();
+            });
+        } else {
+          console.log("No languages URL available");
+          showFallbackLanguageStats();
+        }
+      }
+    })
+    .catch(function(error) {
+      console.log("Error loading GitHub data:", error);
+      showFallbackRepos();
+      if (languageStats) {
+        showFallbackLanguageStats();
+      }
+    });
 }
 
 // Function to get color for programming language
@@ -898,6 +853,9 @@ function setupSmoothScrolling() {
   
   anchorLinks.forEach(function(anchor) {
     anchor.addEventListener("click", function(e) {
+      e.preventDefault();
+      
+      var targetId = this.getAttribute("href");  function(e) {
       e.preventDefault();
       
       var targetId = this.getAttribute("href");
