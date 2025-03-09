@@ -485,6 +485,12 @@ function loadGitHubProjects() {
     Python: 10
   };
   
+  // Show fallback data immediately to ensure something is displayed
+  showFallbackRepos();
+  if (languageStats) {
+    showFallbackLanguageStats();
+  }
+  
   // Function to show fallback repositories
   function showFallbackRepos() {
     reposSection.innerHTML = "";
@@ -543,31 +549,22 @@ function loadGitHubProjects() {
     // Add language bar and labels to the stats section
     languageStats.appendChild(languageBar);
     languageStats.appendChild(languageLabels);
-    
-    console.log("Fallback language statistics displayed");
   }
   
-  // Try to fetch repositories from GitHub
-  console.log("Fetching GitHub repositories...");
+  // Try to fetch repositories from GitHub (but we already showed fallback data)
   fetch("https://api.github.com/users/" + githubUsername + "/repos?sort=updated&direction=desc&per_page=6")
     .then(function(response) {
-      // Check if the response is ok (status 200-299)
       if (!response.ok) {
-        console.log("GitHub API error: " + response.status);
         throw new Error("GitHub API error: " + response.status);
       }
       return response.json();
     })
     .then(function(data) {
-      // Check if we got any repositories
       if (!data || data.length === 0) {
-        console.log("No repositories found");
         throw new Error("No repositories found");
       }
       
-      console.log("Repositories fetched successfully:", data.length);
-      
-      // Clear loading message
+      // Update repositories with real data
       reposSection.innerHTML = "";
       
       // Create repository cards
@@ -587,23 +584,17 @@ function loadGitHubProjects() {
       
       // If we have language stats element, fetch language data
       if (languageStats) {
-        console.log("Fetching language statistics...");
-        
         // Use a simple approach: just use the first repo's languages as a sample
         if (data[0] && data[0].languages_url) {
           fetch(data[0].languages_url)
             .then(function(res) {
               if (!res.ok) {
-                console.log("Error fetching languages: " + res.status);
                 throw new Error("Error fetching languages");
               }
               return res.json();
             })
             .then(function(languages) {
-              console.log("Languages fetched successfully:", languages);
-              
               if (!languages || Object.keys(languages).length === 0) {
-                console.log("No language data available");
                 throw new Error("No language data available");
               }
               
@@ -655,25 +646,17 @@ function loadGitHubProjects() {
               // Add language bar and labels to the stats section
               languageStats.appendChild(languageBar);
               languageStats.appendChild(languageLabels);
-              
-              console.log("Language statistics displayed successfully");
             })
             .catch(function(error) {
+              // We already showed fallback data, so no need to do anything here
               console.log("Error processing language data:", error);
-              showFallbackLanguageStats();
             });
-        } else {
-          console.log("No languages URL available");
-          showFallbackLanguageStats();
         }
       }
     })
     .catch(function(error) {
+      // We already showed fallback data, so no need to do anything here
       console.log("Error loading GitHub data:", error);
-      showFallbackRepos();
-      if (languageStats) {
-        showFallbackLanguageStats();
-      }
     });
 }
 
@@ -853,9 +836,6 @@ function setupSmoothScrolling() {
   
   anchorLinks.forEach(function(anchor) {
     anchor.addEventListener("click", function(e) {
-      e.preventDefault();
-      
-      var targetId = this.getAttribute("href");  function(e) {
       e.preventDefault();
       
       var targetId = this.getAttribute("href");
