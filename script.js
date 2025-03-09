@@ -1,389 +1,279 @@
-// Main JavaScript file for the Portfolio Website
+// Portfolio Website JavaScript - Simple and Clean Version
 
-// Wait for the DOM to be fully loaded before executing scripts
-document.addEventListener("DOMContentLoaded", () => {
-  // Initialize all modules with proper error handling
-  try {
-    initDarkMode()
-    initTypingEffect()
-    initProjectModal()
-    initGitHubIntegration()
-    initParticles()
-    initScrollAnimations()
-    initSkillsAnimation()
-    initProjectFilters()
-    setCurrentYear()
-    initSmoothScrolling()
-    initMobileMenu()
-    initContactForm()
-    initScrollHeader()
-    initNavActiveState()
-  } catch (error) {
-    console.error("Error initializing modules:", error)
-    // Fall back to making everything visible if there's an error
-    document.querySelectorAll("section").forEach((section) => {
-      section.classList.add("appear")
-    })
-  }
-})
+// Wait for the page to load before running any code
+document.addEventListener("DOMContentLoaded", function() {
+  // Run all our functions when the page loads
+  setupDarkMode();
+  setupTypingEffect();
+  setupProjectDetails();
+  loadGitHubProjects();
+  setupParticlesBackground();
+  animateSkillBars();
+  filterProjects();
+  updateFooterYear();
+  setupSmoothScrolling();
+  setupMobileMenu();
+  setupContactForm();
+  makeHeaderSticky();
+  highlightActiveNavLink();
+});
 
-// Function to initialize dark mode functionality
-function initDarkMode() {
-  const darkModeToggle = document.getElementById("darkModeToggle")
-  const darkModeToggleMobile = document.getElementById("darkModeToggleMobile")
-  const body = document.body
-
-  // Check if elements exist
+// Function to set up dark mode toggle
+function setupDarkMode() {
+  // Get the buttons that toggle dark mode
+  var darkModeToggle = document.getElementById("darkModeToggle");
+  var darkModeToggleMobile = document.getElementById("darkModeToggleMobile");
+  var body = document.body;
+  
+  // Check if the buttons exist
   if (!darkModeToggle || !darkModeToggleMobile) {
-    console.warn("Dark mode toggle elements not found")
-    return
+    console.log("Dark mode toggle buttons not found");
+    return;
   }
-
-  // Function to toggle dark mode
-  const toggleDarkMode = () => {
-    // Toggle light mode class
+  
+  // Function to switch between dark and light mode
+  function toggleDarkMode() {
+    // If currently in light mode, switch to dark mode
     if (body.classList.contains("light-mode")) {
-      body.classList.remove("light-mode")
-      localStorage.setItem("lightMode", "false")
-    } else {
-      body.classList.add("light-mode")
-      localStorage.setItem("lightMode", "true")
-    }
-
-    // Update icons based on current mode
-    updateDarkModeIcons()
-  }
-
-  // Function to update dark mode icons
-  const updateDarkModeIcons = () => {
-    const isLightMode = body.classList.contains("light-mode")
-    const desktopIcon = darkModeToggle.querySelector("i")
-    const mobileIcon = darkModeToggleMobile.querySelector("i")
-
-    if (!desktopIcon || !mobileIcon) {
-      console.warn("Dark mode icons not found")
-      return
-    }
-
-    if (isLightMode) {
-      desktopIcon.className = "fas fa-moon"
-      mobileIcon.className = "fas fa-moon"
-    } else {
-      desktopIcon.className = "fas fa-sun"
-      mobileIcon.className = "fas fa-sun"
+      body.classList.remove("light-mode");
+      localStorage.setItem("lightMode", "false");
+      
+      // Change the icons to sun
+      darkModeToggle.querySelector("i").className = "fas fa-sun";
+      darkModeToggleMobile.querySelector("i").className = "fas fa-sun";
+    } 
+    // If currently in dark mode, switch to light mode
+    else {
+      body.classList.add("light-mode");
+      localStorage.setItem("lightMode", "true");
+      
+      // Change the icons to moon
+      darkModeToggle.querySelector("i").className = "fas fa-moon";
+      darkModeToggleMobile.querySelector("i").className = "fas fa-moon";
     }
   }
-
-  // Add click event listeners to dark mode toggle buttons with direct handling
-  darkModeToggle.addEventListener("click", (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    toggleDarkMode()
-  })
-
-  darkModeToggleMobile.addEventListener("click", (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    toggleDarkMode()
-  })
-
-  // Check for saved mode preference and apply it
-  const savedLightMode = localStorage.getItem("lightMode")
+  
+  // Add click event to the dark mode buttons
+  darkModeToggle.addEventListener("click", function(e) {
+    e.preventDefault();
+    toggleDarkMode();
+  });
+  
+  darkModeToggleMobile.addEventListener("click", function(e) {
+    e.preventDefault();
+    toggleDarkMode();
+  });
+  
+  // Check if user has a saved preference
+  var savedLightMode = localStorage.getItem("lightMode");
+  
+  // Apply the saved preference
   if (savedLightMode === "true") {
-    body.classList.add("light-mode")
+    body.classList.add("light-mode");
+    darkModeToggle.querySelector("i").className = "fas fa-moon";
+    darkModeToggleMobile.querySelector("i").className = "fas fa-moon";
   } else if (savedLightMode === "false") {
-    body.classList.remove("light-mode")
+    body.classList.remove("light-mode");
+    darkModeToggle.querySelector("i").className = "fas fa-sun";
+    darkModeToggleMobile.querySelector("i").className = "fas fa-sun";
   } else {
     // If no preference is saved, check system preference
-    const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+    var prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
     if (!prefersDarkMode) {
-      body.classList.add("light-mode")
+      body.classList.add("light-mode");
+      darkModeToggle.querySelector("i").className = "fas fa-moon";
+      darkModeToggleMobile.querySelector("i").className = "fas fa-moon";
     }
   }
-
-  // Update icons based on initial state
-  updateDarkModeIcons()
-
-  // Listen for system preference changes
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    // Only apply if user hasn't set a preference
-    if (localStorage.getItem("lightMode") === null) {
-      if (e.matches) {
-        body.classList.remove("light-mode")
-      } else {
-        body.classList.add("light-mode")
-      }
-      updateDarkModeIcons()
-    }
-  })
 }
 
-// Function to initialize mobile menu with improved animations
-function initMobileMenu() {
-  const menuToggle = document.getElementById("menuToggle")
-  const closeMenu = document.getElementById("closeMenu")
-  const navbar = document.getElementById("navbar")
-  const menuOverlay = document.getElementById("menuOverlay")
-  const navItems = document.querySelectorAll(".nav-item")
-  const mobileMenuYear = document.getElementById("mobileMenuYear")
-  const body = document.body
-  let isMenuOpen = false
-
-  // Check if required elements exist
+// Function to set up mobile menu
+function setupMobileMenu() {
+  // Get all the elements we need
+  var menuToggle = document.getElementById("menuToggle");
+  var closeMenu = document.getElementById("closeMenu");
+  var navbar = document.getElementById("navbar");
+  var menuOverlay = document.getElementById("menuOverlay");
+  var navItems = document.querySelectorAll(".nav-item");
+  var mobileMenuYear = document.getElementById("mobileMenuYear");
+  var body = document.body;
+  var menuOpen = false;
+  
+  // Check if elements exist
   if (!menuToggle || !closeMenu || !navbar || !menuOverlay) {
-    console.warn("Mobile menu elements not found")
-    return
+    console.log("Mobile menu elements not found");
+    return;
   }
-
-  // Set current year in mobile menu footer if element exists
+  
+  // Set current year in mobile menu footer
   if (mobileMenuYear) {
-    mobileMenuYear.textContent = new Date().getFullYear()
+    mobileMenuYear.textContent = new Date().getFullYear();
   }
-
-  // Function to toggle menu button appearance
-  const toggleMenuButton = (isActive) => {
-    if (isActive) {
-      menuToggle.classList.add("active")
-      menuToggle.setAttribute("aria-expanded", "true")
-    } else {
-      menuToggle.classList.remove("active")
-      menuToggle.setAttribute("aria-expanded", "false")
-    }
-  }
-
-  // Function to animate nav items
-  const animateNavItems = (shouldShow) => {
-    navItems.forEach((item, index) => {
-      if (shouldShow) {
-        // Apply immediately for better performance on mobile
-        item.style.opacity = "1"
-        item.style.transform = "translateX(0)"
-        item.classList.add("show-item")
-      } else {
-        item.style.opacity = "0"
-        item.style.transform = "translateX(20px)"
-        item.classList.remove("show-item")
-      }
-    })
-  }
-
-  // Function to open mobile menu with animation
-  const openMenu = () => {
-    if (isMenuOpen) return
-
-    isMenuOpen = true
-    toggleMenuButton(true)
-
-    // Show overlay first for smooth transition
-    menuOverlay.classList.add("active")
-    menuOverlay.style.display = "block"
-
-    // Then open the menu
-    navbar.classList.add("active")
-    navbar.style.right = "0"
-
-    // Animate nav items after menu is visible
-    setTimeout(() => animateNavItems(true), 100)
-
+  
+  // Function to open the menu
+  function openMenu() {
+    if (menuOpen) return;
+    
+    menuOpen = true;
+    menuToggle.classList.add("active");
+    menuToggle.setAttribute("aria-expanded", "true");
+    
+    // Show overlay and menu
+    menuOverlay.classList.add("active");
+    menuOverlay.style.display = "block";
+    navbar.classList.add("active");
+    navbar.style.right = "0";
+    
+    // Show nav items
+    navItems.forEach(function(item) {
+      item.style.opacity = "1";
+      item.style.transform = "translateX(0)";
+    });
+    
     // Prevent scrolling when menu is open
-    body.style.overflow = "hidden"
-
-    // Add event listeners for keyboard navigation
-    document.addEventListener("keydown", handleEscapeKey)
+    body.style.overflow = "hidden";
   }
-
-  // Function to close mobile menu with animation
-  const closeMenuFunc = () => {
-    if (!isMenuOpen) return
-
-    isMenuOpen = false
-    toggleMenuButton(false)
-
-    // First hide the nav items
-    animateNavItems(false)
-
-    // Then after a short delay, close the menu
-    setTimeout(() => {
-      navbar.classList.remove("active")
-      navbar.style.right = `calc(-1 * var(--nav-width-mobile))`
-      menuOverlay.classList.remove("active")
-      menuOverlay.style.display = "none"
-
+  
+  // Function to close the menu
+  function closeMenu() {
+    if (!menuOpen) return;
+    
+    menuOpen = false;
+    menuToggle.classList.remove("active");
+    menuToggle.setAttribute("aria-expanded", "false");
+    
+    // Hide nav items
+    navItems.forEach(function(item) {
+      item.style.opacity = "0";
+      item.style.transform = "translateX(20px)";
+    });
+    
+    // Hide menu and overlay
+    setTimeout(function() {
+      navbar.classList.remove("active");
+      navbar.style.right = "calc(-1 * var(--nav-width-mobile))";
+      menuOverlay.classList.remove("active");
+      menuOverlay.style.display = "none";
+      
       // Re-enable scrolling
-      body.style.overflow = ""
-
-      // Remove event listeners
-      document.removeEventListener("keydown", handleEscapeKey)
-    }, 200)
+      body.style.overflow = "";
+    }, 200);
   }
-
-  // Function to handle escape key press
-  const handleEscapeKey = (e) => {
-    if (e.key === "Escape") {
-      closeMenuFunc()
-    }
-  }
-
-  // Add event listeners with direct click handling
-  menuToggle.addEventListener("click", (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    openMenu()
-  })
-
-  closeMenu.addEventListener("click", (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    closeMenuFunc()
-  })
-
-  menuOverlay.addEventListener("click", (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    closeMenuFunc()
-  })
-
-  // Close menu when clicking on a link
-  navItems.forEach((item) => {
-    const link = item.querySelector(".nav-link")
+  
+  // Add click events to buttons
+  menuToggle.addEventListener("click", function(e) {
+    e.preventDefault();
+    openMenu();
+  });
+  
+  closeMenu.addEventListener("click", function(e) {
+    e.preventDefault();
+    closeMenu();
+  });
+  
+  menuOverlay.addEventListener("click", function(e) {
+    e.preventDefault();
+    closeMenu();
+  });
+  
+  // Close menu when clicking on a nav link
+  navItems.forEach(function(item) {
+    var link = item.querySelector(".nav-link");
     if (link) {
-      link.addEventListener("click", (e) => {
-        // Don't prevent default here to allow navigation
-        closeMenuFunc()
-
-        // Remove active class from all items
-        navItems.forEach((item) => item.classList.remove("active"))
-
-        // Add active class to clicked item
-        item.classList.add("active")
-      })
+      link.addEventListener("click", function() {
+        closeMenu();
+        
+        // Update active nav item
+        navItems.forEach(function(navItem) {
+          navItem.classList.remove("active");
+        });
+        item.classList.add("active");
+      });
     }
-  })
-
-  // Handle window resize
-  let resizeTimeout
-  window.addEventListener("resize", () => {
-    // Debounce the resize event
-    clearTimeout(resizeTimeout)
-    resizeTimeout = setTimeout(() => {
-      if (window.innerWidth >= 768 && isMenuOpen) {
-        closeMenuFunc()
-      }
-    }, 100)
-  })
-
-  // Handle touch swipe to close menu
-  let touchStartX = 0
-  let touchEndX = 0
-
-  navbar.addEventListener(
-    "touchstart",
-    (e) => {
-      touchStartX = e.changedTouches[0].screenX
-    },
-    { passive: true },
-  )
-
-  navbar.addEventListener(
-    "touchend",
-    (e) => {
-      touchEndX = e.changedTouches[0].screenX
-      handleSwipe()
-    },
-    { passive: true },
-  )
-
-  const handleSwipe = () => {
-    // If swiped left (from right to left)
-    if (touchStartX - touchEndX > 50 && isMenuOpen) {
-      closeMenuFunc()
+  });
+  
+  // Close menu when window is resized to desktop size
+  window.addEventListener("resize", function() {
+    if (window.innerWidth >= 768 && menuOpen) {
+      closeMenu();
     }
-  }
+  });
 }
 
-// Function to add shadow to header on scroll and keep visible on scroll
-function initScrollHeader() {
-  const header = document.getElementById("main-header")
-  let lastScrollTop = 0
-  const scrollThreshold = 10
-
+// Function to make header sticky on scroll
+function makeHeaderSticky() {
+  var header = document.getElementById("main-header");
+  
   if (!header) {
-    console.warn("Header element not found")
-    return
+    console.log("Header not found");
+    return;
   }
-
-  window.addEventListener(
-    "scroll",
-    () => {
-      const currentScroll = window.pageYOffset || document.documentElement.scrollTop
-
-      // Always add scrolled class if past threshold
-      if (currentScroll > scrollThreshold) {
-        header.classList.add("scrolled")
-      } else {
-        header.classList.remove("scrolled")
-      }
-
-      // Always show header (remove hide class)
-      header.classList.remove("hide")
-
-      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll // For Mobile or negative scrolling
-    },
-    { passive: true },
-  )
+  
+  // Add shadow to header when scrolled
+  window.addEventListener("scroll", function() {
+    var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (currentScroll > 10) {
+      header.classList.add("scrolled");
+    } else {
+      header.classList.remove("scrolled");
+    }
+  });
 }
 
-// Function to update active state in navigation based on scroll position
-function initNavActiveState() {
-  const sections = document.querySelectorAll("section[id]")
-  const navItems = document.querySelectorAll(".nav-item")
-
+// Function to highlight active navigation link based on scroll position
+function highlightActiveNavLink() {
+  var sections = document.querySelectorAll("section[id]");
+  var navItems = document.querySelectorAll(".nav-item");
+  
   if (!sections.length || !navItems.length) {
-    console.warn("Sections or nav items not found")
-    return
+    console.log("Sections or nav items not found");
+    return;
   }
-
-  const setActiveNavItem = () => {
-    const scrollPosition = window.scrollY + 100 // Offset for better accuracy
-
-    // Find the current section
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop
-      const sectionHeight = section.offsetHeight
-      const sectionId = section.getAttribute("id")
-
+  
+  // Function to update active nav item
+  function updateActiveNavItem() {
+    var scrollPosition = window.scrollY + 100; // Add offset for better accuracy
+    
+    // Check each section to see if we're in it
+    sections.forEach(function(section) {
+      var sectionTop = section.offsetTop;
+      var sectionHeight = section.offsetHeight;
+      var sectionId = section.getAttribute("id");
+      
       if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
         // Remove active class from all items
-        navItems.forEach((item) => {
-          item.classList.remove("active")
-        })
-
-        // Add active class to corresponding nav item
-        const activeNavItem = document.querySelector(`.nav-item a[href="#${sectionId}"]`).parentElement
+        navItems.forEach(function(item) {
+          item.classList.remove("active");
+        });
+        
+        // Add active class to current section's nav item
+        var activeNavItem = document.querySelector('.nav-item a[href="#' + sectionId + '"]');
         if (activeNavItem) {
-          activeNavItem.classList.add("active")
+          activeNavItem.parentElement.classList.add("active");
         }
       }
-    })
+    });
   }
-
-  // Set active state on scroll
-  window.addEventListener("scroll", setActiveNavItem, { passive: true })
-
-  // Set active state on page load
-  window.addEventListener("load", setActiveNavItem)
+  
+  // Update active nav item on scroll
+  window.addEventListener("scroll", updateActiveNavItem);
+  
+  // Update active nav item on page load
+  window.addEventListener("load", updateActiveNavItem);
 }
 
-// Function to initialize typing effect
-function initTypingEffect() {
-  const typingText = document.querySelector(".typing-text")
-
+// Function to set up typing effect
+function setupTypingEffect() {
+  var typingText = document.querySelector(".typing-text");
+  
   if (!typingText) {
-    console.warn("Typing text element not found")
-    return
+    console.log("Typing text element not found");
+    return;
   }
-
-  const texts = [
+  
+  // List of texts to display
+  var texts = [
     "Web Developer",
     "Data Analyst",
     "Computer Science Student",
@@ -393,13 +283,13 @@ function initTypingEffect() {
     "SQL",
     "Power BI",
     "Excel",
-    "Data Visualization",
-  ]
-
+    "Data Visualization"
+  ];
+  
   // Check if Typed.js is loaded
-  if (typeof window.Typed !== "undefined") {
-    // Using Typed.js for typing animation
-    new window.Typed(typingText, {
+  if (typeof Typed !== "undefined") {
+    // Create typing animation
+    new Typed(typingText, {
       strings: texts,
       typeSpeed: 50,
       backSpeed: 30,
@@ -407,338 +297,321 @@ function initTypingEffect() {
       startDelay: 500,
       loop: true,
       showCursor: true,
-      cursorChar: "|",
-    })
+      cursorChar: "|"
+    });
   } else {
-    console.warn("Typed.js library not loaded")
-    // Fallback: Display the first text without animation
-    typingText.textContent = texts[0]
+    console.log("Typed.js not loaded, showing static text");
+    typingText.textContent = texts[0];
   }
 }
 
-// Function to initialize project modal
-function initProjectModal() {
-  const modal = document.getElementById("modal")
-  const modalTitle = document.getElementById("modal-title")
-  const modalDescription = document.getElementById("modal-description")
-  const modalFiles = document.getElementById("modal-files")
-  const modalLink = document.getElementById("modal-link")
-  const closeBtn = document.getElementsByClassName("close")[0]
-  const viewDetailsButtons = document.querySelectorAll(".view-details")
-
-  // Check if required elements exist
+// Function to set up project details modal
+function setupProjectDetails() {
+  var modal = document.getElementById("modal");
+  var modalTitle = document.getElementById("modal-title");
+  var modalDescription = document.getElementById("modal-description");
+  var modalFiles = document.getElementById("modal-files");
+  var modalLink = document.getElementById("modal-link");
+  var closeBtn = document.getElementsByClassName("close")[0];
+  var viewDetailsButtons = document.querySelectorAll(".view-details");
+  
+  // Check if elements exist
   if (!modal || !modalTitle || !modalDescription || !modalFiles || !modalLink || !closeBtn) {
-    console.warn("Modal elements not found")
-    return
+    console.log("Modal elements not found");
+    return;
   }
-
-  // Project details - Consider moving this to a separate JSON file in a production environment
-  const projects = {
+  
+  // Project details
+  var projects = {
     "Customer Behavior Analysis": {
       title: "Customer Behavior Analysis",
-      description:
-        "This data analysis project involved analyzing a large dataset of customer information to identify trends and patterns in purchasing behavior. The project used Python and libraries such as pandas and matplotlib to clean the data, perform statistical analysis, and create visualizations.",
+      description: "This data analysis project involved analyzing a large dataset of customer information to identify trends and patterns in purchasing behavior. The project used Python and libraries such as pandas and matplotlib to clean the data, perform statistical analysis, and create visualizations.",
       files: [
         { name: "data_analysis.ipynb", description: "Jupyter Notebook containing the main analysis" },
         { name: "data_cleaning.py", description: "Python script for data cleaning and preprocessing" },
         { name: "visualization.py", description: "Python script for creating visualizations" },
-        { name: "report.pdf", description: "Final report summarizing findings and recommendations" },
-      ],
+        { name: "report.pdf", description: "Final report summarizing findings and recommendations" }
+      ]
     },
     "E-commerce Website": {
       title: "Excellent KB Events and Hire",
-      description:
-        "Developed a responsive e-commerce website for a local business using HTML, CSS, and JavaScript. The website includes services offered by the business for various events including weddings, graduations, funerals, and corporate events. Clients are able to see the previous work done by the business and they able to book services they want and check the price estimation. In this project JavaScript is used for price estimator calculator, animations, slideshow gallery, form Submission with Formspree and back to top button",
+      description: "Developed a responsive e-commerce website for a local business using HTML, CSS, and JavaScript. The website includes services offered by the business for various events including weddings, graduations, funerals, and corporate events. Clients are able to see the previous work done by the business and they able to book services they want and check the price estimation. In this project JavaScript is used for price estimator calculator, animations, slideshow gallery, form Submission with Formspree and back to top button",
       files: [
         { name: "index.html", description: "Main HTML file" },
         { name: "styles.css", description: "CSS styles for the website" },
-        { name: "script.js", description: "JavaScript functionality" },
+        { name: "script.js", description: "JavaScript functionality" }
       ],
-      link: "https://excellent-kb-events.netlify.app/",
+      link: "https://excellent-kb-events.netlify.app/"
     },
     "Sales Dashboard": {
       title: "Sales Dashboard",
-      description:
-        "Created an interactive sales dashboard using Power BI to visualize sales data and key performance indicators. The dashboard provides insights into sales trends, customer demographics, and product performance.",
+      description: "Created an interactive sales dashboard using Power BI to visualize sales data and key performance indicators. The dashboard provides insights into sales trends, customer demographics, and product performance.",
       files: [
         { name: "sales_dashboard.pbix", description: "Power BI dashboard file" },
         { name: "data_model.xlsx", description: "Excel data model" },
-        { name: "documentation.pdf", description: "Dashboard documentation and user guide" },
-      ],
+        { name: "documentation.pdf", description: "Dashboard documentation and user guide" }
+      ]
     },
     "My Portfolio": {
       title: "My Portfolio Website",
-      description:
-        "Developed a website that has my details such as contacts. The website has projects i did, skills that i have and my github reposetories. JavaScript is used for theme switching, animation, transitions, data fetching from GitHub repository data, showcasing the user's latest projects and displays language statistics based on the fetched GitHub data. CSS is responsible for the visual presentation and layout of the portfolio, ensuring it looks appealing and functions well across different devices.",
+      description: "Developed a website that has my details such as contacts. The website has projects i did, skills that i have and my github reposetories. JavaScript is used for theme switching, animation, transitions, data fetching from GitHub repository data, showcasing the user's latest projects and displays language statistics based on the fetched GitHub data. CSS is responsible for the visual presentation and layout of the portfolio, ensuring it looks appealing and functions well across different devices.",
       files: [
         { name: "index.html", description: "Main HTML file" },
         { name: "styles.css", description: "CSS styles for the app" },
-        { name: "script.js", description: "JavaScript functionality and API integration" },
+        { name: "script.js", description: "JavaScript functionality and API integration" }
       ],
-      link: "https://orapeleng-madibela.github.io/my-portfolio/",
-    },
-  }
-
-  // Check if view details buttons exist
-  if (viewDetailsButtons.length === 0) {
-    console.warn("No 'View Details' buttons found")
-    return
-  }
-
-  // Add click event listeners to all "View Details" buttons
-  viewDetailsButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const projectTitleElement = button.parentElement.querySelector("h3")
-
-      if (!projectTitleElement) {
-        console.warn("Project title element not found")
-        return
-      }
-
-      const projectTitle = projectTitleElement.textContent
-      const project = projects[projectTitle]
-
+      link: "https://orapeleng-madibela.github.io/my-portfolio/"
+    }
+  };
+  
+  // Add click event to all "View Details" buttons
+  viewDetailsButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+      var projectTitle = button.parentElement.querySelector("h3").textContent;
+      var project = projects[projectTitle];
+      
       if (!project) {
-        console.warn(`Project details not found for: ${projectTitle}`)
-        return
+        console.log("Project details not found for: " + projectTitle);
+        return;
       }
-
-      // Populate modal with project details
-      modalTitle.textContent = project.title
-      modalDescription.textContent = project.description
-
-      // Clear and populate files list
-      modalFiles.innerHTML = ""
+      
+      // Fill modal with project details
+      modalTitle.textContent = project.title;
+      modalDescription.textContent = project.description;
+      
+      // Clear and fill files list
+      modalFiles.innerHTML = "";
       if (project.files && project.files.length > 0) {
-        const filesList = document.createElement("ul")
-        project.files.forEach((file) => {
-          const listItem = document.createElement("li")
-          listItem.innerHTML = `<strong>${file.name}</strong>: ${file.description}`
-          filesList.appendChild(listItem)
-        })
-        modalFiles.appendChild(filesList)
+        var filesList = document.createElement("ul");
+        project.files.forEach(function(file) {
+          var listItem = document.createElement("li");
+          listItem.innerHTML = "<strong>" + file.name + "</strong>: " + file.description;
+          filesList.appendChild(listItem);
+        });
+        modalFiles.appendChild(filesList);
       }
-
-      // Clear and populate project link
-      modalLink.innerHTML = ""
+      
+      // Clear and fill project link
+      modalLink.innerHTML = "";
       if (project.link) {
-        const link = document.createElement("a")
-        link.href = project.link
-        link.innerHTML = '<i class="fas fa-external-link-alt"></i> View Live Project'
-        link.target = "_blank"
-        link.rel = "noopener noreferrer"
-        modalLink.appendChild(link)
+        var link = document.createElement("a");
+        link.href = project.link;
+        link.innerHTML = '<i class="fas fa-external-link-alt"></i> View Live Project';
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        modalLink.appendChild(link);
       }
-
+      
       // Show modal
-      modal.style.display = "block"
-      document.body.style.overflow = "hidden" // Prevent scrolling when modal is open
-
-      // Ensure the modal is scrolled to the top when opened
-      if (modal.querySelector(".modal-inner")) {
-        modal.querySelector(".modal-inner").scrollTop = 0
-      }
-
-      // Make sure the "View Live Project" link is visible by scrolling to it if needed
-      if (project.link) {
-        setTimeout(() => {
-          modalLink.scrollIntoView({ behavior: "smooth", block: "nearest" })
-        }, 100)
-      }
-    })
-  })
-
+      modal.style.display = "block";
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    });
+  });
+  
   // Close modal when clicking the close button
-  closeBtn.onclick = () => {
-    modal.style.display = "none"
-    document.body.style.overflow = "" // Re-enable scrolling
-  }
-
+  closeBtn.onclick = function() {
+    modal.style.display = "none";
+    document.body.style.overflow = ""; // Re-enable scrolling
+  };
+  
   // Close modal when clicking outside the modal content
-  window.onclick = (event) => {
+  window.onclick = function(event) {
     if (event.target == modal) {
-      modal.style.display = "none"
-      document.body.style.overflow = "" // Re-enable scrolling
+      modal.style.display = "none";
+      document.body.style.overflow = ""; // Re-enable scrolling
     }
-  }
-
-  // Add keyboard support for closing the modal with Escape key
-  document.addEventListener("keydown", (event) => {
+  };
+  
+  // Close modal with Escape key
+  document.addEventListener("keydown", function(event) {
     if (event.key === "Escape" && modal.style.display === "block") {
-      modal.style.display = "none"
-      document.body.style.overflow = "" // Re-enable scrolling
+      modal.style.display = "none";
+      document.body.style.overflow = ""; // Re-enable scrolling
     }
-  })
+  });
 }
 
-// Function to initialize GitHub integration
-function initGitHubIntegration() {
-  const githubUsername = "Orapeleng-madibela"
-  const reposSection = document.getElementById("repos")
-  const languageStats = document.getElementById("language-stats")
-  const languageBar = document.querySelector(".language-bar")
-  const languageLabels = document.querySelector(".language-labels")
-
-  // Check if required elements exist
+// Function to load GitHub repositories and language statistics
+function loadGitHubProjects() {
+  var githubUsername = "Orapeleng-madibela";
+  var reposSection = document.getElementById("repos");
+  var languageStats = document.getElementById("language-stats");
+  var languageBar = document.querySelector(".language-bar");
+  var languageLabels = document.querySelector(".language-labels");
+  
+  // Check if elements exist
   if (!reposSection) {
-    console.warn("GitHub repositories section not found")
-    return
+    console.log("GitHub repositories section not found");
+    return;
   }
-
-  // Show loading state
-  reposSection.innerHTML = "<p>Loading repositories...</p>"
-
-  // Optional elements check
-  const hasLanguageStats = languageStats && languageBar && languageLabels
-
+  
+  // Show loading message
+  reposSection.innerHTML = "<p>Loading repositories...</p>";
+  
+  // Check if language stats elements exist
+  var hasLanguageStats = languageStats && languageBar && languageLabels;
+  
   if (hasLanguageStats) {
-    languageStats.innerHTML = "<p>Loading language statistics...</p>"
+    // Clear language stats and show loading message
+    languageBar.innerHTML = "";
+    languageLabels.innerHTML = "";
+    languageStats.innerHTML = "<h3>Language Statistics</h3><p>Loading language statistics...</p>";
   }
-
-  // Fallback data in case API fails
-  const fallbackRepos = [
+  
+  // Fallback data in case GitHub API fails
+  var fallbackRepos = [
     {
       name: "my-portfolio",
       description: "My personal portfolio website showcasing my skills and projects using HTML, CSS, and JavaScript",
       html_url: "https://github.com/Orapeleng-madibela/my-portfolio",
-      updated_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     },
     {
       name: "data-analysis-projects",
       description: "Collection of data analysis projects using Python, pandas, and matplotlib for data visualization",
       html_url: "https://github.com/Orapeleng-madibela/data-analysis-projects",
-      updated_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     },
     {
       name: "web-development",
       description: "Web development projects using HTML, CSS, JavaScript and responsive design techniques",
       html_url: "https://github.com/Orapeleng-madibela/web-development",
-      updated_at: new Date().toISOString(),
-    },
-  ]
-
+      updated_at: new Date().toISOString()
+    }
+  ];
+  
   // Fallback language data
-  const fallbackLanguages = {
+  var fallbackLanguages = {
     JavaScript: 40,
     HTML: 30,
     CSS: 20,
-    Python: 10,
-  }
-
-  // Try to fetch from GitHub API with a timeout
-  try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 5000)
-
-    fetch(`https://api.github.com/users/${githubUsername}/repos?sort=updated&direction=desc&per_page=6`, {
-      signal: controller.signal,
+    Python: 10
+  };
+  
+  // Try to fetch repositories from GitHub
+  fetch("https://api.github.com/users/" + githubUsername + "/repos?sort=updated&direction=desc&per_page=6")
+    .then(function(response) {
+      if (!response.ok) {
+        throw new Error("GitHub API error: " + response.status);
+      }
+      return response.json();
     })
-      .then((response) => {
-        clearTimeout(timeoutId)
-        if (!response.ok) {
-          throw new Error(`GitHub API responded with status: ${response.status}`)
-        }
-        return response.json()
-      })
-      .then((data) => {
-        if (!data || data.length === 0) {
-          throw new Error("No repositories found")
-        }
-
-        // Clear loading state and display repos
-        reposSection.innerHTML = ""
-
-        // Create repository cards
-        data.forEach((repo) => {
-          const repoElement = document.createElement("div")
-          repoElement.classList.add("repo")
-          repoElement.innerHTML = `
-            <h3>${repo.name}</h3>
-            <p>${repo.description || "No description available."}</p>
-            <div class="repo-meta">
-              <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
-              <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-            </div>
-          `
-          reposSection.appendChild(repoElement)
-        })
-
-        // Fetch language stats if we have the elements
-        if (hasLanguageStats) {
-          // Get languages for each repo
-          Promise.all(
-            data.map((repo) =>
-              fetch(repo.languages_url)
-                .then((res) => (res.ok ? res.json() : {}))
-                .catch(() => ({})),
-            ),
-          )
-            .then((languagesData) => {
-              // Combine all language data
-              const languageTotals = {}
-              languagesData.forEach((repoLanguages) => {
-                Object.entries(repoLanguages).forEach(([language, bytes]) => {
-                  languageTotals[language] = (languageTotals[language] || 0) + bytes
-                })
-              })
-
-              const totalBytes = Object.values(languageTotals).reduce((a, b) => a + b, 0)
-
-              if (totalBytes === 0) {
-                throw new Error("No language data available")
-              }
-
-              // Clear previous content
-              languageBar.innerHTML = ""
-              languageLabels.innerHTML = ""
-
-              // Create language statistics visualization
-              Object.entries(languageTotals)
-                .sort(([, a], [, b]) => b - a)
-                .forEach(([language, bytes]) => {
-                  const percentage = ((bytes / totalBytes) * 100).toFixed(1)
-
-                  // Create language segment in bar
-                  const segment = document.createElement("div")
-                  segment.className = "language-segment"
-                  segment.style.width = `${percentage}%`
-                  segment.style.backgroundColor = getLanguageColor(language)
-                  segment.title = `${language}: ${percentage}%`
-                  languageBar.appendChild(segment)
-
-                  // Create language label
-                  const label = document.createElement("div")
-                  label.className = "language-label"
-                  label.innerHTML = `
-                    <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
-                    <span>${language}: ${percentage}%</span>
-                  `
-                  languageLabels.appendChild(label)
-                })
+    .then(function(data) {
+      if (!data || data.length === 0) {
+        throw new Error("No repositories found");
+      }
+      
+      // Clear loading message
+      reposSection.innerHTML = "";
+      
+      // Create repository cards
+      data.forEach(function(repo) {
+        var repoElement = document.createElement("div");
+        repoElement.classList.add("repo");
+        repoElement.innerHTML = `
+          <h3>${repo.name}</h3>
+          <p>${repo.description || "No description available."}</p>
+          <div class="repo-meta">
+            <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
+            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          </div>
+        `;
+        reposSection.appendChild(repoElement);
+      });
+      
+      // If we have language stats elements, fetch language data
+      if (hasLanguageStats) {
+        // Get languages for each repo
+        var languagePromises = data.map(function(repo) {
+          if (!repo.languages_url) {
+            return Promise.resolve({});
+          }
+          
+          return fetch(repo.languages_url)
+            .then(function(res) {
+              return res.ok ? res.json() : {};
             })
-            .catch((error) => {
-              console.error("Error fetching language data:", error)
-              displayFallbackLanguageStats()
-            })
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching GitHub data:", error)
-        displayFallbackRepos()
-        displayFallbackLanguageStats()
-      })
-  } catch (error) {
-    console.error("Error in GitHub integration:", error)
-    displayFallbackRepos()
-    displayFallbackLanguageStats()
-  }
-
-  // Function to display fallback repositories
-  function displayFallbackRepos() {
-    reposSection.innerHTML = ""
-    fallbackRepos.forEach((repo) => {
-      const repoElement = document.createElement("div")
-      repoElement.classList.add("repo")
+            .catch(function() {
+              return {};
+            });
+        });
+        
+        Promise.all(languagePromises)
+          .then(function(languagesData) {
+            // Combine all language data
+            var languageTotals = {};
+            
+            languagesData.forEach(function(repoLanguages) {
+              if (!repoLanguages) return;
+              
+              Object.keys(repoLanguages).forEach(function(language) {
+                var bytes = repoLanguages[language];
+                if (language && bytes) {
+                  languageTotals[language] = (languageTotals[language] || 0) + bytes;
+                }
+              });
+            });
+            
+            var totalBytes = 0;
+            Object.keys(languageTotals).forEach(function(language) {
+              totalBytes += languageTotals[language];
+            });
+            
+            if (totalBytes === 0) {
+              throw new Error("No language data available");
+            }
+            
+            // Clear language stats content
+            languageBar.innerHTML = "";
+            languageLabels.innerHTML = "";
+            
+            // Create language statistics visualization
+            var languages = Object.keys(languageTotals).sort(function(a, b) {
+              return languageTotals[b] - languageTotals[a];
+            });
+            
+            languages.forEach(function(language) {
+              var bytes = languageTotals[language];
+              var percentage = ((bytes / totalBytes) * 100).toFixed(1);
+              
+              // Create language segment in bar
+              var segment = document.createElement("div");
+              segment.className = "language-segment";
+              segment.style.width = percentage + "%";
+              segment.style.backgroundColor = getLanguageColor(language);
+              segment.title = language + ": " + percentage + "%";
+              languageBar.appendChild(segment);
+              
+              // Create language label
+              var label = document.createElement("div");
+              label.className = "language-label";
+              label.innerHTML = `
+                <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
+                <span>${language}: ${percentage}%</span>
+              `;
+              languageLabels.appendChild(label);
+            });
+          })
+          .catch(function(error) {
+            console.log("Error loading language data:", error);
+            showFallbackLanguageStats();
+          });
+      }
+    })
+    .catch(function(error) {
+      console.log("Error loading GitHub data:", error);
+      showFallbackRepos();
+      if (hasLanguageStats) {
+        showFallbackLanguageStats();
+      }
+    });
+  
+  // Function to show fallback repositories
+  function showFallbackRepos() {
+    reposSection.innerHTML = "";
+    fallbackRepos.forEach(function(repo) {
+      var repoElement = document.createElement("div");
+      repoElement.classList.add("repo");
       repoElement.innerHTML = `
         <h3>${repo.name}</h3>
         <p>${repo.description || "No description available."}</p>
@@ -746,42 +619,56 @@ function initGitHubIntegration() {
           <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
           <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
         </div>
-      `
-      reposSection.appendChild(repoElement)
-    })
+      `;
+      reposSection.appendChild(repoElement);
+    });
   }
-
-  // Function to display fallback language statistics
-  function displayFallbackLanguageStats() {
-    if (!hasLanguageStats) return
-
-    languageBar.innerHTML = ""
-    languageLabels.innerHTML = ""
-
-    Object.entries(fallbackLanguages).forEach(([language, percentage]) => {
+  
+  // Function to show fallback language statistics
+  function showFallbackLanguageStats() {
+    if (!hasLanguageStats) return;
+    
+    // Clear language stats content
+    languageBar.innerHTML = "";
+    languageLabels.innerHTML = "";
+    
+    // Make sure the heading is preserved
+    if (languageStats.querySelector("h3") === null) {
+      var heading = document.createElement("h3");
+      heading.textContent = "Language Statistics";
+      languageStats.innerHTML = "";
+      languageStats.appendChild(heading);
+      languageStats.appendChild(languageBar);
+      languageStats.appendChild(languageLabels);
+    }
+    
+    // Add fallback language data
+    Object.keys(fallbackLanguages).forEach(function(language) {
+      var percentage = fallbackLanguages[language];
+      
       // Create language segment in bar
-      const segment = document.createElement("div")
-      segment.className = "language-segment"
-      segment.style.width = `${percentage}%`
-      segment.style.backgroundColor = getLanguageColor(language)
-      segment.title = `${language}: ${percentage}%`
-      languageBar.appendChild(segment)
-
+      var segment = document.createElement("div");
+      segment.className = "language-segment";
+      segment.style.width = percentage + "%";
+      segment.style.backgroundColor = getLanguageColor(language);
+      segment.title = language + ": " + percentage + "%";
+      languageBar.appendChild(segment);
+      
       // Create language label
-      const label = document.createElement("div")
-      label.className = "language-label"
+      var label = document.createElement("div");
+      label.className = "language-label";
       label.innerHTML = `
         <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
         <span>${language}: ${percentage}%</span>
-      `
-      languageLabels.appendChild(label)
-    })
+      `;
+      languageLabels.appendChild(label);
+    });
   }
 }
 
 // Function to get color for programming language
 function getLanguageColor(language) {
-  const colors = {
+  var colors = {
     JavaScript: "#f1e05a",
     Python: "#3572A5",
     HTML: "#e34c26",
@@ -793,23 +680,24 @@ function getLanguageColor(language) {
     Ruby: "#701516",
     Swift: "#ffac45",
     Go: "#00ADD8",
-    Rust: "#dea584",
-  }
-  return colors[language] || "#808080" // Default to gray if language not in list
+    Rust: "#dea584"
+  };
+  return colors[language] || "#808080"; // Default to gray if language not in list
 }
 
 // Function to initialize particles background
-function initParticles() {
+function setupParticlesBackground() {
   // Check if particlesJS is loaded
-  if (typeof window.particlesJS !== "undefined") {
-    const particlesContainer = document.getElementById("particles-js")
-
+  if (typeof particlesJS !== "undefined") {
+    var particlesContainer = document.getElementById("particles-js");
+    
     if (!particlesContainer) {
-      console.warn("Particles container not found")
-      return
+      console.log("Particles container not found");
+      return;
     }
-
-    window.particlesJS("particles-js", {
+    
+    // Initialize particles
+    particlesJS("particles-js", {
       particles: {
         number: { value: 80, density: { enable: true, value_area: 800 } },
         color: { value: "#4a00e0" },
@@ -824,8 +712,8 @@ function initParticles() {
           random: false,
           straight: false,
           out_mode: "out",
-          bounce: false,
-        },
+          bounce: false
+        }
       },
       interactivity: {
         detect_on: "canvas",
@@ -835,275 +723,225 @@ function initParticles() {
           bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
           repulse: { distance: 200, duration: 0.4 },
           push: { particles_nb: 4 },
-          remove: { particles_nb: 2 },
-        },
+          remove: { particles_nb: 2 }
+        }
       },
-      retina_detect: true,
-    })
+      retina_detect: true
+    });
   } else {
-    console.warn("particles.js library not loaded")
+    console.log("particles.js library not loaded");
   }
 }
 
-// Function to initialize scroll animations
-function initScrollAnimations() {
-  const animatedElements = document.querySelectorAll(".fade-in, .scale-in, .slide-in-left, .slide-in-right")
-
-  if (animatedElements.length === 0) {
-    return // No elements to animate
-  }
-
-  // Make all sections immediately visible when page loads
-  document.querySelectorAll("section").forEach((section) => {
-    section.classList.add("appear")
-  })
-
-  // Check if IntersectionObserver is supported
-  if (!("IntersectionObserver" in window)) {
-    console.warn("IntersectionObserver not supported in this browser")
-    // Make all elements visible as fallback
-    animatedElements.forEach((element) => element.classList.add("appear"))
-    return
-  }
-
-  const observerOptions = {
-    root: null,
-    rootMargin: "0px",
-    threshold: 0.1,
-  }
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("appear")
-        observer.unobserve(entry.target)
-      }
-    })
-  }, observerOptions)
-
-  animatedElements.forEach((element) => {
-    observer.observe(element)
-  })
-}
-
-// Function to initialize skills animation
-function initSkillsAnimation() {
-  const progressBars = document.querySelectorAll(".progress-bar")
-
+// Function to animate skill bars when they come into view
+function animateSkillBars() {
+  var progressBars = document.querySelectorAll(".progress-bar");
+  
   if (progressBars.length === 0) {
-    return // No progress bars to animate
+    return; // No progress bars to animate
   }
-
-  // Check if IntersectionObserver is supported
-  if (!("IntersectionObserver" in window)) {
-    console.warn("IntersectionObserver not supported in this browser")
-    // Animate all progress bars immediately as fallback
-    progressBars.forEach((bar) => {
-      const percentage = bar.getAttribute("data-percentage")
-      const progressBarInner = bar.querySelector(".progress-bar-inner")
-      if (progressBarInner) {
-        progressBarInner.style.width = `${percentage}%`
-      }
-    })
-    return
+  
+  // Function to check if an element is in the viewport
+  function isInViewport(element) {
+    var rect = element.getBoundingClientRect();
+    return (
+      rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.bottom >= 0
+    );
   }
-
-  const observerOptions = {
-    root: null,
-    rootMargin: "0px",
-    threshold: 0.5,
-  }
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const percentage = entry.target.getAttribute("data-percentage")
-        const progressBarInner = entry.target.querySelector(".progress-bar-inner")
-
+  
+  // Function to animate progress bars in viewport
+  function animateVisibleBars() {
+    progressBars.forEach(function(bar) {
+      if (isInViewport(bar) && !bar.classList.contains("animated")) {
+        var percentage = bar.getAttribute("data-percentage");
+        var progressBarInner = bar.querySelector(".progress-bar-inner");
+        
         if (progressBarInner && percentage) {
-          setTimeout(() => {
-            progressBarInner.style.width = `${percentage}%`
-          }, 200)
+          setTimeout(function() {
+            progressBarInner.style.width = percentage + "%";
+          }, 200);
+          
+          bar.classList.add("animated");
         }
-
-        observer.unobserve(entry.target)
       }
-    })
-  }, observerOptions)
-
-  progressBars.forEach((bar) => {
-    observer.observe(bar)
-  })
+    });
+  }
+  
+  // Animate on scroll
+  window.addEventListener("scroll", animateVisibleBars);
+  
+  // Animate on page load
+  window.addEventListener("load", animateVisibleBars);
 }
 
-// Function to initialize project filters
-function initProjectFilters() {
-  const filterButtons = document.querySelectorAll(".filter-btn")
-  const projects = document.querySelectorAll(".project")
-
+// Function to filter projects by category
+function filterProjects() {
+  var filterButtons = document.querySelectorAll(".filter-btn");
+  var projects = document.querySelectorAll(".project");
+  
   if (filterButtons.length === 0 || projects.length === 0) {
-    console.warn("Project filter elements not found")
-    return
+    console.log("Project filter elements not found");
+    return;
   }
-
-  filterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const filter = button.getAttribute("data-filter")
-
+  
+  filterButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+      var filter = button.getAttribute("data-filter");
+      
       if (!filter) {
-        console.warn("Filter attribute missing on button")
-        return
+        console.log("Filter attribute missing on button");
+        return;
       }
-
+      
       // Update active button
-      filterButtons.forEach((btn) => btn.classList.remove("active"))
-      button.classList.add("active")
-
+      filterButtons.forEach(function(btn) {
+        btn.classList.remove("active");
+      });
+      button.classList.add("active");
+      
       // Filter projects
-      projects.forEach((project) => {
-        const category = project.getAttribute("data-category")
-
+      projects.forEach(function(project) {
+        var category = project.getAttribute("data-category");
+        
         if (filter === "all" || category === filter) {
-          project.style.display = "flex"
-          setTimeout(() => {
-            project.style.opacity = "1"
-            project.style.transform = "translateY(0)"
-          }, 10)
+          project.style.display = "flex";
+          setTimeout(function() {
+            project.style.opacity = "1";
+            project.style.transform = "translateY(0)";
+          }, 10);
         } else {
-          project.style.opacity = "0"
-          project.style.transform = "translateY(20px)"
-          setTimeout(() => {
-            project.style.display = "none"
-          }, 300)
+          project.style.opacity = "0";
+          project.style.transform = "translateY(20px)";
+          setTimeout(function() {
+            project.style.display = "none";
+          }, 300);
         }
-      })
-    })
-  })
+      });
+    });
+  });
 }
 
-// Function to set the current year in the footer
-function setCurrentYear() {
-  const yearElement = document.getElementById("currentYear")
-
+// Function to update the year in the footer
+function updateFooterYear() {
+  var yearElement = document.getElementById("currentYear");
+  
   if (yearElement) {
-    yearElement.textContent = new Date().getFullYear()
+    yearElement.textContent = new Date().getFullYear();
   }
 }
 
-// Function to initialize smooth scrolling
-function initSmoothScrolling() {
-  const anchorLinks = document.querySelectorAll('a[href^="#"]')
-
+// Function to set up smooth scrolling for anchor links
+function setupSmoothScrolling() {
+  var anchorLinks = document.querySelectorAll('a[href^="#"]');
+  
   if (anchorLinks.length === 0) {
-    return // No anchor links to handle
+    return; // No anchor links to handle
   }
-
-  anchorLinks.forEach((anchor) => {
-    anchor.addEventListener("click", function (e) {
-      e.preventDefault()
-
-      const targetId = this.getAttribute("href")
-      if (!targetId) return
-
-      const targetElement = document.querySelector(targetId)
-
+  
+  anchorLinks.forEach(function(anchor) {
+    anchor.addEventListener("click", function(e) {
+      e.preventDefault();
+      
+      var targetId = this.getAttribute("href");
+      if (!targetId) return;
+      
+      var targetElement = document.querySelector(targetId);
+      
       if (targetElement) {
-        const header = document.querySelector("header")
-        const headerHeight = header ? header.offsetHeight : 0
-        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight
-
+        var header = document.querySelector("header");
+        var headerHeight = header ? header.offsetHeight : 0;
+        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        
+        // Scroll to the target element
         window.scrollTo({
           top: targetPosition,
-          behavior: "smooth",
-        })
+          behavior: "smooth"
+        });
       }
-    })
-  })
+    });
+  });
 }
 
-// Function to initialize contact form
-function initContactForm() {
-  const contactForm = document.getElementById("contactForm")
-  const toast = document.getElementById("toast")
-
+// Function to set up contact form
+function setupContactForm() {
+  var contactForm = document.getElementById("contactForm");
+  var toast = document.getElementById("toast");
+  
   if (!contactForm || !toast) {
-    console.warn("Contact form elements not found")
-    return
+    console.log("Contact form elements not found");
+    return;
   }
-
-  const toastMessage = toast.querySelector(".toast-message")
-  const successIcon = toast.querySelector(".toast-icon.success")
-  const errorIcon = toast.querySelector(".toast-icon.error")
-
+  
+  var toastMessage = toast.querySelector(".toast-message");
+  var successIcon = toast.querySelector(".toast-icon.success");
+  var errorIcon = toast.querySelector(".toast-icon.error");
+  
   if (!toastMessage || !successIcon || !errorIcon) {
-    console.warn("Toast elements not found")
-    return
+    console.log("Toast elements not found");
+    return;
   }
-
-  // Make sure toast is hidden initially
-  toast.classList.remove("show")
-  toast.style.opacity = "0"
-  toast.style.visibility = "hidden"
-
-  contactForm.addEventListener("submit", async (e) => {
-    e.preventDefault()
-
-    const formData = new FormData(contactForm)
-    const formAction = contactForm.getAttribute("action")
-
+  
+  // Hide toast initially
+  toast.classList.remove("show");
+  toast.style.opacity = "0";
+  toast.style.visibility = "hidden";
+  
+  // Add submit event to form
+  contactForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    var formData = new FormData(contactForm);
+    var formAction = contactForm.getAttribute("action");
+    
     if (!formAction) {
-      console.error("Form action attribute is missing")
-      showToast("Form configuration error. Please try again later.", false)
-      return
+      console.log("Form action attribute is missing");
+      showToast("Form configuration error. Please try again later.", false);
+      return;
     }
-
-    try {
-      const response = await fetch(formAction, {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      })
-
-      if (response.ok) {
-        // Show success toast
-        showToast("Message sent successfully!", true)
-        // Reset form
-        contactForm.reset()
-      } else {
-        // Show error toast
-        showToast("Failed to send message. Please try again.", false)
+    
+    // Send form data
+    fetch(formAction, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "Accept": "application/json"
       }
-    } catch (error) {
-      console.error("Error sending form:", error)
-      // Show error toast
-      showToast("Failed to send message. Please try again.", false)
-    }
-  })
-
-  // Helper function to show toast
+    })
+    .then(function(response) {
+      if (response.ok) {
+        // Show success message
+        showToast("Message sent successfully!", true);
+        // Reset form
+        contactForm.reset();
+      } else {
+        // Show error message
+        showToast("Failed to send message. Please try again.", false);
+      }
+    })
+    .catch(function(error) {
+      console.log("Error sending form:", error);
+      // Show error message
+      showToast("Failed to send message. Please try again.", false);
+    });
+  });
+  
+  // Function to show toast notification
   function showToast(message, isSuccess) {
-    toastMessage.textContent = message
-    successIcon.style.display = isSuccess ? "block" : "none"
-    errorIcon.style.display = isSuccess ? "none" : "block"
-
+    toastMessage.textContent = message;
+    successIcon.style.display = isSuccess ? "block" : "none";
+    errorIcon.style.display = isSuccess ? "none" : "block";
+    
     // Remove any existing show class and timeout
-    toast.classList.remove("show")
-    clearTimeout(toast.timeout)
-
-    // Force a reflow to ensure the removal takes effect before adding again
-    void toast.offsetWidth
-
-    // Ensure the toast is positioned above all elements
-    document.body.appendChild(toast)
-
+    toast.classList.remove("show");
+    clearTimeout(toast.timeout);
+    
     // Show the toast
-    toast.classList.add("show")
-
+    toast.classList.add("show");
+    
     // Hide toast after 5 seconds
-    toast.timeout = setTimeout(() => {
-      toast.classList.remove("show")
-    }, 5000)
+    toast.timeout = setTimeout(function() {
+      toast.classList.remove("show");
+    }, 5000);
   }
 }
