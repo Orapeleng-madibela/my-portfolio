@@ -433,29 +433,45 @@ function setupProjectDetails() {
 
 // Function to load GitHub repositories and language statistics
 function loadGitHubProjects() {
+  // My GitHub username
   var githubUsername = "Orapeleng-madibela";
+  
+  // Get the elements where we'll show the GitHub data
   var reposSection = document.getElementById("repos");
   var languageStats = document.getElementById("language-stats");
   var languageBar = document.querySelector(".language-bar");
   var languageLabels = document.querySelector(".language-labels");
   
-  // Check if elements exist
+  // Check if repos section exists
   if (!reposSection) {
     console.log("GitHub repositories section not found");
     return;
   }
   
-  // Show loading message
+  // Show loading message for repositories
   reposSection.innerHTML = "<p>Loading repositories...</p>";
   
   // Check if language stats elements exist
-  var hasLanguageStats = languageStats && languageBar && languageLabels;
-  
-  if (hasLanguageStats) {
+  var hasLanguageStats = false;
+  if (languageStats && languageBar && languageLabels) {
+    hasLanguageStats = true;
+    
     // Clear language stats and show loading message
     languageBar.innerHTML = "";
     languageLabels.innerHTML = "";
-    languageStats.innerHTML = "<h3>Language Statistics</h3><p>Loading language statistics...</p>";
+    
+    // Make sure we have the heading
+    if (!languageStats.querySelector("h3")) {
+      var heading = document.createElement("h3");
+      heading.textContent = "Language Statistics";
+      languageStats.innerHTML = "";
+      languageStats.appendChild(heading);
+    }
+    
+    // Add loading message
+    var loadingMessage = document.createElement("p");
+    loadingMessage.textContent = "Loading language statistics...";
+    languageStats.appendChild(loadingMessage);
   }
   
   // Fallback data in case GitHub API fails
@@ -491,12 +507,14 @@ function loadGitHubProjects() {
   // Try to fetch repositories from GitHub
   fetch("https://api.github.com/users/" + githubUsername + "/repos?sort=updated&direction=desc&per_page=6")
     .then(function(response) {
+      // Check if the response is ok (status 200-299)
       if (!response.ok) {
         throw new Error("GitHub API error: " + response.status);
       }
       return response.json();
     })
     .then(function(data) {
+      // Check if we got any repositories
       if (!data || data.length === 0) {
         throw new Error("No repositories found");
       }
@@ -522,20 +540,35 @@ function loadGitHubProjects() {
       // If we have language stats elements, fetch language data
       if (hasLanguageStats) {
         // Get languages for each repo
-        var languagePromises = data.map(function(repo) {
-          if (!repo.languages_url) {
-            return Promise.resolve({});
+        var languagePromises = [];
+        
+        data.forEach(function(repo) {
+          if (repo.languages_url) {
+            var promise = fetch(repo.languages_url)
+              .then(function(res) {
+                if (res.ok) {
+                  return res.json();
+                } else {
+                  console.log("Error fetching languages for " + repo.name);
+                  return {};
+                }
+              })
+              .catch(function(error) {
+                console.log("Error fetching languages for " + repo.name + ": " + error);
+                return {};
+              });
+            
+            languagePromises.push(promise);
           }
-          
-          return fetch(repo.languages_url)
-            .then(function(res) {
-              return res.ok ? res.json() : {};
-            })
-            .catch(function() {
-              return {};
-            });
         });
         
+        // If we have no language URLs, use fallback
+        if (languagePromises.length === 0) {
+          showFallbackLanguageStats();
+          return;
+        }
+        
+        // Wait for all language requests to complete
         Promise.all(languagePromises)
           .then(function(languagesData) {
             // Combine all language data
@@ -544,6 +577,7 @@ function loadGitHubProjects() {
             languagesData.forEach(function(repoLanguages) {
               if (!repoLanguages) return;
               
+              // Add up bytes for each language
               Object.keys(repoLanguages).forEach(function(language) {
                 var bytes = repoLanguages[language];
                 if (language && bytes) {
@@ -552,54 +586,29 @@ function loadGitHubProjects() {
               });
             });
             
+            // Calculate total bytes
             var totalBytes = 0;
             Object.keys(languageTotals).forEach(function(language) {
               totalBytes += languageTotals[language];
             });
             
-            if (totalBytes === 0) {
-              throw new Error("No language data available");
+            // If no language data, use fallback
+            if (totalBytes === 0 || Object.keys(languageTotals).length === 0) {
+              showFallbackLanguageStats();
+              return;
             }
             
-            // Clear language stats content
-            languageBar.innerHTML = "";
-            languageLabels.innerHTML = "";
-            
-            // Create language statistics visualization
-            var languages = Object.keys(languageTotals).sort(function(a, b) {
-              return languageTotals[b] - languageTotals[a];
-            });
-            
-            languages.forEach(function(language) {
-              var bytes = languageTotals[language];
-              var percentage = ((bytes / totalBytes) * 100).toFixed(1);
-              
-              // Create language segment in bar
-              var segment = document.createElement("div");
-              segment.className = "language-segment";
-              segment.style.width = percentage + "%";
-              segment.style.backgroundColor = getLanguageColor(language);
-              segment.title = language + ": " + percentage + "%";
-              languageBar.appendChild(segment);
-              
-              // Create language label
-              var label = document.createElement("div");
-              label.className = "language-label";
-              label.innerHTML = `
-                <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
-                <span>${language}: ${percentage}%</span>
-              `;
-              languageLabels.appendChild(label);
-            });
+            // Display language statistics
+            displayLanguageStats(languageTotals, totalBytes);
           })
           .catch(function(error) {
-            console.log("Error loading language data:", error);
+            console.log("Error processing language data: " + error);
             showFallbackLanguageStats();
           });
       }
     })
     .catch(function(error) {
-      console.log("Error loading GitHub data:", error);
+      console.log("Error loading GitHub data: " + error);
       showFallbackRepos();
       if (hasLanguageStats) {
         showFallbackLanguageStats();
@@ -624,23 +633,70 @@ function loadGitHubProjects() {
     });
   }
   
+  // Function to display language statistics
+  function displayLanguageStats(languageTotals, totalBytes) {
+    if (!hasLanguageStats) return;
+    
+    // Clear language stats content
+    languageStats.innerHTML = "";
+    languageBar.innerHTML = "";
+    languageLabels.innerHTML = "";
+    
+    // Add heading
+    var heading = document.createElement("h3");
+    heading.textContent = "Language Statistics";
+    languageStats.appendChild(heading);
+    
+    // Add language bar and labels containers back
+    languageStats.appendChild(languageBar);
+    languageStats.appendChild(languageLabels);
+    
+    // Sort languages by usage (most used first)
+    var languages = Object.keys(languageTotals).sort(function(a, b) {
+      return languageTotals[b] - languageTotals[a];
+    });
+    
+    // Create language statistics visualization
+    languages.forEach(function(language) {
+      var bytes = languageTotals[language];
+      var percentage = ((bytes / totalBytes) * 100).toFixed(1);
+      
+      // Create language segment in bar
+      var segment = document.createElement("div");
+      segment.className = "language-segment";
+      segment.style.width = percentage + "%";
+      segment.style.backgroundColor = getLanguageColor(language);
+      segment.title = language + ": " + percentage + "%";
+      languageBar.appendChild(segment);
+      
+      // Create language label
+      var label = document.createElement("div");
+      label.className = "language-label";
+      label.innerHTML = `
+        <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
+        <span>${language}: ${percentage}%</span>
+      `;
+      languageLabels.appendChild(label);
+    });
+  }
+  
   // Function to show fallback language statistics
   function showFallbackLanguageStats() {
     if (!hasLanguageStats) return;
     
     // Clear language stats content
+    languageStats.innerHTML = "";
     languageBar.innerHTML = "";
     languageLabels.innerHTML = "";
     
-    // Make sure the heading is preserved
-    if (languageStats.querySelector("h3") === null) {
-      var heading = document.createElement("h3");
-      heading.textContent = "Language Statistics";
-      languageStats.innerHTML = "";
-      languageStats.appendChild(heading);
-      languageStats.appendChild(languageBar);
-      languageStats.appendChild(languageLabels);
-    }
+    // Add heading
+    var heading = document.createElement("h3");
+    heading.textContent = "Language Statistics";
+    languageStats.appendChild(heading);
+    
+    // Add language bar and labels containers back
+    languageStats.appendChild(languageBar);
+    languageStats.appendChild(languageLabels);
     
     // Add fallback language data
     Object.keys(fallbackLanguages).forEach(function(language) {
@@ -668,6 +724,7 @@ function loadGitHubProjects() {
 
 // Function to get color for programming language
 function getLanguageColor(language) {
+  // Colors for different programming languages
   var colors = {
     JavaScript: "#f1e05a",
     Python: "#3572A5",
@@ -937,11 +994,17 @@ function setupContactForm() {
     clearTimeout(toast.timeout);
     
     // Show the toast
+    toast.style.opacity = "1";
+    toast.style.visibility = "visible";
     toast.classList.add("show");
     
     // Hide toast after 5 seconds
     toast.timeout = setTimeout(function() {
       toast.classList.remove("show");
+      setTimeout(function() {
+        toast.style.opacity = "0";
+        toast.style.visibility = "hidden";
+      }, 300);
     }, 5000);
   }
 }
