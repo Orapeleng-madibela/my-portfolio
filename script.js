@@ -1,43 +1,19 @@
-// Immediate fix for visibility issues - run before anything else
-document.addEventListener("DOMContentLoaded", () => {
-  // Force all sections to be visible immediately
-  document.querySelectorAll("section").forEach((section) => {
-    section.style.opacity = "1"
-    section.style.transform = "translateY(0)"
-    section.style.visibility = "visible"
-    section.classList.add("appear")
-  })
-})
-
-// Backup fix - run this even if there's an error elsewhere
-window.onload = () => {
-  document.querySelectorAll("section").forEach((section) => {
-    section.style.opacity = "1"
-    section.style.transform = "translateY(0)"
-    section.style.visibility = "visible"
-    section.classList.add("appear")
-  })
-}
-
 // Main JavaScript file for the Portfolio Website
 
 // Wait for the DOM to be fully loaded before executing scripts
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize all modules with proper error handling
   try {
-    fixVisibility() // Add this line to fix visibility issues
     initDarkMode()
     initTypingEffect()
     initProjectModal()
     initGitHubIntegration()
     initParticles()
-    applyAnimationClasses()
     initScrollAnimations()
     initSkillsAnimation()
     initProjectFilters()
     setCurrentYear()
     initSmoothScrolling()
-    initLazyLoading()
     initMobileMenu()
     initContactForm()
     initScrollHeader()
@@ -325,12 +301,11 @@ function initMobileMenu() {
   }
 }
 
-// Function to add shadow to header on scroll and hide on scroll down
+// Function to add shadow to header on scroll and keep visible on scroll
 function initScrollHeader() {
   const header = document.getElementById("main-header")
   let lastScrollTop = 0
   const scrollThreshold = 10
-  let isScrollingUp = true
 
   if (!header) {
     console.warn("Header element not found")
@@ -349,20 +324,8 @@ function initScrollHeader() {
         header.classList.remove("scrolled")
       }
 
-      // Handle header hiding on scroll down (only if mobile menu is not open)
-      if (!document.getElementById("navbar").classList.contains("active")) {
-        // Determine scroll direction
-        isScrollingUp = currentScroll < lastScrollTop
-
-        // If scrolling down and past threshold, hide header
-        if (!isScrollingUp && currentScroll > 100) {
-          header.classList.add("hide")
-        }
-        // If scrolling up, show header
-        else if (isScrollingUp) {
-          header.classList.remove("hide")
-        }
-      }
+      // Always show header (remove hide class)
+      header.classList.remove("hide")
 
       lastScrollTop = currentScroll <= 0 ? 0 : currentScroll // For Mobile or negative scrolling
     },
@@ -485,7 +448,7 @@ function initProjectModal() {
     "E-commerce Website": {
       title: "Excellent KB Events and Hire",
       description:
-        "Developed a responsive e-commerce website for a local business using HTML, CSS, and JavaScript. The website includes services offered by the business for various events including weddings, graduations, funerals, and corporate events. Clients are able to see the previous work done by the business and they able to book services they want and check the price estimation. In this project JavaScript is used for price estimator calculator, animations, slideshow gallery,  form Submission with Formspree and back to top button",
+        "Developed a responsive e-commerce website for a local business using HTML, CSS, and JavaScript. The website includes services offered by the business for various events including weddings, graduations, funerals, and corporate events. Clients are able to see the previous work done by the business and they able to book services they want and check the price estimation. In this project JavaScript is used for price estimator calculator, animations, slideshow gallery, form Submission with Formspree and back to top button",
       files: [
         { name: "index.html", description: "Main HTML file" },
         { name: "styles.css", description: "CSS styles for the website" },
@@ -1058,55 +1021,6 @@ function initSmoothScrolling() {
   })
 }
 
-// Function to initialize lazy loading for images
-function initLazyLoading() {
-  const lazyImages = document.querySelectorAll("img.lazy-load")
-
-  if (lazyImages.length === 0) {
-    return // No images to lazy load
-  }
-
-  // Check if IntersectionObserver is supported
-  if (!("IntersectionObserver" in window)) {
-    console.warn("IntersectionObserver not supported in this browser")
-    // Load all images immediately as fallback
-    lazyImages.forEach((img) => {
-      const src = img.getAttribute("data-src")
-      if (src) {
-        img.src = src
-        img.classList.remove("lazy-load")
-      }
-    })
-    return
-  }
-
-  const observerOptions = {
-    root: null,
-    rootMargin: "0px",
-    threshold: 0.1,
-  }
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const img = entry.target
-        const src = img.getAttribute("data-src")
-
-        if (src) {
-          img.src = src
-          img.classList.remove("lazy-load")
-        }
-
-        observer.unobserve(img)
-      }
-    })
-  }, observerOptions)
-
-  lazyImages.forEach((img) => {
-    observer.observe(img)
-  })
-}
-
 // Function to initialize contact form
 function initContactForm() {
   const contactForm = document.getElementById("contactForm")
@@ -1193,55 +1107,3 @@ function initContactForm() {
     }, 5000)
   }
 }
-
-function applyAnimationClasses() {
-  // Apply fade-in animation to sections
-  document.querySelectorAll("section").forEach((section) => {
-    section.classList.add("fade-in")
-  })
-
-  // Apply scale-in animation to skill items
-  document.querySelectorAll(".skill").forEach((skill) => {
-    skill.classList.add("scale-in")
-  })
-
-  // Apply slide-in animations to project items
-  document.querySelectorAll(".project").forEach((project, index) => {
-    project.classList.add(index % 2 === 0 ? "slide-in-left" : "slide-in-right")
-  })
-
-  // Apply fade-in animation to timeline items
-  document.querySelectorAll(".timeline-item").forEach((item) => {
-    item.classList.add("fade-in")
-  })
-}
-
-// Ensure all sections are visible even if JS is slow or fails
-document.addEventListener("DOMContentLoaded", () => {
-  // Immediately show all sections to prevent blank page
-  document.querySelectorAll("section").forEach((section) => {
-    section.classList.add("appear")
-  })
-})
-
-// Add this function to fix empty page issue
-function fixVisibility() {
-  // Force show all sections immediately
-  document.querySelectorAll("section").forEach((section) => {
-    section.style.opacity = "1"
-    section.style.transform = "translateY(0)"
-    section.style.visibility = "visible"
-    section.classList.add("appear")
-  })
-
-  // And again after a short delay to be sure
-  setTimeout(() => {
-    document.querySelectorAll("section").forEach((section) => {
-      section.style.opacity = "1"
-      section.style.transform = "translateY(0)"
-      section.style.visibility = "visible"
-      section.classList.add("appear")
-    })
-  }, 100)
-}
-
