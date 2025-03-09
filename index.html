@@ -143,7 +143,7 @@
     <div id="menuOverlay" class="menu-overlay" aria-hidden="true"></div>
 
     <main>
-        <section id="home" class="appear">
+        <section id="home">
             <div class="container">
                 <h1 class="rgb-text">ORAPELENG TIMOTHY MADIBELA</h1>
                 <div class="typing-text"></div>
@@ -157,12 +157,12 @@
             </div>
         </section>
 
-        <section id="about" class="appear">
+        <section id="about">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-user"></i> About Me</h2>
                 <div class="about-content">
                     <div class="profile-pic-container">
-                        <img src="IMG_20231020_161116.jpg" alt="Orapeleng Timothy Madibela" class="profile-pic lazy-load" data-src="IMG_20231020_161116.jpg">
+                        <img src="IMG_20231020_161116.jpg" alt="Orapeleng Timothy Madibela" class="profile-pic">
                     </div>
                     <div class="about-text">
                         <p>I am a proactive computer science student pursuing a Bachelor of Sciences degree in Mathematical Sciences at the University of Limpopo. As a collaborative team player, I believe in working hard independently and as part of a team. I'm passionate about learning and interested in becoming a Data Analyst and Web Developer. My goal is to combine my analytical skills with web development expertise to create data-driven web applications that solve real-world problems.</p>
@@ -171,7 +171,7 @@
             </div>
         </section>
 
-        <section id="skills" class="appear">
+        <section id="skills">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-code"></i> Skills</h2>
                 <div class="skills-grid">
@@ -269,7 +269,7 @@
             </div>
         </section>
 
-        <section id="projects" class="appear">
+        <section id="projects">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-briefcase"></i> Projects</h2>
                 <div class="project-filters">
@@ -314,7 +314,7 @@
             </div>
         </section>
 
-        <section id="timeline" class="appear">
+        <section id="timeline">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-clock"></i> Education</h2>
                 <div class="timeline">
@@ -350,7 +350,7 @@
             </div>
         </section>
 
-        <section id="github" class="appear">
+        <section id="github">
             <div class="container">
                 <h2 class="section-header"><i class="fab fa-github"></i> GitHub Repositories</h2>
                 <div id="repos" class="repos-grid"></div>
@@ -362,7 +362,7 @@
             </div>
         </section>
 
-        <section id="contact" class="appear">
+        <section id="contact">
             <div class="container">
                 <h2 class="section-header"><i class="fas fa-envelope"></i> Contact Me</h2>
                 <div class="contact-grid">
@@ -391,7 +391,7 @@
                                 <i class="fas fa-envelope"></i>
                                 <div>
                                     <p>Email</p>
-                                    <a href="mailto:orapeleng.madibela@gmail.com">orapeleng.madibela@gmail.com</a>
+                                    <a href="mailto:orapelengmadibela@gmail.com">orapelengmadibela@gmail.com</a>
                                 </div>
                             </li>
                             <li>
@@ -448,183 +448,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="script.js"></script>
-    <script>
-  // Emergency fix to ensure content visibility
-  document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll("section").forEach(function(section) {
-      section.style.opacity = "1";
-      section.style.transform = "translateY(0)";
-      section.style.visibility = "visible";
-      section.classList.add("appear");
-    });
-  });
-  
-  // Backup in case DOMContentLoaded already fired
-  document.querySelectorAll("section").forEach(function(section) {
-    section.style.opacity = "1";
-    section.style.transform = "translateY(0)";
-    section.style.visibility = "visible";
-    section.classList.add("appear");
-  });
-</script>
-
-<!-- Add a noscript fallback for when JavaScript is disabled -->
-<noscript>
-  <style>
-    section {
-      opacity: 1 !important;
-      transform: translateY(0) !important;
-      visibility: visible !important;
-    }
-    .progress-bar-inner {
-      width: 100% !important;
-    }
-  </style>
-</noscript>
-
-<!-- Add inline script at the end of body to ensure mobile menu works -->
-<script>
-  // Emergency fix for mobile menu
-  document.addEventListener("DOMContentLoaded", function() {
-    // Fix mobile menu toggle
-    const menuToggle = document.getElementById("menuToggle");
-    const closeMenu = document.getElementById("closeMenu");
-    const navbar = document.getElementById("navbar");
-    const menuOverlay = document.getElementById("menuOverlay");
-    
-    if (menuToggle && closeMenu && navbar && menuOverlay) {
-      menuToggle.addEventListener("click", function(e) {
-        e.preventDefault();
-        navbar.classList.add("active");
-        navbar.style.right = "0";
-        menuOverlay.classList.add("active");
-        menuOverlay.style.display = "block";
-        document.body.style.overflow = "hidden";
-      });
-      
-      closeMenu.addEventListener("click", function(e) {
-        e.preventDefault();
-        navbar.classList.remove("active");
-        navbar.style.right = `calc(-1 * var(--nav-width-mobile))`;
-        menuOverlay.classList.remove("active");
-        menuOverlay.style.display = "none";
-        document.body.style.overflow = "";
-      });
-      
-      menuOverlay.addEventListener("click", function(e) {
-        e.preventDefault();
-        navbar.classList.remove("active");
-        navbar.style.right = `calc(-1 * var(--nav-width-mobile))`;
-        menuOverlay.classList.remove("active");
-        menuOverlay.style.display = "none";
-        document.body.style.overflow = "";
-      });
-    }
-    
-    // Fix dark mode toggle
-    const darkModeToggle = document.getElementById("darkModeToggle");
-    const darkModeToggleMobile = document.getElementById("darkModeToggleMobile");
-    
-    if (darkModeToggle && darkModeToggleMobile) {
-      const toggleDarkMode = function() {
-        document.body.classList.toggle("light-mode");
-        const isLightMode = document.body.classList.contains("light-mode");
-        localStorage.setItem("lightMode", isLightMode);
-        
-        // Update icons
-        const desktopIcon = darkModeToggle.querySelector("i");
-        const mobileIcon = darkModeToggleMobile.querySelector("i");
-        
-        if (desktopIcon && mobileIcon) {
-          if (isLightMode) {
-            desktopIcon.className = "fas fa-moon";
-            mobileIcon.className = "fas fa-moon";
-          } else {
-            desktopIcon.className = "fas fa-sun";
-            mobileIcon.className = "fas fa-sun";
-          }
-        }
-      };
-      
-      darkModeToggle.addEventListener("click", toggleDarkMode);
-      darkModeToggleMobile.addEventListener("click", toggleDarkMode);
-    }
-    
-    // Fix GitHub repositories section
-    const reposSection = document.getElementById("repos");
-    const languageStats = document.getElementById("language-stats");
-    const languageBar = document.querySelector(".language-bar");
-    const languageLabels = document.querySelector(".language-labels");
-
-    if (reposSection && reposSection.innerHTML === "") {
-      reposSection.innerHTML = `
-        <div class="repo">
-          <h3>my-portfolio</h3>
-          <p>My personal portfolio website showcasing my skills and projects using HTML, CSS, and JavaScript</p>
-          <div class="repo-meta">
-            <span>Updated: ${new Date().toLocaleDateString()}</span>
-            <a href="https://github.com/Orapeleng-madibela/my-portfolio" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-          </div>
-        </div>
-        <div class="repo">
-          <h3>data-analysis-projects</h3>
-          <p>Collection of data analysis projects using Python, pandas, and matplotlib for data visualization</p>
-          <div class="repo-meta">
-            <span>Updated: ${new Date().toLocaleDateString()}</span>
-            <a href="https://github.com/Orapeleng-madibela/data-analysis-projects" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-          </div>
-        </div>
-        <div class="repo">
-          <h3>web-development</h3>
-          <p>Web development projects using HTML, CSS, JavaScript and responsive design techniques</p>
-          <div class="repo-meta">
-            <span>Updated: ${new Date().toLocaleDateString()}</span>
-            <a href="https://github.com/Orapeleng-madibela/web-development" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-          </div>
-        </div>
-      `;
-      
-      // Add fallback language statistics
-      if (languageStats && languageBar && languageLabels) {
-        languageBar.innerHTML = "";
-        languageLabels.innerHTML = "";
-        
-        const fallbackLanguages = {
-          "JavaScript": 40,
-          "HTML": 30,
-          "CSS": 20,
-          "Python": 10
-        };
-        
-        const colors = {
-          "JavaScript": "#f1e05a",
-          "Python": "#3572A5",
-          "HTML": "#e34c26",
-          "CSS": "#563d7c"
-        };
-        
-        Object.entries(fallbackLanguages).forEach(([language, percentage]) => {
-          // Create language segment in bar
-          const segment = document.createElement("div");
-          segment.className = "language-segment";
-          segment.style.width = `${percentage}%`;
-          segment.style.backgroundColor = colors[language] || "#808080";
-          segment.title = `${language}: ${percentage}%`;
-          languageBar.appendChild(segment);
-
-          // Create language label
-          const label = document.createElement("div");
-          label.className = "language-label";
-          label.innerHTML = `
-            <div class="language-color" style="background-color: ${colors[language] || "#808080"}"></div>
-            <span>${language}: ${percentage}%</span>
-          `;
-          languageLabels.appendChild(label);
-        });
-      }
-    }
-  });
-</script>
 </body>
 </html>
-
