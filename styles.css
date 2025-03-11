@@ -1,4 +1,3 @@
-/* Main CSS File for the Portfolio Website */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 :root {
@@ -38,13 +37,6 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-  /* Prevent content overflow */
-  overflow-x: hidden;
-  width: 100%;
-}
-
 body {
   font-family: "Poppins", sans-serif;
   background-color: var(--background-color);
@@ -56,9 +48,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  /* Ensure text is readable on mobile */
-  font-size: 16px;
 }
 
 .container {
@@ -66,8 +55,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
-  /* Ensure container doesn't cause horizontal overflow */
-  overflow-x: hidden;
 }
 
 /* Particles Background */
@@ -551,8 +538,6 @@ main {
   position: relative;
   z-index: 1;
   display: block;
-  /* Prevent horizontal overflow */
-  overflow-x: hidden;
 }
 
 section {
@@ -564,9 +549,6 @@ section {
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
-  /* Prevent horizontal overflow */
-  overflow-x: hidden;
-  width: 100%;
 }
 
 /* Animation classes for scroll effects */
@@ -586,8 +568,6 @@ h1,
 h2,
 h3 {
   margin-bottom: 1.5rem;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 h2 {
@@ -617,9 +597,6 @@ h2::after {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: rgb-effect 5s linear infinite;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
-  max-width: 100%;
 }
 
 @keyframes rgb-effect {
@@ -638,9 +615,6 @@ h2::after {
   font-size: 1.5rem;
   min-height: 3rem;
   margin: 1.5rem 0;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
-  max-width: 100%;
 }
 
 .download-resume {
@@ -672,9 +646,6 @@ h2::after {
   padding: 2rem;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  /* Ensure content fits on mobile */
-  width: 100%;
-  overflow: hidden;
 }
 
 @media (min-width: 768px) {
@@ -694,22 +665,10 @@ h2::after {
   object-fit: cover;
   border: 4px solid var(--primary-color);
   box-shadow: 0 0 20px rgba(74, 0, 224, 0.3);
-  /* Make profile pic responsive */
-  max-width: 100%;
-}
-
-/* Make profile pic smaller on mobile */
-@media (max-width: 480px) {
-  .profile-pic {
-    width: 200px;
-    height: 200px;
-  }
 }
 
 .about-text {
   flex-grow: 1;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 /* Skills Section */
@@ -717,15 +676,6 @@ h2::after {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
-  /* Ensure grid fits on mobile */
-  width: 100%;
-}
-
-/* Adjust grid for smaller screens */
-@media (max-width: 320px) {
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .skill {
@@ -733,9 +683,6 @@ h2::after {
   padding: 1.5rem;
   border-radius: var(--border-radius);
   transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-  /* Ensure content fits on mobile */
-  width: 100%;
-  overflow: hidden;
 }
 
 .skill:hover {
@@ -752,8 +699,6 @@ h2::after {
 .skill h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 .progress-container {
@@ -794,24 +739,6 @@ h2::after {
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  /* Ensure filters fit on mobile */
-  width: 100%;
-}
-
-/* Make filters scrollable on very small screens */
-@media (max-width: 380px) {
-  .project-filters {
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-  }
-  
-  .project-filters::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
 }
 
 .filter-btn {
@@ -823,11 +750,6 @@ h2::after {
   cursor: pointer;
   transition: all var(--transition-speed) ease;
   font-weight: 500;
-  /* Make buttons more tappable on mobile */
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .filter-btn.active,
@@ -839,15 +761,6 @@ h2::after {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
-  /* Ensure grid fits on mobile */
-  width: 100%;
-}
-
-/* Adjust grid for smaller screens */
-@media (max-width: 320px) {
-  .project-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .project {
@@ -857,9 +770,6 @@ h2::after {
   transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
   display: flex;
   flex-direction: column;
-  /* Ensure content fits on mobile */
-  width: 100%;
-  overflow: hidden;
 }
 
 .project:hover {
@@ -886,16 +796,12 @@ h2::after {
 .project h3 {
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 .project p {
   color: var(--muted-color);
   margin-bottom: 1.5rem;
   flex-grow: 1;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 .view-details {
@@ -908,11 +814,6 @@ h2::after {
   transition: all var(--transition-speed) ease;
   font-weight: 500;
   align-self: flex-start;
-  /* Make buttons more tappable on mobile */
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .view-details:hover {
@@ -924,9 +825,6 @@ h2::after {
   position: relative;
   max-width: 800px;
   margin: 0 auto;
-  /* Ensure timeline fits on mobile */
-  width: 100%;
-  padding: 0 10px;
 }
 
 .timeline::after {
@@ -980,14 +878,10 @@ h2::after {
   position: relative;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  /* Ensure content fits on mobile */
-  word-wrap: break-word;
 }
 
 .timeline-content h3 {
   margin-bottom: 0.5rem;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 .timeline-content .date {
@@ -1006,15 +900,6 @@ h2::after {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
-  /* Ensure grid fits on mobile */
-  width: 100%;
-}
-
-/* Adjust grid for smaller screens */
-@media (max-width: 320px) {
-  .repos-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .repo {
@@ -1025,9 +910,6 @@ h2::after {
   height: 100%;
   display: flex;
   flex-direction: column;
-  /* Ensure content fits on mobile */
-  width: 100%;
-  overflow: hidden;
 }
 
 .repo:hover {
@@ -1038,8 +920,6 @@ h2::after {
 .repo h3 {
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 .repo p {
@@ -1047,8 +927,6 @@ h2::after {
   margin-bottom: 1rem;
   font-size: 0.875rem;
   flex-grow: 1;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 .repo-meta {
@@ -1073,9 +951,6 @@ h2::after {
   background-color: var(--card-background);
   padding: 1.5rem;
   border-radius: var(--border-radius);
-  /* Ensure content fits on mobile */
-  width: 100%;
-  overflow: hidden;
 }
 
 .language-bar {
@@ -1099,20 +974,11 @@ h2::after {
   margin-top: 1rem;
 }
 
-/* Adjust language labels for smaller screens */
-@media (max-width: 480px) {
-  .language-labels {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-}
-
 .language-label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 .language-color {
@@ -1127,8 +993,6 @@ h2::after {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
-  /* Ensure grid fits on mobile */
-  width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -1143,17 +1007,6 @@ h2::after {
   padding: 2rem;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  /* Ensure content fits on mobile */
-  width: 100%;
-  overflow: hidden;
-}
-
-/* Adjust padding for smaller screens */
-@media (max-width: 480px) {
-  .contact-form,
-  .contact-info {
-    padding: 1.5rem;
-  }
 }
 
 .contact-form h3,
@@ -1176,8 +1029,6 @@ h2::after {
   color: var(--text-color);
   font-family: "Poppins", sans-serif;
   transition: border-color var(--transition-speed) ease;
-  /* Prevent iOS zoom on focus */
-  font-size: 16px;
 }
 
 .form-group input:focus,
@@ -1196,8 +1047,6 @@ h2::after {
   transition: background-color var(--transition-speed) ease;
   font-weight: 500;
   width: 100%;
-  /* Make buttons more tappable on mobile */
-  min-height: 44px;
 }
 
 .submit-btn:hover {
@@ -1213,15 +1062,12 @@ h2::after {
   align-items: flex-start;
   gap: 1rem;
   margin-bottom: 1.5rem;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 .contact-info li i {
   font-size: 1.25rem;
   color: var(--primary-color);
   margin-top: 0.25rem;
-  flex-shrink: 0;
 }
 
 .contact-info li div p:first-child {
@@ -1284,7 +1130,6 @@ footer .container {
   justify-content: center;
   gap: 1.5rem;
   margin-bottom: 1rem;
-  flex-wrap: wrap;
 }
 
 .social-links a {
@@ -1388,20 +1233,9 @@ footer .container {
   flex-direction: column;
 }
 
-/* Adjust modal for smaller screens */
-@media (max-width: 480px) {
-  .modal-content {
-    margin: 10% auto;
-    padding: 1.5rem;
-    width: 95%;
-  }
-}
-
 .modal-inner {
   overflow-y: auto;
   padding-right: 10px;
-  /* Ensure content fits on mobile */
-  word-wrap: break-word;
 }
 
 .close {
@@ -1411,8 +1245,6 @@ footer .container {
   font-weight: bold;
   cursor: pointer;
   transition: color 0.3s ease;
-  /* Make close button more tappable on mobile */
-  padding: 5px;
 }
 
 .close:hover,
@@ -1424,14 +1256,10 @@ footer .container {
 #modal-title {
   margin-top: 0;
   color: var(--primary-color);
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 #modal-description {
   margin-bottom: 1.5rem;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 #modal-files ul {
@@ -1443,8 +1271,6 @@ footer .container {
   margin-bottom: 0.75rem;
   padding-left: 1.5rem;
   position: relative;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 #modal-files li::before {
@@ -1469,8 +1295,6 @@ footer .container {
   border-radius: var(--border-radius);
   text-decoration: none;
   transition: background-color 0.3s ease;
-  /* Make buttons more tappable on mobile */
-  min-height: 44px;
 }
 
 #modal-link a:hover {
@@ -1515,7 +1339,6 @@ footer .container {
 .toast-icon {
   margin-right: 0.75rem;
   font-size: 1.25rem;
-  flex-shrink: 0;
 }
 
 .toast-icon.success {
@@ -1531,8 +1354,6 @@ footer .container {
 .toast-message {
   flex-grow: 1;
   font-size: 0.9rem;
-  /* Ensure text wraps on mobile */
-  word-wrap: break-word;
 }
 
 /* Adjust for mobile */
@@ -1579,71 +1400,6 @@ footer .container {
   .navbar-subtitle {
     font-size: 0.8rem;
   }
-  
-  /* Adjust header height for better mobile experience */
-  :root {
-    --header-height: 60px;
-  }
-  
-  /* Adjust section padding for mobile */
-  section {
-    padding: 4rem 0;
-    min-height: calc(100vh - var(--header-height));
-  }
-  
-  /* Adjust heading sizes for mobile */
-  h2 {
-    font-size: 1.75rem;
-  }
-  
-  .rgb-text {
-    font-size: 2.25rem;
-  }
-  
-  .typing-text {
-    font-size: 1.25rem;
-  }
-}
-
-/* Very small screen adjustments */
-@media (max-width: 320px) {
-  .container {
-    padding: 0 1rem;
-  }
-  
-  h2 {
-    font-size: 1.5rem;
-  }
-  
-  .rgb-text {
-    font-size: 2rem;
-  }
-  
-  .typing-text {
-    font-size: 1.1rem;
-  }
-  
-  .profile-pic {
-    width: 180px;
-    height: 180px;
-  }
-  
-  .about-content,
-  .contact-form,
-  .contact-info {
-    padding: 1.25rem;
-  }
-}
-
-/* Fix for iOS input zoom */
-@media screen and (-webkit-min-device-pixel-ratio: 0) { 
-  select,
-  textarea,
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"] {
-    font-size: 16px !important;
-  }
 }
 
 /* Make sure all sections are visible */
@@ -1651,75 +1407,4 @@ section {
   opacity: 1 !important;
   visibility: visible !important;
   transform: translateY(0) !important;
-}
-
-/* Back to top button */
-.back-to-top {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 50px;
-  height: 50px;
-  background-color: var(--primary-color);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  cursor: pointer;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
-  z-index: 99;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.back-to-top.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-.back-to-top:hover {
-  background-color: var(--secondary-color);
-  transform: translateY(-5px);
-}
-
-/* Adjust back to top button for mobile */
-@media (max-width: 480px) {
-  .back-to-top {
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
-}
-
-/* Prevent content overflow */
-img, video, iframe, canvas, svg {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Ensure tables don't overflow */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  overflow-x: auto;
-  display: block;
-}
-
-@media (min-width: 768px) {
-  table {
-    display: table;
-  }
-}
-
-/* Ensure code blocks don't overflow */
-pre, code {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-width: 100%;
-  overflow-x: auto;
 }
