@@ -1,5 +1,3 @@
-// Portfolio Website JavaScript - Mobile Responsive Version
-
 // Wait for the page to load before running any code
 document.addEventListener("DOMContentLoaded", function() {
   // Check if viewport meta tag exists, add if not
@@ -161,7 +159,7 @@ function setupMobileMenu() {
   var menuOpen = false;
   
   // Check if elements exist
-  if (!menuToggle || !closeMenu || !navbar || !menuOverlay) {
+  if (!menuToggle || !navbar || !menuOverlay) {
     console.log("Mobile menu elements not found");
     return;
   }
@@ -179,19 +177,35 @@ function setupMobileMenu() {
     menuToggle.classList.add("active");
     menuToggle.setAttribute("aria-expanded", "true");
     
-    // Show overlay and menu
-    menuOverlay.classList.add("active");
+    // Show overlay first
     menuOverlay.style.display = "block";
+    
+    // Force reflow to ensure transitions work
+    void menuOverlay.offsetWidth;
+    
+    // Then add active classes and animate
+    menuOverlay.classList.add("active");
     menuOverlay.style.opacity = "1";
+    
+    // Show navbar
+    navbar.style.display = "block";
     navbar.classList.add("active");
+    
+    // Force reflow for navbar animation
+    void navbar.offsetWidth;
+    
+    // Animate navbar in
     navbar.style.right = "0";
     
     // Stagger nav items animation for better effect
     navItems.forEach(function(item, index) {
+      item.style.opacity = "0";
+      item.style.transform = "translateX(20px)";
+      
       setTimeout(function() {
         item.style.opacity = "1";
         item.style.transform = "translateX(0)";
-      }, 50 * index);
+      }, 50 * (index + 1));
     });
     
     // Prevent scrolling when menu is open
@@ -201,8 +215,8 @@ function setupMobileMenu() {
     setupSwipeToClose();
   }
   
-  // Function to close the menu
-  function closeMenu() {
+  // Function to close the menu with improved animation
+  function closeMenuFunc() {
     if (!menuOpen) return;
     
     menuOpen = false;
@@ -217,72 +231,97 @@ function setupMobileMenu() {
       }, 30 * index);
     });
     
-    // Hide menu and overlay
-    menuOverlay.style.opacity = "0";
+    // Animate navbar out
     navbar.style.right = "calc(-1 * var(--nav-width-mobile, 80vw))";
     
+    // Fade out overlay
+    menuOverlay.style.opacity = "0";
+    
+    // Wait for animations to complete before hiding elements
     setTimeout(function() {
       navbar.classList.remove("active");
+      navbar.style.display = "none";
       menuOverlay.classList.remove("active");
       menuOverlay.style.display = "none";
       
       // Re-enable scrolling
       body.style.overflow = "";
-    }, 300);
+      
+      // Reset nav items for next opening
+      navItems.forEach(function(item) {
+        item.style.opacity = "0";
+        item.style.transform = "translateX(20px)";
+      });
+    }, 300); // Match this with your CSS transition time
   }
   
   // Add click events to buttons
   menuToggle.addEventListener("click", function(e) {
     e.preventDefault();
+    e.stopPropagation();
     openMenu();
   });
   
-  closeMenu.addEventListener("click", function(e) {
-    e.preventDefault();
-    closeMenu();
-  });
+  if (closeMenu) {
+    closeMenu.addEventListener("click", function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeMenuFunc();
+    });
+  }
   
   menuOverlay.addEventListener("click", function(e) {
     e.preventDefault();
-    closeMenu();
+    e.stopPropagation();
+    closeMenuFunc();
   });
   
-  // Make sure links work properly on mobile
+  // Improved navigation from mobile menu
   navLinks.forEach(function(link) {
     link.addEventListener("click", function(e) {
       // Get the target section id
       var targetId = link.getAttribute('href');
+      
       if (targetId && targetId.startsWith('#')) {
         e.preventDefault();
+        e.stopPropagation();
         
-        // Close the mobile menu
-        closeMenu();
+        // Store the target for use after menu closes
+        var targetElement = document.querySelector(targetId);
         
-        // Scroll to the section after menu is closed
+        if (!targetElement) {
+          console.log("Target section not found:", targetId);
+          closeMenuFunc();
+          return;
+        }
+        
+        // Close the mobile menu first
+        closeMenuFunc();
+        
+        // Wait for menu close animation to complete
         setTimeout(function() {
-          var targetElement = document.querySelector(targetId);
-          if (targetElement) {
-            var header = document.querySelector("header");
-            var headerHeight = header ? header.offsetHeight : 0;
-            var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-            
-            window.scrollTo({
-              top: targetPosition,
-              behavior: "smooth"
-            });
-            
-            // Update active nav item
-            navItems.forEach(function(navItem) {
-              navItem.classList.remove("active");
-            });
-            
-            // Find the parent nav-item and add active class
-            var parentItem = link.closest('.nav-item');
-            if (parentItem) {
-              parentItem.classList.add("active");
-            }
+          // Calculate position accounting for header
+          var header = document.querySelector("header");
+          var headerHeight = header ? header.offsetHeight : 0;
+          var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+          
+          // Scroll to the section
+          window.scrollTo({
+            top: targetPosition,
+            behavior: "smooth"
+          });
+          
+          // Update active nav item
+          navItems.forEach(function(navItem) {
+            navItem.classList.remove("active");
+          });
+          
+          // Find the parent nav-item and add active class
+          var parentItem = link.closest('.nav-item');
+          if (parentItem) {
+            parentItem.classList.add("active");
           }
-        }, 300);
+        }, 350); // Slightly longer than the menu close animation
       }
     });
   });
@@ -293,34 +332,51 @@ function setupMobileMenu() {
     var threshold = 100; // Minimum distance for swipe
     var restraint = 100; // Maximum perpendicular distance
     
-    // Handle touch start
-    navbar.addEventListener('touchstart', function(e) {
+    function handleTouchStart(e) {
       if (!menuOpen) return;
       
       var touch = e.changedTouches[0];
       startX = touch.pageX;
       startY = touch.pageY;
-    }, { passive: true });
+    }
     
-    // Handle touch end
-    navbar.addEventListener('touchend', function(e) {
+    function handleTouchEnd(e) {
       if (!menuOpen) return;
       
       var touch = e.changedTouches[0];
       var distX = touch.pageX - startX;
       var distY = Math.abs(touch.pageY - startY);
       
-      // Check for swipe right with restraint
+      // Check for swipe right (to close menu)
       if (distX > threshold && distY < restraint) {
-        closeMenu();
+        closeMenuFunc();
       }
-    }, { passive: true });
+    }
+    
+    // Add event listeners
+    navbar.addEventListener('touchstart', handleTouchStart, { passive: true });
+    navbar.addEventListener('touchend', handleTouchEnd, { passive: true });
+    
+    // Clean up function to remove listeners when menu closes
+    setTimeout(function() {
+      if (!menuOpen) {
+        navbar.removeEventListener('touchstart', handleTouchStart);
+        navbar.removeEventListener('touchend', handleTouchEnd);
+      }
+    }, 300);
   }
   
   // Close menu when window is resized to desktop size
   window.addEventListener("resize", function() {
     if (window.innerWidth >= 768 && menuOpen) {
-      closeMenu();
+      closeMenuFunc();
+    }
+  });
+  
+  // Close menu with Escape key
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape" && menuOpen) {
+      closeMenuFunc();
     }
   });
 }
@@ -1116,7 +1172,7 @@ function updateFooterYear() {
 
 // Function to set up smooth scrolling for anchor links
 function setupSmoothScrolling() {
-  var anchorLinks = document.querySelectorAll('a[href^="#"]');
+  var anchorLinks = document.querySelectorAll('a[href^="#"]:not(.nav-link)');
   
   if (anchorLinks.length === 0) {
     return; // No anchor links to handle
@@ -1124,11 +1180,6 @@ function setupSmoothScrolling() {
   
   anchorLinks.forEach(function(anchor) {
     anchor.addEventListener("click", function(e) {
-      // Don't handle if it's part of the mobile menu - that's handled separately
-      if (anchor.closest("#navbar") && window.innerWidth < 768) {
-        return;
-      }
-      
       e.preventDefault();
       
       var targetId = this.getAttribute("href");
