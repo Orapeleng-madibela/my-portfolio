@@ -1,7 +1,10 @@
-// Portfolio Website JavaScript - Final Version
+// Portfolio Website JavaScript - Mobile Responsive Version
 
 // Wait for the page to load before running any code
 document.addEventListener("DOMContentLoaded", function() {
+  // Check if viewport meta tag exists, add if not
+  ensureViewportMeta();
+  
   // Run all our functions when the page loads
   setupDarkMode();
   setupTypingEffect();
@@ -16,7 +19,64 @@ document.addEventListener("DOMContentLoaded", function() {
   setupContactForm();
   makeHeaderSticky();
   highlightActiveNavLink();
+  preventContentOverflow();
 });
+
+// Function to ensure viewport meta tag exists
+function ensureViewportMeta() {
+  var viewportMeta = document.querySelector('meta[name="viewport"]');
+  if (!viewportMeta) {
+    viewportMeta = document.createElement('meta');
+    viewportMeta.name = 'viewport';
+    viewportMeta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0';
+    document.getElementsByTagName('head')[0].appendChild(viewportMeta);
+    console.log("Added viewport meta tag");
+  }
+}
+
+// Function to prevent content overflow on mobile
+function preventContentOverflow() {
+  // Apply max-width to images
+  var images = document.querySelectorAll('img');
+  images.forEach(function(image) {
+    image.style.maxWidth = '100%';
+    image.style.height = 'auto';
+  });
+  
+  // Handle tables for mobile
+  var tables = document.querySelectorAll('table');
+  tables.forEach(function(table) {
+    var wrapper = document.createElement('div');
+    wrapper.style.overflowX = 'auto';
+    wrapper.style.width = '100%';
+    table.parentNode.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+  });
+  
+  // Check for horizontal overflow
+  function checkForOverflow() {
+    if (document.body.scrollWidth > window.innerWidth) {
+      console.log("Horizontal overflow detected");
+      // Find offending elements
+      var allElements = document.querySelectorAll('*');
+      allElements.forEach(function(el) {
+        if (el.offsetWidth > window.innerWidth) {
+          console.log("Overflow element:", el);
+          el.style.maxWidth = '100%';
+          el.style.boxSizing = 'border-box';
+        }
+      });
+    }
+  }
+  
+  // Run initial check
+  checkForOverflow();
+  
+  // Run check on window resize
+  window.addEventListener('resize', function() {
+    checkForOverflow();
+  });
+}
 
 // Function to set up dark mode toggle
 function setupDarkMode() {
@@ -95,6 +155,7 @@ function setupMobileMenu() {
   var navbar = document.getElementById("navbar");
   var menuOverlay = document.getElementById("menuOverlay");
   var navItems = document.querySelectorAll(".nav-item");
+  var navLinks = document.querySelectorAll(".nav-link");
   var mobileMenuYear = document.getElementById("mobileMenuYear");
   var body = document.body;
   var menuOpen = false;
@@ -121,17 +182,23 @@ function setupMobileMenu() {
     // Show overlay and menu
     menuOverlay.classList.add("active");
     menuOverlay.style.display = "block";
+    menuOverlay.style.opacity = "1";
     navbar.classList.add("active");
     navbar.style.right = "0";
     
-    // Show nav items
-    navItems.forEach(function(item) {
-      item.style.opacity = "1";
-      item.style.transform = "translateX(0)";
+    // Stagger nav items animation for better effect
+    navItems.forEach(function(item, index) {
+      setTimeout(function() {
+        item.style.opacity = "1";
+        item.style.transform = "translateX(0)";
+      }, 50 * index);
     });
     
     // Prevent scrolling when menu is open
     body.style.overflow = "hidden";
+    
+    // Add touch capability for swiping menu closed
+    setupSwipeToClose();
   }
   
   // Function to close the menu
@@ -142,22 +209,26 @@ function setupMobileMenu() {
     menuToggle.classList.remove("active");
     menuToggle.setAttribute("aria-expanded", "false");
     
-    // Hide nav items
-    navItems.forEach(function(item) {
-      item.style.opacity = "0";
-      item.style.transform = "translateX(20px)";
+    // Hide nav items with staggered animation
+    navItems.forEach(function(item, index) {
+      setTimeout(function() {
+        item.style.opacity = "0";
+        item.style.transform = "translateX(20px)";
+      }, 30 * index);
     });
     
     // Hide menu and overlay
+    menuOverlay.style.opacity = "0";
+    navbar.style.right = "calc(-1 * var(--nav-width-mobile, 80vw))";
+    
     setTimeout(function() {
       navbar.classList.remove("active");
-      navbar.style.right = "calc(-1 * var(--nav-width-mobile))";
       menuOverlay.classList.remove("active");
       menuOverlay.style.display = "none";
       
       // Re-enable scrolling
       body.style.overflow = "";
-    }, 200);
+    }, 300);
   }
   
   // Add click events to buttons
@@ -176,21 +247,75 @@ function setupMobileMenu() {
     closeMenu();
   });
   
-  // Close menu when clicking on a nav link
-  navItems.forEach(function(item) {
-    var link = item.querySelector(".nav-link");
-    if (link) {
-      link.addEventListener("click", function() {
+  // Make sure links work properly on mobile
+  navLinks.forEach(function(link) {
+    link.addEventListener("click", function(e) {
+      // Get the target section id
+      var targetId = link.getAttribute('href');
+      if (targetId && targetId.startsWith('#')) {
+        e.preventDefault();
+        
+        // Close the mobile menu
         closeMenu();
         
-        // Update active nav item
-        navItems.forEach(function(navItem) {
-          navItem.classList.remove("active");
-        });
-        item.classList.add("active");
-      });
-    }
+        // Scroll to the section after menu is closed
+        setTimeout(function() {
+          var targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            var header = document.querySelector("header");
+            var headerHeight = header ? header.offsetHeight : 0;
+            var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: "smooth"
+            });
+            
+            // Update active nav item
+            navItems.forEach(function(navItem) {
+              navItem.classList.remove("active");
+            });
+            
+            // Find the parent nav-item and add active class
+            var parentItem = link.closest('.nav-item');
+            if (parentItem) {
+              parentItem.classList.add("active");
+            }
+          }
+        }, 300);
+      }
+    });
   });
+  
+  // Setup touch swipe to close menu
+  function setupSwipeToClose() {
+    var startX, startY;
+    var threshold = 100; // Minimum distance for swipe
+    var restraint = 100; // Maximum perpendicular distance
+    
+    // Handle touch start
+    navbar.addEventListener('touchstart', function(e) {
+      if (!menuOpen) return;
+      
+      var touch = e.changedTouches[0];
+      startX = touch.pageX;
+      startY = touch.pageY;
+    }, { passive: true });
+    
+    // Handle touch end
+    navbar.addEventListener('touchend', function(e) {
+      if (!menuOpen) return;
+      
+      var touch = e.changedTouches[0];
+      var distX = touch.pageX - startX;
+      var distY = Math.abs(touch.pageY - startY);
+      
+      // Check for swipe right with restraint
+      if (distX > threshold && distY < restraint) {
+        closeMenu();
+      }
+    }, { passive: true });
+  }
   
   // Close menu when window is resized to desktop size
   window.addEventListener("resize", function() {
@@ -364,6 +489,20 @@ function setupProjectDetails() {
     }
   };
   
+  // Make modal responsive for mobile
+  function makeModalResponsive() {
+    var modalContent = modal.querySelector(".modal-content");
+    if (modalContent) {
+      modalContent.style.width = window.innerWidth <= 768 ? "90%" : "70%";
+      modalContent.style.maxHeight = window.innerWidth <= 768 ? "80vh" : "80vh";
+      modalContent.style.overflowY = "auto";
+    }
+  }
+  
+  // Run initially and on resize
+  makeModalResponsive();
+  window.addEventListener("resize", makeModalResponsive);
+  
   // Add click event to all "View Details" buttons
   viewDetailsButtons.forEach(function(button) {
     button.addEventListener("click", function() {
@@ -404,6 +543,7 @@ function setupProjectDetails() {
       
       // Show modal
       modal.style.display = "block";
+      makeModalResponsive(); // Ensure modal is properly sized
       document.body.style.overflow = "hidden"; // Prevent scrolling
     });
   });
@@ -429,11 +569,32 @@ function setupProjectDetails() {
       document.body.style.overflow = ""; // Re-enable scrolling
     }
   });
+  
+  // Support touch swipe to dismiss modal
+  var startX, startY;
+  var threshold = 50;
+  
+  modal.addEventListener('touchstart', function(e) {
+    var touch = e.changedTouches[0];
+    startX = touch.pageX;
+    startY = touch.pageY;
+  }, { passive: true });
+  
+  modal.addEventListener('touchend', function(e) {
+    var touch = e.changedTouches[0];
+    var distX = Math.abs(touch.pageX - startX);
+    var distY = Math.abs(touch.pageY - startY);
+    
+    if (distX > threshold || distY > threshold) {
+      modal.style.display = "none";
+      document.body.style.overflow = "";
+    }
+  }, { passive: true });
 }
 
 // Function to load GitHub repositories and language statistics
 function loadGitHubProjects() {
-  // Your GitHub username
+  // My GitHub username
   var githubUsername = "Orapeleng-madibela";
   
   // Get the elements where we'll show the GitHub data
@@ -487,81 +648,200 @@ function loadGitHubProjects() {
     Python: 10
   };
   
-  // Try to fetch repositories from GitHub
-  console.log("Fetching GitHub repositories for " + githubUsername + "...");
+  // Function to show fallback repositories
+  function showFallbackRepos() {
+    reposSection.innerHTML = "";
+    
+    // Create a responsive container for repos
+    var reposContainer = document.createElement("div");
+    reposContainer.className = "repos-container";
+    reposContainer.style.display = "grid";
+    reposContainer.style.gap = "20px";
+    
+    // Responsive grid layout
+    reposContainer.style.gridTemplateColumns = "repeat(auto-fill, minmax(280px, 1fr))";
+    
+    fallbackRepos.forEach(function(repo) {
+      var repoElement = document.createElement("div");
+      repoElement.classList.add("repo");
+      repoElement.style.padding = "15px";
+      repoElement.style.borderRadius = "8px";
+      repoElement.style.backgroundColor = "var(--card-bg, #2d2d2d)";
+      repoElement.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+      repoElement.style.transition = "transform 0.3s ease";
+      repoElement.style.display = "flex";
+      repoElement.style.flexDirection = "column";
+      repoElement.style.height = "100%";
+      
+      repoElement.innerHTML = `
+        <h3 style="margin-top: 0; word-break: break-word;">${repo.name}</h3>
+        <p style="flex-grow: 1; word-break: break-word;">${repo.description || "No description available."}</p>
+        <div class="repo-meta" style="margin-top: 10px; display: flex; justify-content: space-between; flex-wrap: wrap;">
+          <span style="font-size: 0.85rem;">Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
+          <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" style="display: inline-block; margin-top: 5px;">View on GitHub</a>
+        </div>
+      `;
+      
+      reposContainer.appendChild(repoElement);
+    });
+    
+    reposSection.appendChild(reposContainer);
+  }
   
-  // Use a direct API call with no caching to ensure fresh data
-  fetch("https://api.github.com/users/" + githubUsername + "/repos?sort=updated&direction=desc&per_page=6&" + new Date().getTime(), {
-    headers: {
-      'Accept': 'application/vnd.github.v3+json',
-      'Cache-Control': 'no-cache'
-    }
-  })
+  // Function to show fallback language statistics
+  function showFallbackLanguageStats() {
+    if (!languageStats) return;
+    
+    // Clear and rebuild language stats section
+    languageStats.innerHTML = "<h3>Language Statistics</h3>";
+    
+    // Create responsive language bar
+    var languageBar = document.createElement("div");
+    languageBar.className = "language-bar";
+    languageBar.style.display = "flex";
+    languageBar.style.height = "25px";
+    languageBar.style.borderRadius = "12.5px";
+    languageBar.style.overflow = "hidden";
+    languageBar.style.marginBottom = "15px";
+    languageBar.style.width = "100%";
+    
+    // Create responsive language labels container
+    var languageLabels = document.createElement("div");
+    languageLabels.className = "language-labels";
+    languageLabels.style.display = "flex";
+    languageLabels.style.flexWrap = "wrap";
+    languageLabels.style.gap = "10px";
+    
+    // Add fallback language data
+    Object.keys(fallbackLanguages).forEach(function(language) {
+      var percentage = fallbackLanguages[language];
+      
+      // Create language segment in bar
+      var segment = document.createElement("div");
+      segment.className = "language-segment";
+      segment.style.width = percentage + "%";
+      segment.style.backgroundColor = getLanguageColor(language);
+      segment.title = language + ": " + percentage + "%";
+      languageBar.appendChild(segment);
+      
+      // Create language label
+      var label = document.createElement("div");
+      label.className = "language-label";
+      label.style.display = "flex";
+      label.style.alignItems = "center";
+      label.style.fontSize = "0.85rem";
+      
+      var colorBox = document.createElement("div");
+      colorBox.style.width = "12px";
+      colorBox.style.height = "12px";
+      colorBox.style.backgroundColor = getLanguageColor(language);
+      colorBox.style.marginRight = "5px";
+      colorBox.style.borderRadius = "2px";
+      
+      var text = document.createElement("span");
+      text.textContent = language + ": " + percentage + "%";
+      
+      label.appendChild(colorBox);
+      label.appendChild(text);
+      languageLabels.appendChild(label);
+    });
+    
+    // Add language bar and labels to the stats section
+    languageStats.appendChild(languageBar);
+    languageStats.appendChild(languageLabels);
+  }
+  
+  // Show fallback data immediately to ensure something is displayed
+  showFallbackRepos();
+  if (languageStats) {
+    showFallbackLanguageStats();
+  }
+  
+  // Try to fetch repositories from GitHub
+  fetch("https://api.github.com/users/" + githubUsername + "/repos?sort=updated&direction=desc&per_page=6")
     .then(function(response) {
       if (!response.ok) {
-        console.log("GitHub API error: " + response.status);
         throw new Error("GitHub API error: " + response.status);
       }
       return response.json();
     })
     .then(function(data) {
       if (!data || data.length === 0) {
-        console.log("No repositories found");
         throw new Error("No repositories found");
       }
       
-      console.log("Repositories fetched successfully:", data.length);
-      
-      // Clear repos section
+      // Update repositories with real data
       reposSection.innerHTML = "";
+      
+      // Create a responsive container for repos
+      var reposContainer = document.createElement("div");
+      reposContainer.className = "repos-container";
+      reposContainer.style.display = "grid";
+      reposContainer.style.gap = "20px";
+      reposContainer.style.gridTemplateColumns = "repeat(auto-fill, minmax(280px, 1fr))";
       
       // Create repository cards
       data.forEach(function(repo) {
         var repoElement = document.createElement("div");
-        repoElement.className = "repo";
+        repoElement.classList.add("repo");
+        repoElement.style.padding = "15px";
+        repoElement.style.borderRadius = "8px";
+        repoElement.style.backgroundColor = "var(--card-bg, #2d2d2d)";
+        repoElement.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+        repoElement.style.transition = "transform 0.3s ease";
+        repoElement.style.display = "flex";
+        repoElement.style.flexDirection = "column";
+        repoElement.style.height = "100%";
+        
         repoElement.innerHTML = `
-          <h3>${repo.name}</h3>
-          <p>${repo.description || "No description available."}</p>
-          <div class="repo-meta">
-            <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
-            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          <h3 style="margin-top: 0; word-break: break-word;">${repo.name}</h3>
+          <p style="flex-grow: 1; word-break: break-word;">${repo.description || "No description available."}</p>
+          <div class="repo-meta" style="margin-top: 10px; display: flex; justify-content: space-between; flex-wrap: wrap;">
+            <span style="font-size: 0.85rem;">Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
+            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" style="display: inline-block; margin-top: 5px;">View on GitHub</a>
           </div>
         `;
-        reposSection.appendChild(repoElement);
+        
+        reposContainer.appendChild(repoElement);
       });
+      
+      reposSection.appendChild(reposContainer);
       
       // If we have language stats element, fetch language data
       if (languageStats) {
-        console.log("Fetching language statistics...");
-        
         // Use a simple approach: just use the first repo's languages as a sample
         if (data[0] && data[0].languages_url) {
           fetch(data[0].languages_url)
             .then(function(res) {
               if (!res.ok) {
-                console.log("Error fetching languages: " + res.status);
                 throw new Error("Error fetching languages");
               }
               return res.json();
             })
             .then(function(languages) {
-              console.log("Languages fetched successfully:", languages);
-              
               if (!languages || Object.keys(languages).length === 0) {
-                console.log("No language data available");
                 throw new Error("No language data available");
               }
               
               // Clear language stats section
               languageStats.innerHTML = "<h3>Language Statistics</h3>";
               
-              // Create language bar
+              // Create responsive language bar
               var languageBar = document.createElement("div");
               languageBar.className = "language-bar";
+              languageBar.style.display = "flex";
+              languageBar.style.height = "25px";
+              languageBar.style.borderRadius = "12.5px";
+              languageBar.style.overflow = "hidden";
+              languageBar.style.marginBottom = "15px";
+              languageBar.style.width = "100%";
               
-              // Create language labels container
+              // Create responsive language labels container
               var languageLabels = document.createElement("div");
               languageLabels.className = "language-labels";
+              languageLabels.style.display = "flex";
+              languageLabels.style.flexWrap = "wrap";
+              languageLabels.style.gap = "10px";
               
               // Calculate total bytes
               var totalBytes = 0;
@@ -590,102 +870,40 @@ function loadGitHubProjects() {
                 // Create language label
                 var label = document.createElement("div");
                 label.className = "language-label";
-                label.innerHTML = `
-                  <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
-                  <span>${language}: ${percentage}%</span>
-                `;
+                label.style.display = "flex";
+                label.style.alignItems = "center";
+                label.style.fontSize = "0.85rem";
+                
+                var colorBox = document.createElement("div");
+                colorBox.style.width = "12px";
+                colorBox.style.height = "12px";
+                colorBox.style.backgroundColor = getLanguageColor(language);
+                colorBox.style.marginRight = "5px";
+                colorBox.style.borderRadius = "2px";
+                
+                var text = document.createElement("span");
+                text.textContent = language + ": " + percentage + "%";
+                
+                label.appendChild(colorBox);
+                label.appendChild(text);
                 languageLabels.appendChild(label);
               });
               
               // Add language bar and labels to the stats section
               languageStats.appendChild(languageBar);
               languageStats.appendChild(languageLabels);
-              
-              console.log("Language statistics displayed successfully");
             })
             .catch(function(error) {
+              // Already showing fallback data, just log error
               console.log("Error processing language data:", error);
-              showFallbackLanguageStats();
             });
-        } else {
-          console.log("No languages URL available");
-          showFallbackLanguageStats();
         }
       }
     })
     .catch(function(error) {
+      // Already showing fallback data, just log error
       console.log("Error loading GitHub data:", error);
-      showFallbackRepos();
-      if (languageStats) {
-        showFallbackLanguageStats();
-      }
     });
-  
-  // Function to show fallback repositories
-  function showFallbackRepos() {
-    // Clear any existing content
-    reposSection.innerHTML = "";
-    
-    // Add each repository to the section
-    fallbackRepos.forEach(function(repo) {
-      var repoElement = document.createElement("div");
-      repoElement.className = "repo";
-      repoElement.innerHTML = `
-        <h3>${repo.name}</h3>
-        <p>${repo.description || "No description available."}</p>
-        <div class="repo-meta">
-          <span>Updated: ${new Date(repo.updated_at).toLocaleDateString()}</span>
-          <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-        </div>
-      `;
-      reposSection.appendChild(repoElement);
-    });
-    
-    console.log("Fallback repositories displayed");
-  }
-  
-  // Function to show fallback language statistics
-  function showFallbackLanguageStats() {
-    if (!languageStats) return;
-    
-    // Clear and rebuild language stats section
-    languageStats.innerHTML = "<h3>Language Statistics</h3>";
-    
-    // Create language bar
-    var languageBar = document.createElement("div");
-    languageBar.className = "language-bar";
-    
-    // Create language labels container
-    var languageLabels = document.createElement("div");
-    languageLabels.className = "language-labels";
-    
-    // Add fallback language data
-    Object.keys(fallbackLanguages).forEach(function(language) {
-      var percentage = fallbackLanguages[language];
-      
-      // Create language segment in bar
-      var segment = document.createElement("div");
-      segment.className = "language-segment";
-      segment.style.width = percentage + "%";
-      segment.style.backgroundColor = getLanguageColor(language);
-      segment.title = language + ": " + percentage + "%";
-      languageBar.appendChild(segment);
-      
-      // Create language label
-      var label = document.createElement("div");
-      label.className = "language-label";
-      label.innerHTML = `
-        <div class="language-color" style="background-color: ${getLanguageColor(language)}"></div>
-        <span>${language}: ${percentage}%</span>
-      `;
-      languageLabels.appendChild(label);
-    });
-    
-    // Add language bar and labels to the stats section
-    languageStats.appendChild(languageBar);
-    languageStats.appendChild(languageLabels);
-    console.log("Fallback language statistics displayed");
-  }
 }
 
 // Function to get color for programming language
@@ -719,10 +937,13 @@ function setupParticlesBackground() {
       return;
     }
     
+    // Reduce particle count on mobile for better performance
+    var particleCount = window.innerWidth < 768 ? 30 : 80;
+    
     // Initialize particles
     particlesJS("particles-js", {
       particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
+        number: { value: particleCount, density: { enable: true, value_area: 800 } },
         color: { value: "#4a00e0" },
         shape: { type: "circle" },
         opacity: { value: 0.5, random: false },
@@ -730,7 +951,7 @@ function setupParticlesBackground() {
         line_linked: { enable: true, distance: 150, color: "#8e2de2", opacity: 0.4, width: 1 },
         move: {
           enable: true,
-          speed: 6,
+          speed: window.innerWidth < 768 ? 3 : 6, // Slower on mobile
           direction: "none",
           random: false,
           straight: false,
@@ -740,16 +961,29 @@ function setupParticlesBackground() {
       },
       interactivity: {
         detect_on: "canvas",
-        events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+        events: { 
+          onhover: { enable: true, mode: "repulse" }, 
+          onclick: { enable: true, mode: "push" }, 
+          resize: true 
+        },
         modes: {
           grab: { distance: 400, line_linked: { opacity: 1 } },
           bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
-          repulse: { distance: 200, duration: 0.4 },
-          push: { particles_nb: 4 },
+          repulse: { distance: window.innerWidth < 768 ? 100 : 200, duration: 0.4 },
+          push: { particles_nb: window.innerWidth < 768 ? 2 : 4 },
           remove: { particles_nb: 2 }
         }
       },
       retina_detect: true
+    });
+    
+    // Update particle density on resize
+    window.addEventListener("resize", function() {
+      if (typeof pJSDom !== "undefined" && pJSDom.length > 0) {
+        pJSDom[0].pJS.particles.number.value = window.innerWidth < 768 ? 30 : 80;
+        pJSDom[0].pJS.particles.move.speed = window.innerWidth < 768 ? 3 : 6;
+        pJSDom[0].pJS.fn.particlesRefresh();
+      }
     });
   } else {
     console.log("particles.js library not loaded");
@@ -796,6 +1030,12 @@ function animateSkillBars() {
   
   // Animate on page load
   window.addEventListener("load", animateVisibleBars);
+  
+  // Also animate on orientation change for mobile
+  window.addEventListener("orientationchange", function() {
+    // Wait for orientation change to complete
+    setTimeout(animateVisibleBars, 300);
+  });
 }
 
 // Function to filter projects by category
@@ -806,6 +1046,26 @@ function filterProjects() {
   if (filterButtons.length === 0 || projects.length === 0) {
     console.log("Project filter elements not found");
     return;
+  }
+  
+  // Make filter buttons scrollable on mobile
+  var filterContainer = filterButtons[0].parentElement;
+  if (filterContainer) {
+    filterContainer.style.overflowX = "auto";
+    filterContainer.style.whiteSpace = "nowrap";
+    filterContainer.style.WebkitOverflowScrolling = "touch";
+    filterContainer.style.scrollbarWidth = "none"; // Firefox
+    filterContainer.style.msOverflowStyle = "none"; // IE/Edge
+    
+    // Hide scrollbar in webkit browsers
+    filterContainer.style.cssText += `
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    `;
+    
+    // Add padding for better mobile experience
+    filterContainer.style.padding = "5px 0";
   }
   
   filterButtons.forEach(function(button) {
@@ -864,6 +1124,11 @@ function setupSmoothScrolling() {
   
   anchorLinks.forEach(function(anchor) {
     anchor.addEventListener("click", function(e) {
+      // Don't handle if it's part of the mobile menu - that's handled separately
+      if (anchor.closest("#navbar") && window.innerWidth < 768) {
+        return;
+      }
+      
       e.preventDefault();
       
       var targetId = this.getAttribute("href");
@@ -905,6 +1170,41 @@ function setupContactForm() {
     return;
   }
   
+  // Make form inputs more mobile-friendly
+  var formInputs = contactForm.querySelectorAll('input, textarea');
+  formInputs.forEach(function(input) {
+    input.style.fontSize = "16px"; // Prevents zoom on iOS
+    
+    // Add touch-specific styling
+    input.addEventListener('focus', function() {
+      this.style.outline = "none";
+      this.style.boxShadow = "0 0 0 2px var(--accent-color, #8e2de2)";
+    });
+    
+    input.addEventListener('blur', function() {
+      this.style.boxShadow = "none";
+    });
+  });
+  
+  // Position toast for mobile
+  function positionToast() {
+    if (window.innerWidth <= 768) {
+      toast.style.width = "calc(100% - 32px)";
+      toast.style.bottom = "20px";
+      toast.style.left = "16px";
+      toast.style.right = "16px";
+    } else {
+      toast.style.width = "auto";
+      toast.style.bottom = "30px";
+      toast.style.right = "30px";
+      toast.style.left = "auto";
+    }
+  }
+  
+  // Run initially and on resize
+  positionToast();
+  window.addEventListener('resize', positionToast);
+  
   // Hide toast initially
   toast.classList.remove("show");
   toast.style.opacity = "0";
@@ -914,6 +1214,28 @@ function setupContactForm() {
   contactForm.addEventListener("submit", function(e) {
     e.preventDefault();
     
+    // Check form validation on mobile
+    var isValid = true;
+    formInputs.forEach(function(input) {
+      if (input.required && !input.value.trim()) {
+        isValid = false;
+        input.style.borderColor = "red";
+        
+        // Add shake animation effect
+        input.classList.add('shake');
+        setTimeout(function() {
+          input.classList.remove('shake');
+        }, 500);
+      } else {
+        input.style.borderColor = "";
+      }
+    });
+    
+    if (!isValid) {
+      showToast("Please fill in all required fields.", false);
+      return;
+    }
+    
     var formData = new FormData(contactForm);
     var formAction = contactForm.getAttribute("action");
     
@@ -921,6 +1243,14 @@ function setupContactForm() {
       console.log("Form action attribute is missing");
       showToast("Form configuration error. Please try again later.", false);
       return;
+    }
+    
+    // Show loading state
+    var submitButton = contactForm.querySelector('button[type="submit"]');
+    if (submitButton) {
+      var originalText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
     }
     
     // Send form data
@@ -946,6 +1276,13 @@ function setupContactForm() {
       console.log("Error sending form:", error);
       // Show error message
       showToast("Failed to send message. Please try again.", false);
+    })
+    .finally(function() {
+      // Reset button state
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+      }
     });
   });
   
@@ -972,5 +1309,14 @@ function setupContactForm() {
         toast.style.visibility = "hidden";
       }, 300);
     }, 5000);
+    
+    // Allow dismiss on touch
+    toast.addEventListener('click', function() {
+      toast.classList.remove("show");
+      setTimeout(function() {
+        toast.style.opacity = "0";
+        toast.style.visibility = "hidden";
+      }, 300);
+    }, { once: true });
   }
 }
