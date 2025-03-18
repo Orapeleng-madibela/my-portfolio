@@ -310,6 +310,14 @@
                         <p>Built my portfolio website which has my details and information about me.</p>
                         <button class="view-details">View Details</button>
                     </div>
+                    <div class="project" data-category="web">
+                        <div class="project-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3>Orapeleng Creative Webs</h3>
+                        <p>Designed and developed a creative web design agency website showcasing services and portfolio.</p>
+                        <button class="view-details">View Details</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -353,11 +361,21 @@
         <section id="github">
             <div class="container">
                 <h2 class="section-header"><i class="fab fa-github"></i> GitHub Repositories</h2>
-                <div id="repos" class="repos-grid"></div>
+                <div id="repos" class="repos-grid">
+                    <!-- GitHub repositories will be loaded here -->
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading repositories...</p>
+                    </div>
+                </div>
                 <div id="language-stats">
                     <h3>Language Statistics</h3>
                     <div class="language-bar"></div>
                     <div class="language-labels"></div>
+                </div>
+                <div id="github-error" class="github-error" style="display: none;">
+                    <p><i class="fas fa-exclamation-triangle"></i> Unable to load GitHub repositories. Please try again later.</p>
+                    <button id="retry-github" class="retry-btn">Retry</button>
                 </div>
             </div>
         </section>
@@ -391,7 +409,7 @@
                                 <i class="fas fa-envelope"></i>
                                 <div>
                                     <p>Email</p>
-                                    <a href="mailto:madibelaorapeleng17@gmail.com">madibelaorapeleng17@gmail.com</a>
+                                    <a href="mailto:orapelengmadibela@gmail.com">orapelengmadibela@gmail.com</a>
                                 </div>
                             </li>
                             <li>
@@ -450,3 +468,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
