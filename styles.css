@@ -665,6 +665,7 @@ h2::after {
   object-fit: cover;
   border: 4px solid var(--primary-color);
   box-shadow: 0 0 20px rgba(74, 0, 224, 0.3);
+  aspect-ratio: 1 / 1; /* Ensure perfect circle */
 }
 
 .about-text {
@@ -945,6 +946,62 @@ h2::after {
 
 .repo a:hover {
   color: var(--secondary-color);
+}
+
+/* Loading spinner for GitHub repos */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  grid-column: 1 / -1;
+}
+
+.loading-spinner i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* GitHub error message */
+.github-error {
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.github-error i {
+  color: var(--error-color);
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.retry-btn {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease;
+}
+
+.retry-btn:hover {
+  background-color: var(--secondary-color);
 }
 
 #language-stats {
@@ -1332,6 +1389,12 @@ footer .container {
 
 .toast-content {
   display: flex;
+  align-items: center;  translateY(0);
+  pointer-events: auto;
+}
+
+.toast-content {
+  display: flex;
   align-items: center;
   width: 100%;
 }
@@ -1408,3 +1471,4 @@ section {
   visibility: visible !important;
   transform: translateY(0) !important;
 }
+
