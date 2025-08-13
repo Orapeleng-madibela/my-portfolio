@@ -4,12 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orapeleng Timothy Madibela - Portfolio</title>
+    <meta name="description" content="Portfolio of Orapeleng Timothy Madibela - Computer Science Student, Web Developer, and Data Analyst">
+    <meta name="keywords" content="web developer, data analyst, computer science, portfolio, HTML, CSS, JavaScript, Python">
+    <meta name="author" content="Orapeleng Timothy Madibela">
+    
+    <!-- Preconnect to external domains for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    
+    <!-- External Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
 </head>
 <body>
-    <!-- Toast notification - positioned at the top level for proper stacking -->
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Toast Notification -->
     <div id="toast" class="toast" aria-live="polite" role="status">
         <div class="toast-content">
             <i class="fas fa-check-circle toast-icon success" aria-hidden="true"></i>
@@ -18,10 +33,10 @@
         </div>
     </div>
 
-    <!-- Modal - positioned at the top level for proper stacking -->
-    <div id="modal" class="modal">
+    <!-- Project Details Modal -->
+    <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <button class="close" aria-label="Close modal">&times;</button>
             <div class="modal-inner">
                 <h2 id="modal-title"></h2>
                 <p id="modal-description"></p>
@@ -31,39 +46,37 @@
         </div>
     </div>
 
-    <!-- WhatsApp floating button -->
+    <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/27662343315" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
-        <i class="fab fa-whatsapp"></i>
+        <i class="fab fa-whatsapp" aria-hidden="true"></i>
         <span class="sr-only">Chat on WhatsApp</span>
     </a>
 
-    <div id="particles-js"></div>
-        
-            <div class="mobile-controls">
-                <!-- Mobile Menu Button -->
-                <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-                    <span class="menu-icon"></span>
-                </button>
-                
-                <!-- Dark Mode Toggle (Mobile) -->
-                <button id="darkModeToggleMobile" class="dark-mode-toggle-mobile" aria-label="Toggle dark mode">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
+    <!-- Particles Background -->
+    <div id="particles-js" aria-hidden="true"></div>
 
+    <!-- Mobile Controls -->
+    <div class="mobile-controls">
+        <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+            <span class="menu-icon"></span>
+        </button>
+        <button id="darkModeToggleMobile" class="dark-mode-toggle-mobile" aria-label="Toggle dark mode">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+        </button>
+    </div>
 
     <!-- Mobile Menu Overlay -->
     <div id="menuOverlay" class="menu-overlay" aria-hidden="true"></div>
 
-    <main>
-
-        <header id="main-header">
+    <!-- Header -->
+    <header id="main-header" role="banner">
         <div class="container">
             <div class="logo">
-                <a href="#home">OTM</a>
+                <a href="#home" aria-label="Orapeleng Timothy Madibela - Home">OTM</a>
             </div>
-                    <!-- Navigation -->
-            <nav id="navbar" aria-label="Main navigation">
+            
+            <!-- Main Navigation -->
+            <nav id="navbar" role="navigation" aria-label="Main navigation">
                 <div class="navbar-container">
                     <div class="navbar-header">
                         <div class="navbar-brand">
@@ -71,86 +84,95 @@
                             <p class="navbar-subtitle">Portfolio Navigation</p>
                         </div>
                         <button id="closeMenu" class="close-menu" aria-label="Close menu">
-                            <i class="fas fa-times"></i>
+                            <i class="fas fa-times" aria-hidden="true"></i>
                         </button>
                     </div>
 
                     <ul class="nav-links">
                         <li class="nav-item active">
                             <a href="#home" class="nav-link" aria-current="page">
-                                <i class="fas fa-home nav-icon"></i>
+                                <i class="fas fa-home nav-icon" aria-hidden="true"></i>
                                 <span>Home</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#about" class="nav-link">
-                                <i class="fas fa-user nav-icon"></i>
+                                <i class="fas fa-user nav-icon" aria-hidden="true"></i>
                                 <span>About</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#skills" class="nav-link">
-                                <i class="fas fa-code nav-icon"></i>
+                                <i class="fas fa-code nav-icon" aria-hidden="true"></i>
                                 <span>Skills</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#projects" class="nav-link">
-                                <i class="fas fa-briefcase nav-icon"></i>
+                                <i class="fas fa-briefcase nav-icon" aria-hidden="true"></i>
                                 <span>Projects</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#timeline" class="nav-link">
-                                <i class="fas fa-clock nav-icon"></i>
+                                <i class="fas fa-clock nav-icon" aria-hidden="true"></i>
                                 <span>Timeline</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#github" class="nav-link">
-                                <i class="fab fa-github nav-icon"></i>
+                                <i class="fab fa-github nav-icon" aria-hidden="true"></i>
                                 <span>GitHub</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#contact" class="nav-link">
-                                <i class="fas fa-envelope nav-icon"></i>
+                                <i class="fas fa-envelope nav-icon" aria-hidden="true"></i>
                                 <span>Contact</span>
                             </a>
                         </li>
                     </ul>
                 
-                <!-- Dark Mode Toggle (Desktop) -->
-                <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
-                    <i class="fas fa-moon"></i>
-                </button>
+                    <!-- Desktop Dark Mode Toggle -->
+                    <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                </div>
             </nav>
         </div>
     </header>
 
-        <section id="home">
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section id="home" aria-labelledby="hero-heading">
             <div class="container">
-                <h1 class="rgb-text">ORAPELENG TIMOTHY MADIBELA</h1>
-                <div class="typing-text"></div>
-                <div class="icons">
+                <h1 id="hero-heading" class="rgb-text">ORAPELENG TIMOTHY MADIBELA</h1>
+                <div class="typing-text" aria-live="polite"></div>
+                <div class="icons" aria-hidden="true">
                     <i class="fas fa-code"></i>
                     <i class="fas fa-chart-bar"></i>
                 </div>
-                <a href="Orapeleng Resume.pdf" download class="download-resume">
-                    <i class="fas fa-download"></i> Download Resume (PDF)
-                </a>
-                <a href="orapeleng-madibela-7c48be4b-d367-48cb-aef0-7d48a387b627-certificate.pdf" download class="download-resume">
-                    <i class="fas fa-download"></i> download-Kubernetes certificate
-                </a>
+                <div class="download-links">
+                    <a href="Orapeleng Resume.pdf" download class="download-resume">
+                        <i class="fas fa-download" aria-hidden="true"></i> Download Resume (PDF)
+                    </a>
+                    <a href="orapeleng-madibela-7c48be4b-d367-48cb-aef0-7d48a387b627-certificate.pdf" download class="download-resume">
+                        <i class="fas fa-download" aria-hidden="true"></i> Download Kubernetes Certificate
+                    </a>
+                </div>
             </div>
         </section>
 
-        <section id="about">
+        <!-- About Section -->
+        <section id="about" aria-labelledby="about-heading">
             <div class="container">
-                <h2 class="section-header"><i class="fas fa-user"></i> About Me</h2>
+                <h2 id="about-heading" class="section-header">
+                    <i class="fas fa-user" aria-hidden="true"></i> About Me
+                </h2>
                 <div class="about-content">
                     <div class="profile-pic-container">
-                        <img src="IMG_20231020_161116.jpg" alt="Orapeleng Timothy Madibela" class="profile-pic">
+                        <img src="IMG_20231020_161116.jpg" alt="Orapeleng Timothy Madibela - Professional headshot" class="profile-pic">
                     </div>
                     <div class="about-text">
                         <p>I am a proactive computer science student pursuing a Bachelor of Sciences degree in Mathematical Sciences at the University of Limpopo. As a collaborative team player, I believe in working hard independently and as part of a team. I'm passionate about learning and interested in becoming a Software Developer. My goal is to combine my analytical skills with web development expertise to create data-driven web applications that solve real-world problems, with Kubernetes and Cloud Native Essentials skill.</p>
@@ -159,200 +181,211 @@
             </div>
         </section>
 
-        <section id="skills">
+        <!-- Skills Section -->
+        <section id="skills" aria-labelledby="skills-heading">
             <div class="container">
-                <h2 class="section-header"><i class="fas fa-code"></i> Skills</h2>
+                <h2 id="skills-heading" class="section-header">
+                    <i class="fas fa-code" aria-hidden="true"></i> Skills
+                </h2>
                 <div class="skills-grid">
-                    <div class="skill">
-                        <i class="fab fa-html5"></i>
+                    <article class="skill">
+                        <i class="fab fa-html5" aria-hidden="true"></i>
                         <h3>HTML5</h3>
                         <div class="progress-container">
-                            <div class="progress-bar" data-percentage="70">
+                            <div class="progress-bar" data-percentage="70" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" aria-label="HTML5 skill level">
                                 <div class="progress-bar-inner"></div>
                             </div>
                             <div class="progress-label">70%</div>
                         </div>
-                    </div>
-                    <div class="skill">
-                        <i class="fab fa-css3-alt"></i>
+                    </article>
+                    <article class="skill">
+                        <i class="fab fa-css3-alt" aria-hidden="true"></i>
                         <h3>CSS3</h3>
                         <div class="progress-container">
-                            <div class="progress-bar" data-percentage="65">
+                            <div class="progress-bar" data-percentage="65" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" aria-label="CSS3 skill level">
                                 <div class="progress-bar-inner"></div>
                             </div>
                             <div class="progress-label">65%</div>
                         </div>
-                    </div>
-                    <div class="skill">
-                        <i class="fab fa-js"></i>
+                    </article>
+                    <article class="skill">
+                        <i class="fab fa-js" aria-hidden="true"></i>
                         <h3>JavaScript</h3>
                         <div class="progress-container">
-                            <div class="progress-bar" data-percentage="60">
+                            <div class="progress-bar" data-percentage="60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="JavaScript skill level">
                                 <div class="progress-bar-inner"></div>
                             </div>
                             <div class="progress-label">60%</div>
                         </div>
-                    </div>
-                    <div class="skill">
-                        <i class="fab fa-python"></i>
+                    </article>
+                    <article class="skill">
+                        <i class="fab fa-python" aria-hidden="true"></i>
                         <h3>Python</h3>
                         <div class="progress-container">
-                            <div class="progress-bar" data-percentage="50">
+                            <div class="progress-bar" data-percentage="50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="Python skill level">
                                 <div class="progress-bar-inner"></div>
                             </div>
                             <div class="progress-label">50%</div>
                         </div>
-                    </div>
-                    <div class="skill">
-                        <i class="fas fa-database"></i>
+                    </article>
+                    <article class="skill">
+                        <i class="fas fa-database" aria-hidden="true"></i>
                         <h3>SQL</h3>
                         <div class="progress-container">
-                            <div class="progress-bar" data-percentage="55">
+                            <div class="progress-bar" data-percentage="55" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="SQL skill level">
                                 <div class="progress-bar-inner"></div>
                             </div>
                             <div class="progress-label">55%</div>
                         </div>
-                    </div>
-                    <div class="skill">
-                        <i class="fab fa-microsoft"></i>
+                    </article>
+                    <article class="skill">
+                        <i class="fab fa-microsoft" aria-hidden="true"></i>
                         <h3>Power BI</h3>
                         <div class="progress-container">
-                            <div class="progress-bar" data-percentage="55">
+                            <div class="progress-bar" data-percentage="55" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="Power BI skill level">
                                 <div class="progress-bar-inner"></div>
                             </div>
                             <div class="progress-label">55%</div>
                         </div>
-                    </div>
-                    <div class="skill">
-                        <i class="fas fa-chart-line"></i>
+                    </article>
+                    <article class="skill">
+                        <i class="fas fa-chart-line" aria-hidden="true"></i>
                         <h3>Data Analysis</h3>
                         <div class="progress-container">
-                            <div class="progress-bar" data-percentage="58">
+                            <div class="progress-bar" data-percentage="58" role="progressbar" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100" aria-label="Data Analysis skill level">
                                 <div class="progress-bar-inner"></div>
                             </div>
                             <div class="progress-label">58%</div>
                         </div>
-                    </div>
-                    <div class="skill">
-                        <i class="fab fa-cuttlefish"></i>
+                    </article>
+                    <article class="skill">
+                        <i class="fab fa-cuttlefish" aria-hidden="true"></i>
                         <h3>C++</h3>
                         <div class="progress-container">
-                            <div class="progress-bar" data-percentage="60">
+                            <div class="progress-bar" data-percentage="60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="C++ skill level">
                                 <div class="progress-bar-inner"></div>
                             </div>
                             <div class="progress-label">60%</div>
                         </div>
-                    </div>
-                    <div class="skill">
-                        <i class="fab fa-java"></i>
+                    </article>
+                    <article class="skill">
+                        <i class="fab fa-java" aria-hidden="true"></i>
                         <h3>Java</h3>
                         <div class="progress-container">
-                            <div class="progress-bar" data-percentage="50">
+                            <div class="progress-bar" data-percentage="50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="Java skill level">
                                 <div class="progress-bar-inner"></div>
                             </div>
                             <div class="progress-label">50%</div>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <section id="projects">
+        <!-- Projects Section -->
+        <section id="projects" aria-labelledby="projects-heading">
             <div class="container">
-                <h2 class="section-header"><i class="fas fa-briefcase"></i> Projects</h2>
-                <div class="project-filters">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="web">Web Development</button>
-                    <button class="filter-btn" data-filter="data">Data Analysis</button>
+                <h2 id="projects-heading" class="section-header">
+                    <i class="fas fa-briefcase" aria-hidden="true"></i> Projects
+                </h2>
+                <div class="project-filters" role="tablist" aria-label="Project categories">
+                    <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
+                    <button class="filter-btn" data-filter="web" role="tab" aria-selected="false">Web Development</button>
+                    <button class="filter-btn" data-filter="data" role="tab" aria-selected="false">Data Analysis</button>
                 </div>
                 <div class="project-grid">
-                    <div class="project" data-category="data">
-                        <div class="project-icon">
+                    <article class="project" data-category="data">
+                        <div class="project-icon" aria-hidden="true">
                             <i class="fas fa-chart-bar"></i>
                         </div>
                         <h3>Customer Behavior Analysis</h3>
                         <p>Analyzed customer data to identify trends in purchasing behavior.</p>
                         <button class="view-details">View Details</button>
-                    </div>
-                    <div class="project" data-category="web">
-                        <div class="project-icon">
+                    </article>
+                    <article class="project" data-category="web">
+                        <div class="project-icon" aria-hidden="true">
                             <i class="fas fa-code"></i>
                         </div>
                         <h3>E-commerce Website</h3>
                         <p>Created a responsive e-commerce website for a local business.</p>
                         <button class="view-details">View Details</button>
-                    </div>
-                    <div class="project" data-category="data">
-                        <div class="project-icon">
+                    </article>
+                    <article class="project" data-category="data">
+                        <div class="project-icon" aria-hidden="true">
                             <i class="fas fa-chart-pie"></i>
                         </div>
                         <h3>Sales Dashboard</h3>
                         <p>Developed an interactive sales dashboard using Power BI.</p>
                         <button class="view-details">View Details</button>
-                    </div>
-                    <div class="project" data-category="web">
-                        <div class="project-icon">
+                    </article>
+                    <article class="project" data-category="web">
+                        <div class="project-icon" aria-hidden="true">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
                         <h3>My Portfolio</h3>
                         <p>Built my portfolio website which has my details and information about me.</p>
                         <button class="view-details">View Details</button>
-                    </div>
-                    <div class="project" data-category="web">
-                        <div class="project-icon">
+                    </article>
+                    <article class="project" data-category="web">
+                        <div class="project-icon" aria-hidden="true">
                             <i class="fas fa-palette"></i>
                         </div>
                         <h3>Orapeleng Creative Webs</h3>
                         <p>Designed and developed a creative web design agency website showcasing services and portfolio.</p>
                         <button class="view-details">View Details</button>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <section id="timeline">
+        <!-- Timeline Section -->
+        <section id="timeline" aria-labelledby="timeline-heading">
             <div class="container">
-                <h2 class="section-header"><i class="fas fa-clock"></i> Education</h2>
+                <h2 id="timeline-heading" class="section-header">
+                    <i class="fas fa-clock" aria-hidden="true"></i> Education
+                </h2>
                 <div class="timeline">
-                    <div class="timeline-item">
+                    <article class="timeline-item">
                         <div class="timeline-content">
                             <h3>University of Limpopo</h3>
                             <p>BSc Mathematical Sciences</p>
-                            <span class="date">2021 - Present</span>
+                            <time class="date" datetime="2021">2021 - Present</time>
                         </div>
-                    </div>
-                    <div class="timeline-item">
+                    </article>
+                    <article class="timeline-item">
                         <div class="timeline-content">
                             <h3>Nkobong Secondary School</h3>
                             <p>High School Bachelor</p>
-                            <span class="date">2016 - 2020</span>
+                            <time class="date" datetime="2016">2016 - 2020</time>
                         </div>
-                    </div>
-                    <div class="timeline-item">
+                    </article>
+                    <article class="timeline-item">
                         <div class="timeline-content">
                             <h3>Class Representative</h3>
                             <p>SSTB000 Module</p>
-                            <span class="date">2023</span>
+                            <time class="date" datetime="2023">2023</time>
                         </div>
-                    </div>
-                    <div class="timeline-item">
+                    </article>
+                    <article class="timeline-item">
                         <div class="timeline-content">
                             <h3>Representative Council of Learners</h3>
                             <p>Grade 12 Representative</p>
-                            <span class="date">2020</span>
+                            <time class="date" datetime="2020">2020</time>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <section id="github">
+        <!-- GitHub Section -->
+        <section id="github" aria-labelledby="github-heading">
             <div class="container">
-                <h2 class="section-header"><i class="fab fa-github"></i> GitHub Repositories</h2>
+                <h2 id="github-heading" class="section-header">
+                    <i class="fab fa-github" aria-hidden="true"></i> GitHub Repositories
+                </h2>
                 <div id="repos" class="repos-grid">
-                    <!-- GitHub repositories will be loaded here -->
                     <div class="loading-spinner">
-                        <i class="fas fa-spinner fa-spin"></i>
+                        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                         <p>Loading repositories...</p>
                     </div>
                 </div>
@@ -362,30 +395,37 @@
                     <div class="language-labels"></div>
                 </div>
                 <div id="github-error" class="github-error" style="display: none;">
-                    <p><i class="fas fa-exclamation-triangle"></i> Unable to load GitHub repositories. Please try again later.</p>
+                    <p><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Unable to load GitHub repositories. Please try again later.</p>
                     <button id="retry-github" class="retry-btn">Retry</button>
                 </div>
             </div>
         </section>
 
-        <section id="contact">
+        <!-- Contact Section -->
+        <section id="contact" aria-labelledby="contact-heading">
             <div class="container">
-                <h2 class="section-header"><i class="fas fa-envelope"></i> Contact Me</h2>
+                <h2 id="contact-heading" class="section-header">
+                    <i class="fas fa-envelope" aria-hidden="true"></i> Contact Me
+                </h2>
                 <div class="contact-grid">
                     <div class="contact-form">
                         <h3>Send Me a Message</h3>
-                        <form id="contactForm" action="https://formspree.io/f/xovjgjpn" method="POST">
+                        <form id="contactForm" action="https://formspree.io/f/xovjgjpn" method="POST" novalidate>
                             <div class="form-group">
-                                <input type="text" name="name" placeholder="Your Name" required>
+                                <label for="name" class="sr-only">Your Name</label>
+                                <input type="text" id="name" name="name" placeholder="Your Name" required aria-required="true">
                             </div>
                             <div class="form-group">
-                                <input type="email" name="email" placeholder="Your Email" required>
+                                <label for="email" class="sr-only">Your Email</label>
+                                <input type="email" id="email" name="email" placeholder="Your Email" required aria-required="true">
                             </div>
                             <div class="form-group">
-                                <input type="text" name="subject" placeholder="Subject" required>
+                                <label for="subject" class="sr-only">Subject</label>
+                                <input type="text" id="subject" name="subject" placeholder="Subject" required aria-required="true">
                             </div>
                             <div class="form-group">
-                                <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                                <label for="message" class="sr-only">Your Message</label>
+                                <textarea id="message" name="message" placeholder="Your Message" rows="5" required aria-required="true"></textarea>
                             </div>
                             <button type="submit" class="submit-btn">Send Message</button>
                         </form>
@@ -394,35 +434,35 @@
                         <h3>Contact Information</h3>
                         <ul>
                             <li>
-                                <i class="fas fa-envelope"></i>
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
                                 <div>
                                     <p>Email</p>
                                     <a href="mailto:madibelaorapeleng17@gmail.com">madibelaorapeleng17@gmail.com</a>
                                 </div>
                             </li>
                             <li>
-                                <i class="fas fa-phone"></i>
+                                <i class="fas fa-phone" aria-hidden="true"></i>
                                 <div>
                                     <p>Phone</p>
                                     <a href="tel:+27766069486">+27 76 606 9486</a>
                                 </div>
                             </li>
                             <li>
-                                <i class="fas fa-map-marker-alt"></i>
+                                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                                 <div>
                                     <p>Address</p>
                                     <p>799 Morago ga thaba section, Kraalhoek, 0341</p>
                                 </div>
                             </li>
                             <li>
-                                <i class="fab fa-github"></i>
+                                <i class="fab fa-github" aria-hidden="true"></i>
                                 <div>
                                     <p>GitHub</p>
                                     <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer">Orapeleng-madibela</a>
                                 </div>
                             </li>
                             <li>
-                                <i class="fab fa-linkedin"></i>
+                                <i class="fab fa-linkedin" aria-hidden="true"></i>
                                 <div>
                                     <p>LinkedIn</p>
                                     <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer">Orapeleng Madibela</a>
@@ -435,25 +475,25 @@
         </section>
     </main>
 
-    <footer>
+    <!-- Footer -->
+    <footer role="contentinfo">
         <div class="container">
             <div class="social-links">
-              <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <i class="fab fa-github"></i>
-              </a>
-              <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <i class="fab fa-linkedin"></i>
-              </a>
-              <a href="https://wa.me/27662343315" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-                <i class="fab fa-whatsapp"></i>
-              </a>
+                <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
+                    <i class="fab fa-linkedin" aria-hidden="true"></i>
+                </a>
+                <a href="https://wa.me/27662343315" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Contact">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                </a>
             </div>
             <p>&copy; <span id="currentYear"></span> Orapeleng Timothy Madibela. All rights reserved.</p>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
 </html>
-
