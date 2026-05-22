@@ -7,468 +7,568 @@
     <meta name="description" content="Portfolio of Orapeleng Timothy Madibela - Computer Science Student, Web Developer, and Data Analyst">
     <meta name="keywords" content="web developer, data analyst, computer science, portfolio, HTML, CSS, JavaScript, Python">
     <meta name="author" content="Orapeleng Timothy Madibela">
+    <meta name="theme-color" content="#0ea5e9">
     
-    <!-- Preconnect to external domains for better performance -->
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- External Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Skip to main content for accessibility -->
+    <!-- Skip Link for Accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- Toast Notification -->
-    <div id="toast" class="toast" aria-live="polite" role="status">
+    <div id="toast" class="toast" role="status" aria-live="polite">
         <div class="toast-content">
-            <i class="fas fa-check-circle toast-icon success" aria-hidden="true"></i>
-            <i class="fas fa-exclamation-circle toast-icon error" aria-hidden="true"></i>
-            <div class="toast-message"></div>
+            <i class="fas fa-check-circle toast-icon success"></i>
+            <i class="fas fa-exclamation-circle toast-icon error"></i>
+            <span class="toast-message"></span>
         </div>
     </div>
 
-    <!-- Project Details Modal -->
+    <!-- Project Modal -->
     <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-overlay"></div>
         <div class="modal-content">
-            <button class="close" aria-label="Close modal">&times;</button>
-            <div class="modal-inner">
-                <h2 id="modal-title"></h2>
-                <p id="modal-description"></p>
-                <div id="modal-files"></div>
-                <div id="modal-link"></div>
+            <button class="modal-close" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <h2 id="modal-title" class="modal-title"></h2>
+                <p id="modal-description" class="modal-description"></p>
+                <div id="modal-tech" class="modal-tech"></div>
+                <div id="modal-files" class="modal-files"></div>
+                <div id="modal-link" class="modal-link"></div>
             </div>
         </div>
     </div>
 
-    <!-- WhatsApp Floating Button -->
+    <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/27662343315" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i>
-        <span class="sr-only">Chat on WhatsApp</span>
+        <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Particles Background -->
-    <div id="particles-js" aria-hidden="true"></div>
-
-    <!-- Mobile Controls -->
-    <div class="mobile-controls">
-        <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-            <span class="menu-icon"></span>
-        </button>
-        <button id="darkModeToggleMobile" class="dark-mode-toggle-mobile" aria-label="Toggle dark mode">
-            <i class="fas fa-moon" aria-hidden="true"></i>
-        </button>
-    </div>
-
-    <!-- Mobile Menu Overlay -->
-    <div id="menuOverlay" class="menu-overlay" aria-hidden="true"></div>
+    <!-- Scroll to Top Button -->
+    <button id="scrollTop" class="scroll-top" aria-label="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 
     <!-- Header -->
-    <header id="main-header" role="banner">
-        <div class="container">
-            <div class="logo">
-                <a href="#home" aria-label="Orapeleng Timothy Madibela - Home">OTM</a>
-            </div>
-            
-            <!-- Main Navigation -->
-            <nav id="navbar" role="navigation" aria-label="Main navigation">
-                <div class="navbar-container">
-                    <div class="navbar-header">
-                        <div class="navbar-brand">
-                            <span class="navbar-title">Menu</span>
-                            <p class="navbar-subtitle">Portfolio Navigation</p>
-                        </div>
-                        <button id="closeMenu" class="close-menu" aria-label="Close menu">
-                            <i class="fas fa-times" aria-hidden="true"></i>
-                        </button>
-                    </div>
+    <header id="header" class="header">
+        <div class="header-container">
+            <a href="#home" class="logo">
+                <span class="logo-text">OTM</span>
+                <span class="logo-dot"></span>
+            </a>
 
-                    <ul class="nav-links">
-                        <li class="nav-item active">
-                            <a href="#home" class="nav-link" aria-current="page">
-                                <i class="fas fa-home nav-icon" aria-hidden="true"></i>
-                                <span>Home</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#about" class="nav-link">
-                                <i class="fas fa-user nav-icon" aria-hidden="true"></i>
-                                <span>About</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#skills" class="nav-link">
-                                <i class="fas fa-code nav-icon" aria-hidden="true"></i>
-                                <span>Skills</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#projects" class="nav-link">
-                                <i class="fas fa-briefcase nav-icon" aria-hidden="true"></i>
-                                <span>Projects</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#timeline" class="nav-link">
-                                <i class="fas fa-clock nav-icon" aria-hidden="true"></i>
-                                <span>Timeline</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#github" class="nav-link">
-                                <i class="fab fa-github nav-icon" aria-hidden="true"></i>
-                                <span>GitHub</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#contact" class="nav-link">
-                                <i class="fas fa-envelope nav-icon" aria-hidden="true"></i>
-                                <span>Contact</span>
-                            </a>
-                        </li>
-                    </ul>
-                
-                    <!-- Desktop Dark Mode Toggle -->
-                    <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
-                        <i class="fas fa-moon" aria-hidden="true"></i>
-                    </button>
-                </div>
+            <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active" data-section="home"><i class="fas fa-home"></i><span>Home</span></a></li>
+                    <li><a href="#about" class="nav-link" data-section="about"><i class="fas fa-user"></i><span>About</span></a></li>
+                    <li><a href="#skills" class="nav-link" data-section="skills"><i class="fas fa-code"></i><span>Skills</span></a></li>
+                    <li><a href="#projects" class="nav-link" data-section="projects"><i class="fas fa-briefcase"></i><span>Projects</span></a></li>
+                    <li><a href="#timeline" class="nav-link" data-section="timeline"><i class="fas fa-graduation-cap"></i><span>Education</span></a></li>
+                    <li><a href="#github" class="nav-link" data-section="github"><i class="fab fa-github"></i><span>GitHub</span></a></li>
+                    <li><a href="#contact" class="nav-link" data-section="contact"><i class="fas fa-envelope"></i><span>Contact</span></a></li>
+                </ul>
             </nav>
+
+            <div class="header-actions">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="menuToggle" class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
         </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileOverlay" class="mobile-overlay"></div>
 
     <!-- Main Content -->
     <main id="main-content">
         <!-- Hero Section -->
-        <section id="home" aria-labelledby="hero-heading">
-            <div class="container">
-                <h1 id="hero-heading" class="rgb-text">ORAPELENG TIMOTHY MADIBELA</h1>
-                <div class="typing-text" aria-live="polite"></div>
-                <div class="icons" aria-hidden="true">
+        <section id="home" class="hero">
+            <div class="hero-bg">
+                <div class="hero-gradient"></div>
+                <div class="hero-particles" id="particles"></div>
+            </div>
+            <div class="container hero-content">
+                <div class="hero-badge">
                     <i class="fas fa-code"></i>
-                    <i class="fas fa-chart-bar"></i>
+                    <span>Available for opportunities</span>
                 </div>
-                <div class="download-links">
-                    <a href="Orapeleng Resume.pdf" download class="download-resume">
-                        <i class="fas fa-download" aria-hidden="true"></i> Download Resume (PDF)
+                <h1 class="hero-title">
+                    <span class="greeting">Hello, I'm</span>
+                    <span class="name">Orapeleng Timothy Madibela</span>
+                </h1>
+                <div class="hero-subtitle">
+                    <span class="typing-text" id="typingText"></span>
+                    <span class="cursor">|</span>
+                </div>
+                <p class="hero-description">
+                    Computer Science Student passionate about building innovative web solutions 
+                    and extracting insights from data.
+                </p>
+                <div class="hero-actions">
+                    <a href="#contact" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Get in Touch</span>
                     </a>
-                    <a href="orapeleng-madibela-7c48be4b-d367-48cb-aef0-7d48a387b627-certificate.pdf" download class="download-resume">
-                        <i class="fas fa-download" aria-hidden="true"></i> Download Kubernetes Certificate
+                    <a href="#projects" class="btn btn-secondary">
+                        <i class="fas fa-folder-open"></i>
+                        <span>View Projects</span>
                     </a>
                 </div>
+                <div class="hero-downloads">
+                    <a href="Orapeleng Resume.pdf" download class="download-link">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Resume</span>
+                    </a>
+                    <a href="orapeleng-madibela-7c48be4b-d367-48cb-aef0-7d48a387b627-certificate.pdf" download class="download-link">
+                        <i class="fas fa-certificate"></i>
+                        <span>Kubernetes Certificate</span>
+                    </a>
+                </div>
+                <div class="hero-social">
+                    <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="mailto:madibelaorapeleng17@gmail.com" aria-label="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-scroll">
+                <a href="#about" class="scroll-indicator" aria-label="Scroll to about section">
+                    <span class="mouse">
+                        <span class="wheel"></span>
+                    </span>
+                    <span class="arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </a>
             </div>
         </section>
 
         <!-- About Section -->
-        <section id="about" aria-labelledby="about-heading">
+        <section id="about" class="section about">
             <div class="container">
-                <h2 id="about-heading" class="section-header">
-                    <i class="fas fa-user" aria-hidden="true"></i> About Me
-                </h2>
-                <div class="about-content">
-                    <div class="profile-pic-container">
-                        <img src="IMG_20231020_161116.jpg" alt="Orapeleng Timothy Madibela - Professional headshot" class="profile-pic">
+                <div class="section-header">
+                    <span class="section-tag">Get to know me</span>
+                    <h2 class="section-title">About Me</h2>
+                </div>
+                <div class="about-grid">
+                    <div class="about-image">
+                        <div class="image-wrapper">
+                            <div class="image-border"></div>
+                            <img src="IMG_20231020_161116.jpg" alt="Orapeleng Timothy Madibela" class="profile-image">
+                            <div class="image-dots"></div>
+                        </div>
+                        <div class="about-stats">
+                            <div class="stat-item">
+                                <span class="stat-number" data-count="9">0</span>
+                                <span class="stat-label">Skills</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" data-count="5">0</span>
+                                <span class="stat-label">Projects</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" data-count="3">0</span>
+                                <span class="stat-label">Years Learning</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="about-text">
-                        <p>I am a proactive computer science student pursuing a Bachelor of Sciences degree in Mathematical Sciences at the University of Limpopo. As a collaborative team player, I believe in working hard independently and as part of a team. I'm passionate about learning and interested in becoming a Software Developer. My goal is to combine my analytical skills with web development expertise to create data-driven web applications that solve real-world problems, with Kubernetes and Cloud Native Essentials skill.</p>
+                    <div class="about-content">
+                        <h3 class="about-subtitle">Computer Science Student &amp; Web Developer</h3>
+                        <p class="about-text">
+                            I am a proactive computer science student pursuing a Bachelor of Sciences degree 
+                            in Mathematical Sciences at the University of Limpopo. As a collaborative team player, 
+                            I believe in working hard independently and as part of a team.
+                        </p>
+                        <p class="about-text">
+                            I'm passionate about learning and interested in becoming a Software Developer. 
+                            My goal is to combine my analytical skills with web development expertise to create 
+                            data-driven web applications that solve real-world problems, with Kubernetes and 
+                            Cloud Native Essentials skills.
+                        </p>
+                        <div class="about-highlights">
+                            <div class="highlight">
+                                <i class="fas fa-laptop-code"></i>
+                                <span>Web Development</span>
+                            </div>
+                            <div class="highlight">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Data Analysis</span>
+                            </div>
+                            <div class="highlight">
+                                <i class="fas fa-cloud"></i>
+                                <span>Cloud Native</span>
+                            </div>
+                            <div class="highlight">
+                                <i class="fas fa-database"></i>
+                                <span>SQL &amp; Databases</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" aria-labelledby="skills-heading">
+        <section id="skills" class="section skills">
             <div class="container">
-                <h2 id="skills-heading" class="section-header">
-                    <i class="fas fa-code" aria-hidden="true"></i> Skills
-                </h2>
+                <div class="section-header">
+                    <span class="section-tag">What I can do</span>
+                    <h2 class="section-title">Skills &amp; Technologies</h2>
+                </div>
                 <div class="skills-grid">
-                    <article class="skill">
-                        <i class="fab fa-html5" aria-hidden="true"></i>
-                        <h3>HTML5</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" data-percentage="70" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" aria-label="HTML5 skill level">
-                                <div class="progress-bar-inner"></div>
-                            </div>
-                            <div class="progress-label">70%</div>
+                    <div class="skill-card" data-aos="fade-up">
+                        <div class="skill-icon"><i class="fab fa-html5"></i></div>
+                        <h3 class="skill-name">HTML5</h3>
+                        <div class="skill-progress">
+                            <div class="progress-bar" data-progress="70"><div class="progress-fill"></div></div>
+                            <span class="progress-text">70%</span>
                         </div>
-                    </article>
-                    <article class="skill">
-                        <i class="fab fa-css3-alt" aria-hidden="true"></i>
-                        <h3>CSS3</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" data-percentage="65" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" aria-label="CSS3 skill level">
-                                <div class="progress-bar-inner"></div>
-                            </div>
-                            <div class="progress-label">65%</div>
+                    </div>
+                    <div class="skill-card" data-aos="fade-up" data-aos-delay="50">
+                        <div class="skill-icon"><i class="fab fa-css3-alt"></i></div>
+                        <h3 class="skill-name">CSS3</h3>
+                        <div class="skill-progress">
+                            <div class="progress-bar" data-progress="65"><div class="progress-fill"></div></div>
+                            <span class="progress-text">65%</span>
                         </div>
-                    </article>
-                    <article class="skill">
-                        <i class="fab fa-js" aria-hidden="true"></i>
-                        <h3>JavaScript</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" data-percentage="60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="JavaScript skill level">
-                                <div class="progress-bar-inner"></div>
-                            </div>
-                            <div class="progress-label">60%</div>
+                    </div>
+                    <div class="skill-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="skill-icon"><i class="fab fa-js"></i></div>
+                        <h3 class="skill-name">JavaScript</h3>
+                        <div class="skill-progress">
+                            <div class="progress-bar" data-progress="60"><div class="progress-fill"></div></div>
+                            <span class="progress-text">60%</span>
                         </div>
-                    </article>
-                    <article class="skill">
-                        <i class="fab fa-python" aria-hidden="true"></i>
-                        <h3>Python</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" data-percentage="50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="Python skill level">
-                                <div class="progress-bar-inner"></div>
-                            </div>
-                            <div class="progress-label">50%</div>
+                    </div>
+                    <div class="skill-card" data-aos="fade-up" data-aos-delay="150">
+                        <div class="skill-icon"><i class="fab fa-python"></i></div>
+                        <h3 class="skill-name">Python</h3>
+                        <div class="skill-progress">
+                            <div class="progress-bar" data-progress="50"><div class="progress-fill"></div></div>
+                            <span class="progress-text">50%</span>
                         </div>
-                    </article>
-                    <article class="skill">
-                        <i class="fas fa-database" aria-hidden="true"></i>
-                        <h3>SQL</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" data-percentage="55" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="SQL skill level">
-                                <div class="progress-bar-inner"></div>
-                            </div>
-                            <div class="progress-label">55%</div>
+                    </div>
+                    <div class="skill-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="skill-icon"><i class="fas fa-database"></i></div>
+                        <h3 class="skill-name">SQL</h3>
+                        <div class="skill-progress">
+                            <div class="progress-bar" data-progress="55"><div class="progress-fill"></div></div>
+                            <span class="progress-text">55%</span>
                         </div>
-                    </article>
-                    <article class="skill">
-                        <i class="fab fa-microsoft" aria-hidden="true"></i>
-                        <h3>Power BI</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" data-percentage="55" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="Power BI skill level">
-                                <div class="progress-bar-inner"></div>
-                            </div>
-                            <div class="progress-label">55%</div>
+                    </div>
+                    <div class="skill-card" data-aos="fade-up" data-aos-delay="250">
+                        <div class="skill-icon"><i class="fab fa-microsoft"></i></div>
+                        <h3 class="skill-name">Power BI</h3>
+                        <div class="skill-progress">
+                            <div class="progress-bar" data-progress="55"><div class="progress-fill"></div></div>
+                            <span class="progress-text">55%</span>
                         </div>
-                    </article>
-                    <article class="skill">
-                        <i class="fas fa-chart-line" aria-hidden="true"></i>
-                        <h3>Data Analysis</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" data-percentage="58" role="progressbar" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100" aria-label="Data Analysis skill level">
-                                <div class="progress-bar-inner"></div>
-                            </div>
-                            <div class="progress-label">58%</div>
+                    </div>
+                    <div class="skill-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="skill-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3 class="skill-name">Data Analysis</h3>
+                        <div class="skill-progress">
+                            <div class="progress-bar" data-progress="58"><div class="progress-fill"></div></div>
+                            <span class="progress-text">58%</span>
                         </div>
-                    </article>
-                    <article class="skill">
-                        <i class="fab fa-cuttlefish" aria-hidden="true"></i>
-                        <h3>C++</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" data-percentage="60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="C++ skill level">
-                                <div class="progress-bar-inner"></div>
-                            </div>
-                            <div class="progress-label">60%</div>
+                    </div>
+                    <div class="skill-card" data-aos="fade-up" data-aos-delay="350">
+                        <div class="skill-icon"><i class="fab fa-cuttlefish"></i></div>
+                        <h3 class="skill-name">C++</h3>
+                        <div class="skill-progress">
+                            <div class="progress-bar" data-progress="60"><div class="progress-fill"></div></div>
+                            <span class="progress-text">60%</span>
                         </div>
-                    </article>
-                    <article class="skill">
-                        <i class="fab fa-java" aria-hidden="true"></i>
-                        <h3>Java</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar" data-percentage="50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="Java skill level">
-                                <div class="progress-bar-inner"></div>
-                            </div>
-                            <div class="progress-label">50%</div>
+                    </div>
+                    <div class="skill-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="skill-icon"><i class="fab fa-java"></i></div>
+                        <h3 class="skill-name">Java</h3>
+                        <div class="skill-progress">
+                            <div class="progress-bar" data-progress="50"><div class="progress-fill"></div></div>
+                            <span class="progress-text">50%</span>
                         </div>
-                    </article>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" aria-labelledby="projects-heading">
+        <section id="projects" class="section projects">
             <div class="container">
-                <h2 id="projects-heading" class="section-header">
-                    <i class="fas fa-briefcase" aria-hidden="true"></i> Projects
-                </h2>
-                <div class="project-filters" role="tablist" aria-label="Project categories">
-                    <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
-                    <button class="filter-btn" data-filter="web" role="tab" aria-selected="false">Web Development</button>
-                    <button class="filter-btn" data-filter="data" role="tab" aria-selected="false">Data Analysis</button>
+                <div class="section-header">
+                    <span class="section-tag">My work</span>
+                    <h2 class="section-title">Featured Projects</h2>
                 </div>
-                <div class="project-grid">
-                    <article class="project" data-category="data">
-                        <div class="project-icon" aria-hidden="true">
-                            <i class="fas fa-chart-bar"></i>
+                <div class="project-filters">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-layer-group"></i><span>All</span>
+                    </button>
+                    <button class="filter-btn" data-filter="web">
+                        <i class="fas fa-globe"></i><span>Web Dev</span>
+                    </button>
+                    <button class="filter-btn" data-filter="data">
+                        <i class="fas fa-chart-pie"></i><span>Data Analysis</span>
+                    </button>
+                </div>
+                <div class="projects-grid">
+                    <article class="project-card" data-category="data">
+                        <div class="project-image">
+                            <div class="project-placeholder"><i class="fas fa-chart-bar"></i></div>
+                            <div class="project-overlay">
+                                <button class="view-project" data-project="Customer Behavior Analysis">
+                                    <i class="fas fa-eye"></i><span>View Details</span>
+                                </button>
+                            </div>
                         </div>
-                        <h3>Customer Behavior Analysis</h3>
-                        <p>Analyzed customer data to identify trends in purchasing behavior.</p>
-                        <button class="view-details">View Details</button>
+                        <div class="project-info">
+                            <span class="project-category">Data Analysis</span>
+                            <h3 class="project-title">Customer Behavior Analysis</h3>
+                            <p class="project-description">Analyzed customer data to identify trends in purchasing behavior using Python and data visualization tools.</p>
+                            <div class="project-tech">
+                                <span>Python</span><span>Pandas</span><span>Matplotlib</span>
+                            </div>
+                        </div>
                     </article>
-                    <article class="project" data-category="web">
-                        <div class="project-icon" aria-hidden="true">
-                            <i class="fas fa-code"></i>
+                    <article class="project-card" data-category="web">
+                        <div class="project-image">
+                            <div class="project-placeholder"><i class="fas fa-shopping-cart"></i></div>
+                            <div class="project-overlay">
+                                <button class="view-project" data-project="E-commerce Website">
+                                    <i class="fas fa-eye"></i><span>View Details</span>
+                                </button>
+                            </div>
                         </div>
-                        <h3>E-commerce Website</h3>
-                        <p>Created a responsive e-commerce website for a local business.</p>
-                        <button class="view-details">View Details</button>
+                        <div class="project-info">
+                            <span class="project-category">Web Development</span>
+                            <h3 class="project-title">E-commerce Website</h3>
+                            <p class="project-description">Responsive e-commerce website for local event services business with booking functionality.</p>
+                            <div class="project-tech">
+                                <span>HTML</span><span>CSS</span><span>JavaScript</span>
+                            </div>
+                        </div>
                     </article>
-                    <article class="project" data-category="data">
-                        <div class="project-icon" aria-hidden="true">
-                            <i class="fas fa-chart-pie"></i>
+                    <article class="project-card" data-category="data">
+                        <div class="project-image">
+                            <div class="project-placeholder"><i class="fas fa-chart-pie"></i></div>
+                            <div class="project-overlay">
+                                <button class="view-project" data-project="Sales Dashboard">
+                                    <i class="fas fa-eye"></i><span>View Details</span>
+                                </button>
+                            </div>
                         </div>
-                        <h3>Sales Dashboard</h3>
-                        <p>Developed an interactive sales dashboard using Power BI.</p>
-                        <button class="view-details">View Details</button>
+                        <div class="project-info">
+                            <span class="project-category">Data Analysis</span>
+                            <h3 class="project-title">Sales Dashboard</h3>
+                            <p class="project-description">Interactive sales dashboard using Power BI to visualize sales data and key performance indicators.</p>
+                            <div class="project-tech">
+                                <span>Power BI</span><span>Excel</span><span>DAX</span>
+                            </div>
+                        </div>
                     </article>
-                    <article class="project" data-category="web">
-                        <div class="project-icon" aria-hidden="true">
-                            <i class="fas fa-mobile-alt"></i>
+                    <article class="project-card" data-category="web">
+                        <div class="project-image">
+                            <div class="project-placeholder"><i class="fas fa-user-circle"></i></div>
+                            <div class="project-overlay">
+                                <button class="view-project" data-project="My Portfolio">
+                                    <i class="fas fa-eye"></i><span>View Details</span>
+                                </button>
+                            </div>
                         </div>
-                        <h3>My Portfolio</h3>
-                        <p>Built my portfolio website which has my details and information about me.</p>
-                        <button class="view-details">View Details</button>
+                        <div class="project-info">
+                            <span class="project-category">Web Development</span>
+                            <h3 class="project-title">My Portfolio</h3>
+                            <p class="project-description">Personal portfolio website showcasing skills, projects, and GitHub integration.</p>
+                            <div class="project-tech">
+                                <span>HTML</span><span>CSS</span><span>JavaScript</span>
+                            </div>
+                        </div>
                     </article>
-                    <article class="project" data-category="web">
-                        <div class="project-icon" aria-hidden="true">
-                            <i class="fas fa-palette"></i>
+                    <article class="project-card" data-category="web">
+                        <div class="project-image">
+                            <div class="project-placeholder"><i class="fas fa-palette"></i></div>
+                            <div class="project-overlay">
+                                <button class="view-project" data-project="Orapeleng Creative Webs">
+                                    <i class="fas fa-eye"></i><span>View Details</span>
+                                </button>
+                            </div>
                         </div>
-                        <h3>Orapeleng Creative Webs</h3>
-                        <p>Designed and developed a creative web design agency website showcasing services and portfolio.</p>
-                        <button class="view-details">View Details</button>
+                        <div class="project-info">
+                            <span class="project-category">Web Development</span>
+                            <h3 class="project-title">Orapeleng Creative Webs</h3>
+                            <p class="project-description">Creative web design agency website with modern UI/UX and responsive design.</p>
+                            <div class="project-tech">
+                                <span>HTML</span><span>CSS</span><span>JavaScript</span>
+                            </div>
+                        </div>
                     </article>
                 </div>
             </div>
         </section>
 
         <!-- Timeline Section -->
-        <section id="timeline" aria-labelledby="timeline-heading">
+        <section id="timeline" class="section timeline">
             <div class="container">
-                <h2 id="timeline-heading" class="section-header">
-                    <i class="fas fa-clock" aria-hidden="true"></i> Education
-                </h2>
-                <div class="timeline">
-                    <article class="timeline-item">
+                <div class="section-header">
+                    <span class="section-tag">My journey</span>
+                    <h2 class="section-title">Education &amp; Experience</h2>
+                </div>
+                <div class="timeline-container">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-item" data-aos="fade-right">
+                        <div class="timeline-marker"><i class="fas fa-university"></i></div>
                         <div class="timeline-content">
-                            <h3>University of Limpopo</h3>
-                            <p>BSc Mathematical Sciences</p>
-                            <time class="date" datetime="2021">2021 - Present</time>
+                            <span class="timeline-date">2021 - Present</span>
+                            <h3 class="timeline-title">University of Limpopo</h3>
+                            <p class="timeline-subtitle">BSc Mathematical Sciences</p>
+                            <p class="timeline-description">Pursuing a degree in Computer Science with focus on software development and data analysis.</p>
                         </div>
-                    </article>
-                    <article class="timeline-item">
+                    </div>
+                    <div class="timeline-item" data-aos="fade-left">
+                        <div class="timeline-marker"><i class="fas fa-users"></i></div>
                         <div class="timeline-content">
-                            <h3>Nkobong Secondary School</h3>
-                            <p>High School Bachelor</p>
-                            <time class="date" datetime="2016">2016 - 2020</time>
+                            <span class="timeline-date">2023</span>
+                            <h3 class="timeline-title">Class Representative</h3>
+                            <p class="timeline-subtitle">SSTB000 Module</p>
+                            <p class="timeline-description">Served as class representative, facilitating communication between students and lecturers.</p>
                         </div>
-                    </article>
-                    <article class="timeline-item">
+                    </div>
+                    <div class="timeline-item" data-aos="fade-right">
+                        <div class="timeline-marker"><i class="fas fa-school"></i></div>
                         <div class="timeline-content">
-                            <h3>Class Representative</h3>
-                            <p>SSTB000 Module</p>
-                            <time class="date" datetime="2023">2023</time>
+                            <span class="timeline-date">2016 - 2020</span>
+                            <h3 class="timeline-title">Nkobong Secondary School</h3>
+                            <p class="timeline-subtitle">High School Bachelor</p>
+                            <p class="timeline-description">Completed high school education with focus on mathematics and science subjects.</p>
                         </div>
-                    </article>
-                    <article class="timeline-item">
+                    </div>
+                    <div class="timeline-item" data-aos="fade-left">
+                        <div class="timeline-marker"><i class="fas fa-award"></i></div>
                         <div class="timeline-content">
-                            <h3>Representative Council of Learners</h3>
-                            <p>Grade 12 Representative</p>
-                            <time class="date" datetime="2020">2020</time>
+                            <span class="timeline-date">2020</span>
+                            <h3 class="timeline-title">Representative Council of Learners</h3>
+                            <p class="timeline-subtitle">Grade 12 Representative</p>
+                            <p class="timeline-description">Elected as student representative, demonstrating leadership and organizational skills.</p>
                         </div>
-                    </article>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- GitHub Section -->
-        <section id="github" aria-labelledby="github-heading">
+        <section id="github" class="section github">
             <div class="container">
-                <h2 id="github-heading" class="section-header">
-                    <i class="fab fa-github" aria-hidden="true"></i> GitHub Repositories
-                </h2>
+                <div class="section-header">
+                    <span class="section-tag">Open Source</span>
+                    <h2 class="section-title">GitHub Repositories</h2>
+                </div>
                 <div id="repos" class="repos-grid">
-                    <div class="loading-spinner">
-                        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                    <div class="loading-state">
+                        <div class="loader"></div>
                         <p>Loading repositories...</p>
                     </div>
                 </div>
-                <div id="language-stats">
+                <div id="languageStats" class="language-stats">
                     <h3>Language Statistics</h3>
-                    <div class="language-bar"></div>
+                    <div class="language-bar-container">
+                        <div class="language-bar"></div>
+                    </div>
                     <div class="language-labels"></div>
                 </div>
-                <div id="github-error" class="github-error" style="display: none;">
-                    <p><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Unable to load GitHub repositories. Please try again later.</p>
-                    <button id="retry-github" class="retry-btn">Retry</button>
+                <div id="githubError" class="github-error" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Unable to load GitHub repositories. Please try again later.</p>
+                    <button id="retryGithub" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i><span>Retry</span>
+                    </button>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" aria-labelledby="contact-heading">
+        <section id="contact" class="section contact">
             <div class="container">
-                <h2 id="contact-heading" class="section-header">
-                    <i class="fas fa-envelope" aria-hidden="true"></i> Contact Me
-                </h2>
+                <div class="section-header">
+                    <span class="section-tag">Get in touch</span>
+                    <h2 class="section-title">Contact Me</h2>
+                </div>
                 <div class="contact-grid">
-                    <div class="contact-form">
-                        <h3>Send Me a Message</h3>
-                        <form id="contactForm" action="https://formspree.io/f/xovjgjpn" method="POST" novalidate>
-                            <div class="form-group">
-                                <label for="name" class="sr-only">Your Name</label>
-                                <input type="text" id="name" name="name" placeholder="Your Name" required aria-required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="sr-only">Your Email</label>
-                                <input type="email" id="email" name="email" placeholder="Your Email" required aria-required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="subject" class="sr-only">Subject</label>
-                                <input type="text" id="subject" name="subject" placeholder="Subject" required aria-required="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="message" class="sr-only">Your Message</label>
-                                <textarea id="message" name="message" placeholder="Your Message" rows="5" required aria-required="true"></textarea>
-                            </div>
-                            <button type="submit" class="submit-btn">Send Message</button>
-                        </form>
-                    </div>
                     <div class="contact-info">
-                        <h3>Contact Information</h3>
-                        <ul>
-                            <li>
-                                <i class="fas fa-envelope" aria-hidden="true"></i>
-                                <div>
-                                    <p>Email</p>
+                        <h3>Let's Connect</h3>
+                        <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.</p>
+                        <div class="contact-list">
+                            <div class="contact-item">
+                                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                                <div class="contact-details">
+                                    <span class="contact-label">Email</span>
                                     <a href="mailto:madibelaorapeleng17@gmail.com">madibelaorapeleng17@gmail.com</a>
                                 </div>
-                            </li>
-                            <li>
-                                <i class="fas fa-phone" aria-hidden="true"></i>
-                                <div>
-                                    <p>Phone</p>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                                <div class="contact-details">
+                                    <span class="contact-label">Phone</span>
                                     <a href="tel:+27766069486">+27 76 606 9486</a>
                                 </div>
-                            </li>
-                            <li>
-                                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                                <div>
-                                    <p>Address</p>
-                                    <p>799 Morago ga thaba section, Kraalhoek, 0341</p>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <div class="contact-details">
+                                    <span class="contact-label">Location</span>
+                                    <span>Kraalhoek, South Africa</span>
                                 </div>
-                            </li>
-                            <li>
-                                <i class="fab fa-github" aria-hidden="true"></i>
-                                <div>
-                                    <p>GitHub</p>
-                                    <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer">Orapeleng-madibela</a>
-                                </div>
-                            </li>
-                            <li>
-                                <i class="fab fa-linkedin" aria-hidden="true"></i>
-                                <div>
-                                    <p>LinkedIn</p>
-                                    <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer">Orapeleng Madibela</a>
-                                </div>
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
+                        <div class="contact-social">
+                            <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a href="https://wa.me/27662343315" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                    <div class="contact-form-wrapper">
+                        <form id="contactForm" action="https://formspree.io/f/xovjgjpn" method="POST" class="contact-form">
+                            <div class="form-group">
+                                <label for="name">Your Name</label>
+                                <input type="text" id="name" name="name" required placeholder="John Doe">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Your Email</label>
+                                <input type="email" id="email" name="email" required placeholder="john@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" required placeholder="Project Inquiry">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" required placeholder="Tell me about your project..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-paper-plane"></i><span>Send Message</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -476,20 +576,28 @@
     </main>
 
     <!-- Footer -->
-    <footer role="contentinfo">
+    <footer class="footer">
         <div class="container">
-            <div class="social-links">
-                <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
-                    <i class="fab fa-github" aria-hidden="true"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
-                    <i class="fab fa-linkedin" aria-hidden="true"></i>
-                </a>
-                <a href="https://wa.me/27662343315" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Contact">
-                    <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                </a>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#home" class="footer-logo">OTM<span>.</span></a>
+                    <p>Building digital experiences that matter.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#about">About</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Orapeleng-madibela" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/orapeleng-madibela-0074b824a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://wa.me/27662343315" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
             </div>
-            <p>&copy; <span id="currentYear"></span> Orapeleng Timothy Madibela. All rights reserved.</p>
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> Orapeleng Timothy Madibela. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
